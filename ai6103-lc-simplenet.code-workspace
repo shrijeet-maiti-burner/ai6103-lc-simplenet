@@ -1,0 +1,14 @@
+{
+  "folders": [{ "path": "." }],
+  "settings": {
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestArgs": ["tests"],
+    "editor.formatOnSave": true,
+    "files.exclude": { "**/__pycache__": true, "**/.pytest_cache": true },
+    "search.exclude": { "**/.venv": true, "data": true, "results": true, "third_party": true },
+    "[python]": { "editor.defaultFormatter": "charliermarsh.ruff" }
+  },
+  "extensions": { "recommendations": ["ms-python.python", "charliermarsh.ruff"] }
+}

@@ -1,0 +1,374 @@
+{
+  "review_date": "2026-10-16",
+  "timezone": "Asia/Singapore",
+  "files": [
+    {
+      "path": "ChatGPT-AI6103-20261016-1623.md",
+      "bytes": 63159,
+      "sha256": "88086ffd4f9181b20519d1867533d9f47592b8b34042df22a0da3a0d2d7fe8e2"
+    },
+    {
+      "path": "AI6103_Assignment___Fall_2026.pdf",
+      "bytes": 186808,
+      "sha256": "8c50c50d6f837d181e271844aa79b1779eff1d51c2a1c1d3f28359c4f374771a",
+      "pages": 4
+    },
+    {
+      "path": "AI6103_Project_Proposal_SimpleNet (1).pdf",
+      "bytes": 6070,
+      "sha256": "e5d320894e37f85c6a877acc5603b313fb7158119d2f462a327bf405d3abc194",
+      "pages": 1
+    },
+    {
+      "path": "AI6103_Quiz1_Quick_Prep.pdf",
+      "bytes": 488560,
+      "sha256": "8742ab3478b090ba593b61873d3c74f66e572bff3f14968a1864fa7abaf60455",
+      "pages": 8
+    },
+    {
+      "path": "AuthorKit24-2.zip",
+      "bytes": 6987150,
+      "sha256": "22d41f25e0918af9dbc7db9a27a392d62188257a188147318266d0f41ed28093",
+      "members": [
+        {
+          "path": "AuthorKit24/AuthorKit24/AnonymousSubmission/LaTeX/aaai24.bib",
+          "bytes": 4766,
+          "sha256": "d8fcf3dc09b9d489aeff13631174c5998a48cb0d0800ac8a00a2f7bdbc40295b"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/AnonymousSubmission/LaTeX/aaai24.bst",
+          "bytes": 30203,
+          "sha256": "78279b2c82d08ffb9d5fa2ae34c25496e84cdda85ddaa495dc44f5eafa3dae16"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/AnonymousSubmission/LaTeX/aaai24.sty",
+          "bytes": 11544,
+          "sha256": "5208f3bc26830db7c629facd0dfd7054732eddb9d71fcace5da7c2f7a69e7c36"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/AnonymousSubmission/LaTeX/anonymous-submission-latex-2024.pdf",
+          "bytes": 1496184,
+          "sha256": "c3ae7b00b51be72a61b5353a368c17eaa8e02c14b4d316b62ee44c01d7956adc"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/AnonymousSubmission/LaTeX/anonymous-submission-latex-2024.tex",
+          "bytes": 55040,
+          "sha256": "decb8eafbf510446f371c7aec26448c4bc839ddaedebee02c6c1956250a27e64"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/AnonymousSubmission/LaTeX/figure1.pdf",
+          "bytes": 252557,
+          "sha256": "29e16580aae21c9c7785b6851d244a9948c6ccf96e308ee366fa651db22c922b"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/AnonymousSubmission/LaTeX/figure2.pdf",
+          "bytes": 1099641,
+          "sha256": "8899687a74776c5ba3179f630f14a946c36278560a997fbac0cde58cdca1750f"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/AnonymousSubmission/Word/anonymous-submission-word-2024.docx",
+          "bytes": 75963,
+          "sha256": "5866f11c71cc5afd8fed50f13e85c1b3a669be6879a6a60d07c8e096db0da1a1"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/AnonymousSubmission/Word/anonymous-submission-word-2024.pdf",
+          "bytes": 406065,
+          "sha256": "00df43fe7ce142b33a4d7b57a961db9a6390f2d3dcb6859f1caf2e55623cba8b"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/CameraReady/LaTeX/aaai24.bib",
+          "bytes": 4766,
+          "sha256": "d8fcf3dc09b9d489aeff13631174c5998a48cb0d0800ac8a00a2f7bdbc40295b"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/CameraReady/LaTeX/aaai24.bst",
+          "bytes": 30203,
+          "sha256": "78279b2c82d08ffb9d5fa2ae34c25496e84cdda85ddaa495dc44f5eafa3dae16"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/CameraReady/LaTeX/aaai24.sty",
+          "bytes": 11544,
+          "sha256": "5208f3bc26830db7c629facd0dfd7054732eddb9d71fcace5da7c2f7a69e7c36"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/CameraReady/LaTeX/figure1.pdf",
+          "bytes": 252557,
+          "sha256": "29e16580aae21c9c7785b6851d244a9948c6ccf96e308ee366fa651db22c922b"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/CameraReady/LaTeX/figure2.pdf",
+          "bytes": 1099641,
+          "sha256": "8899687a74776c5ba3179f630f14a946c36278560a997fbac0cde58cdca1750f"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/CameraReady/LaTeX/Formatting-Instructions-LaTeX-2024.pdf",
+          "bytes": 1496824,
+          "sha256": "789da4a28d63871fe28703d8098e47b0a9e471cfb11faf518c6951c286be8242"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/CameraReady/LaTeX/Formatting-Instructions-LaTeX-2024.tex",
+          "bytes": 53632,
+          "sha256": "430e2f0c4c95e09011c12ed4e3100eb3a642ccc59ff0b6b23e2a4b4fbda0709e"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/CameraReady/Word/Example of Multiple Author Layout - Word.docx",
+          "bytes": 19867,
+          "sha256": "8cf4627efb867de88a58a4f1e035545532d04815164fb2172a98863d2e73b908"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/CameraReady/Word/Example of Multiple Author Layout - Word.pdf",
+          "bytes": 139265,
+          "sha256": "50aa580c6478179ae137dabf70324675c0f1d07caa9a04da2f837f3f88d52bbc"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/CameraReady/Word/formatting-instructions-word-2024.docx",
+          "bytes": 78846,
+          "sha256": "b50f96e4503fcc2aca26987105b059f3b5e73322413f25aa2f617ed8eab8e9f0"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/CameraReady/Word/formatting-instructions-word-2024.pdf",
+          "bytes": 443194,
+          "sha256": "523ab47465b16fb67882ee4f05d8ac6260cc253d4cdf5ddb0daee9714eef56c1"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/Copyright/AAAI-24-copyrightform.pdf",
+          "bytes": 172318,
+          "sha256": "83d646c915c05967f8d0dbc16fabf1d029179ab82908dbe649cba4cbbfd0adeb"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/Copyright/copyrightform.pdf",
+          "bytes": 124701,
+          "sha256": "ec810cf48c01a77ab537431a18c43f8709b43091ee9263152b7ccadefc95a4d8"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/Copyright/photo-release.pdf",
+          "bytes": 86087,
+          "sha256": "e8eee741af1727840d161d0a151b95aaa909c74f70eb7bc64f47c6ab10f92537"
+        },
+        {
+          "path": "AuthorKit24/AuthorKit24/Copyright/video-distribution.pdf",
+          "bytes": 57562,
+          "sha256": "164f5585084003f206973ae652eaf6735ffaa56ec828568e43a80f788edd8493"
+        }
+      ]
+    },
+    {
+      "path": "Lecture Slides/Content Not in Quiz.pdf",
+      "bytes": 8900579,
+      "sha256": "fe56707e3195a9556bff4e2d5c94e26250c1a89af2c31e5d649529f4e99fd6b3",
+      "pages": 122
+    },
+    {
+      "path": "Lecture Slides/Lecture 0 Introduction.pdf",
+      "bytes": 5474339,
+      "sha256": "1311d87255410feb572b70c572b3a9d52dca955147604547731f19786b3f03b6",
+      "pages": 50
+    },
+    {
+      "path": "Lecture Slides/Lecture 1 Linear Algebra (Part 1).pdf",
+      "bytes": 3532086,
+      "sha256": "d5d13241726278ed2df30c138ec3a0ca1c555763929052f3c30c6869e0a897d8",
+      "pages": 47
+    },
+    {
+      "path": "Lecture Slides/Lecture 1 Linear Algebra (Part 2)(3).pdf",
+      "bytes": 1232534,
+      "sha256": "c94ecad5691685c04a42212ceb2cc51dc6d07639b0393f1ff34045e868a0e6a6",
+      "pages": 21
+    },
+    {
+      "path": "Lecture Slides/Lecture 2 Introduction to Probability.pdf",
+      "bytes": 2750583,
+      "sha256": "3ac7c9639af0d7a0ce3638fc9a13e77b8209b3defe41f205d6b216a676d86490",
+      "pages": 76
+    },
+    {
+      "path": "Lecture Slides/Lecture 3 ML Foundations(2).pdf",
+      "bytes": 3282949,
+      "sha256": "b2c2c24311f241b4130097f2ec6cb459ac02fd22defab6ce77dd7a10165468ff",
+      "pages": 91
+    },
+    {
+      "path": "Lecture Slides/Lecture E-1 Numpy and PyTorch.pdf",
+      "bytes": 1491793,
+      "sha256": "8dd18a1d77576614e5567af85f0ab7c44f6228170bc9ffb6f3fc39264108228f",
+      "pages": 31
+    },
+    {
+      "path": "Lecture Slides/Week 11 NLP with Transformer(1).pdf",
+      "bytes": 5864656,
+      "sha256": "f657dc26b1366547f2549b3b23b70c4435ba489ffd62ae473b6e6b27d60c642e",
+      "pages": 108
+    },
+    {
+      "path": "Lecture Slides/Week 12 Large Language Models(2).pdf",
+      "bytes": 15618951,
+      "sha256": "32bb6d313edb8e243181dc549c51a6bf660fc398c9e96d8e43dcce18fb1ab462",
+      "pages": 93
+    },
+    {
+      "path": "Lecture Slides/Week 13 Vision-Language Models(1).pdf",
+      "bytes": 9845233,
+      "sha256": "344e3da28c019baaa7a650be5de4e2d98e8aa57f103cabe279cdf855506f3b4a",
+      "pages": 35
+    },
+    {
+      "path": "Lecture Slides/Week 5 MLP and CNN.pdf",
+      "bytes": 2826488,
+      "sha256": "aee01cc2cbb41045954372c0fa3a4a0d123e2d20dd64dccfdcc35d026448c9e9",
+      "pages": 71
+    },
+    {
+      "path": "Lecture Slides/Week 6 Optimization and Regularization (Part 1)(1).pdf",
+      "bytes": 3440758,
+      "sha256": "3e46e57239dd63e6279cb28faa7799e70c9bfe43213d365525071669c60acdd6",
+      "pages": 90
+    },
+    {
+      "path": "Lecture Slides/Week 7 Advanced CNN.pdf",
+      "bytes": 8532888,
+      "sha256": "be25b250d2fc4a1e49402f1b35ffc97b58860a7e34ec03aac38011e3cfb7bc12",
+      "pages": 87
+    },
+    {
+      "path": "Lecture Slides/Week 8-9 Optimization (Part 2).pdf",
+      "bytes": 3534081,
+      "sha256": "e2cdec36842065254b5b64e7a94b3034eadbe6eef1975a817c60fa6ea7090a28",
+      "pages": 64
+    },
+    {
+      "path": "Lecture Slides/Week 9 Regularization (Part 2).pdf",
+      "bytes": 8089154,
+      "sha256": "f82fab6c7b7748b2998b06d02398d7aacf0fd1839ef1b08402a944108fdee5bc",
+      "pages": 84
+    },
+    {
+      "path": "Project Ideas.md",
+      "bytes": 6110,
+      "sha256": "2b8b8b5f6cc0115fa78a1e727620990a79f3988b66f089d7a30864c9477bf49f"
+    },
+    {
+      "path": "Python Examples/Logistic Regression Colab(1).zip",
+      "bytes": 472581,
+      "sha256": "c704ff4de0e18add667ffb759834a751556c1a4fbe70dee62e3e3a8ea39788ac",
+      "members": [
+        {
+          "path": "Logistic Regression/.DS_Store",
+          "bytes": 8196,
+          "sha256": "4a5a1e12f1d88d2dfde66c358d3f04c0eec7c6039d682f176d84649b8fc599fe"
+        },
+        {
+          "path": "Logistic Regression/datasets/.DS_Store",
+          "bytes": 6148,
+          "sha256": "d65165279105ca6773180500688df4bdc69a2c7b771752f0a46ef120b7fd8ec3"
+        },
+        {
+          "path": "Logistic Regression/datasets/adult.csv",
+          "bytes": 3974305,
+          "sha256": "5b00264637dbfec36bdeaab5676b0b309ff9eb788d63554ca0a249491c86603d"
+        },
+        {
+          "path": "Logistic Regression/datasets/iris.csv",
+          "bytes": 4551,
+          "sha256": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0"
+        },
+        {
+          "path": "Logistic Regression/datasets/wine.csv",
+          "bytes": 10782,
+          "sha256": "6be6b1203f3d51df0b553a70e57b8a723cd405683958204f96d23d7cd6aea659"
+        },
+        {
+          "path": "Logistic Regression/LogisticRegression.ipynb",
+          "bytes": 78267,
+          "sha256": "70fe805f7dff43deb936d85b22524045a8f49f5a9bb8967207d491fa33e52218"
+        },
+        {
+          "path": "Logistic Regression/uci.py",
+          "bytes": 3232,
+          "sha256": "774a6446a07758f68013a4581fa2b4c783cf4cefbd4086c6da118c702d76afbf"
+        }
+      ]
+    },
+    {
+      "path": "Python Examples/mobilenet-sigmoid.zip",
+      "bytes": 1961,
+      "sha256": "16fa3ec0f3ba69b062787ca93fcbf295efb952163f0a59c29bd7565529baa33a",
+      "members": [
+        {
+          "path": "data.py",
+          "bytes": 3903,
+          "sha256": "99b8657e3231a5d744ac0754e1e2502fbebd00bab38d98f49c15ae0a48ac0415"
+        },
+        {
+          "path": "mobilenet.py",
+          "bytes": 2906,
+          "sha256": "3c1cb8d34afe109d3f0c9f0bac3d2982ff774c5829f12b9470edc430fb9a8d43"
+        }
+      ]
+    },
+    {
+      "path": "Python Examples/New_PyTorch_Usage.ipynb",
+      "bytes": 33619,
+      "sha256": "afcf92648328af80d6dadda79a7908650249f265c951e6382992f93802cbdb27"
+    },
+    {
+      "path": "Python Examples/Numpy_Usage(1).ipynb",
+      "bytes": 38854,
+      "sha256": "b8fb7168b057548d7d9330feed7ffab27da2f39cfe5bb634c373472941791df6"
+    },
+    {
+      "path": "Python Examples/ResNet.ipynb",
+      "bytes": 380553,
+      "sha256": "a79f6673a4e3fac9eac25199e368dc8f64c8c8003ffdd6cab8449aa2bb6138a3"
+    },
+    {
+      "path": "Python Examples/TransformerLM.zip",
+      "bytes": 4249662,
+      "sha256": "9c05315f3f210633c12b3c0fb8c049c3e840ebe189d47b9a4a6584c9b9b39756",
+      "members": [
+        {
+          "path": "TransformerLanguageModel.ipynb",
+          "bytes": 41833,
+          "sha256": "2d89b7834be5436c15b9d3fdc26a38fda59afceb7d6e787cf01fa9fb3cddb405"
+        },
+        {
+          "path": "wikitext-2/README",
+          "bytes": 159,
+          "sha256": "ed96062abea03d4f4e8ca80f0caad8b07ec59687b8064319c7ee6f6d900b6286"
+        },
+        {
+          "path": "wikitext-2/test.txt",
+          "bytes": 1256449,
+          "sha256": "d790b833ef8cf03a90db7bf1271b7520b83c45ce07ba3c1a9699df81e239eca0"
+        },
+        {
+          "path": "wikitext-2/train.txt",
+          "bytes": 10797148,
+          "sha256": "9e9fa1ad55b1c2c95b08e37dd8e653f638fac2c6de904b79e813611eefbc985f"
+        },
+        {
+          "path": "wikitext-2/valid.txt",
+          "bytes": 1121681,
+          "sha256": "f0737ed31fc1329026e95cb8b98e19c2a182c39c240ab909dc31abf2f8af58e8"
+        }
+      ]
+    }
+  ],
+  "preserved": [
+    {
+      "repo_path": "references/proposal.pdf",
+      "source": "AI6103_Project_Proposal_SimpleNet (1).pdf",
+      "sha256": "e5d320894e37f85c6a877acc5603b313fb7158119d2f462a327bf405d3abc194"
+    },
+    {
+      "repo_path": "report/aaai24.sty",
+      "source": "AuthorKit24-2.zip::AuthorKit24/AuthorKit24/CameraReady/LaTeX/aaai24.sty",
+      "sha256": "5208f3bc26830db7c629facd0dfd7054732eddb9d71fcace5da7c2f7a69e7c36"
+    },
+    {
+      "repo_path": "report/aaai24.bst",
+      "source": "AuthorKit24-2.zip::AuthorKit24/AuthorKit24/CameraReady/LaTeX/aaai24.bst",
+      "sha256": "78279b2c82d08ffb9d5fa2ae34c25496e84cdda85ddaa495dc44f5eafa3dae16"
+    }
+  ]
+}
