@@ -67,3 +67,12 @@ def test_invalid_category_and_insufficient_content_fail(tmp_path):
     _image(tmp_path, "bottle/train/good/001.png", 10)
     with pytest.raises(ValueError, match="two distinct"):
         build_normal_manifest(tmp_path, "mvtec_ad", ["bottle"])
+
+
+@pytest.mark.parametrize("mode", ["RGBA", "P", "LA", "I;16"])
+def test_unsupported_modes_fail_during_inventory(tmp_path, mode):
+    source = tmp_path / "bottle/train/good/unsupported.png"
+    source.parent.mkdir(parents=True)
+    Image.new(mode, (5, 7)).save(source)
+    with pytest.raises(ValueError, match=r"unsupported image mode .*: unsupported\.png"):
+        build_normal_manifest(tmp_path, "mvtec_ad", ["bottle"])

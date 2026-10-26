@@ -32,6 +32,8 @@ Verified in a fresh worktree and CPU environment using the frozen lock: Python 3
 
 These publication checks use synthetic fixtures and no dataset images or pretrained downloads. They do not establish trained-detector accuracy, padding benefits, official metric parity or private-server performance. The AD 2 evaluation loader remains pending; pilot integration is checked below.
 
+review follow-up, 26 october: the builder now rejects unsupported modes before manifest creation, matching the reader. four regression cases cover `RGBA`, `P`, `LA` and `I;16`; the data branch's full cpu suite passes 31 tests. lint, formatting, markdown/source checks and `git diff --check` also pass. crop coordinates remain outside the full-frame restoration helper's contract.
+
 ## Pilot integration, 26 October 2026
 
 - The full CPU suite passes 33 tests. Six new tests cover exact B1/B2 equivalence at zero consistency weight, cold continuation across an epoch boundary, nonzero consistency updates, aligned photometric pairs, rejected validation/incompatible checkpoint sources, and an update/prediction/cold continuation through the pinned upstream components.
