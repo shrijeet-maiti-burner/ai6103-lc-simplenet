@@ -25,7 +25,9 @@ from lc_simplenet.pilot import (
     PilotTrainer,
     assert_same_state,
     config_hash,
+    prediction_geometry,
     state_hash,
+    validate_input_geometry,
 )
 
 
@@ -110,10 +112,12 @@ def main():
             category=config.category,
             split=split,
             expected_sha256=config.manifest_sha256,
-            output_size=config.image_size,
+            output_size=config.load_size,
         )
         for split in ("train", "validation")
     }
+    for source in datasets.values():
+        validate_input_geometry(config, source)
     output.mkdir(parents=True, exist_ok=False)
     metadata = {
         "scope": "development pilot; no defect or benchmark results",
@@ -138,7 +142,8 @@ def main():
         "checkpoint_policy": "fixed final step",
         "runner_sha256": sha256(__file__),
         "postprocessing": "raw -D patch maps; image=max patch; bilinear align_corners=False "
-        "to input, Gaussian sigma=4 input pixels, PIL bilinear to native",
+        "to input, Gaussian sigma=4 input pixels; "
+        + ("retain crop coordinates" if config.crop_box is not None else "PIL bilinear to native"),
     }
     if config.weights == "imagenet_v1":
         # The published V1 URL has this filename; hash full bytes after factory loading.
@@ -198,6 +203,7 @@ def main():
         # Predict normal validation only after the fixed training horizon.
         maps, rows = [], []
         native_shape = None
+        crop_shape = None
         for index in range(len(datasets["validation"])):
             sample = datasets["validation"][index]
             patch_map = trainer.predict([sample["image"]])[0]
@@ -209,8 +215,7 @@ def main():
                     "image_id": sample["image_id"],
                     "label": 0,
                     "score": float(patch_map.max()),
-                    "original_size": sample["original_size"].tolist(),
-                    "image_size": sample["image_size"].tolist(),
+                    **prediction_geometry(config, sample),
                 }
             )
             if index == 0:
@@ -220,13 +225,18 @@ def main():
                     mode="bilinear",
                     align_corners=False,
                 )[0, 0].numpy()
-                native = restore_score_map(
-                    gaussian_filter(resized, sigma=4),
-                    original_size=sample["original_size"],
-                    image_size=sample["image_size"],
-                )
-                native_shape = list(native.shape)
-                np.save(output / "first-validation-native-map.npy", native, allow_pickle=False)
+                smoothed = gaussian_filter(resized, sigma=4)
+                if config.crop_box is None:
+                    native = restore_score_map(
+                        smoothed,
+                        original_size=sample["original_size"],
+                        image_size=config.image_size,
+                    )
+                    native_shape = list(native.shape)
+                    np.save(output / "first-validation-native-map.npy", native, allow_pickle=False)
+                else:
+                    crop_shape = list(smoothed.shape)
+                    np.save(output / "first-validation-crop-map.npy", smoothed, allow_pickle=False)
         np.savez_compressed(output / "validation-patch-maps.npz", scores=np.stack(maps))
         write_json(output / "validation-scores.json", rows)
         scores = [row["score"] for row in rows]
@@ -248,6 +258,7 @@ def main():
                 **counts,
             },
             "native_map_shape": native_shape,
+            "crop_map_shape": crop_shape,
             "replay": replay,
             "training_timing": {
                 "steps": len(timings),

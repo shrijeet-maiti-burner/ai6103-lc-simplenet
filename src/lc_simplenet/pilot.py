@@ -28,6 +28,7 @@ class PilotConfig:
     seed: int = 0
     batch_size: int = 2
     image_size: tuple[int, int] = (288, 288)
+    ad_resize: int | None = None
     noise_std: float = 0.015
     margin: float = 0.5
     adapter_lr: float = 0.0001
@@ -49,6 +50,13 @@ class PilotConfig:
             raise ValueError("batch_size must be a positive integer")
         if len(self.image_size) != 2 or any(type(x) is not int or x < 32 for x in self.image_size):
             raise ValueError("image_size must contain two integers >=32")
+        if self.ad_resize is not None and (
+            self.dataset != "mvtec_ad"
+            or type(self.ad_resize) is not int
+            or self.image_size[0] != self.image_size[1]
+            or self.ad_resize < self.image_size[0]
+        ):
+            raise ValueError("ad_resize requires square ad input and resize >= image_size")
         for value in (self.noise_std, self.margin, self.adapter_lr, self.discriminator_lr):
             if not np.isfinite(value) or value <= 0:
                 raise ValueError("Noise, margin and learning rates must be finite and positive")
@@ -57,6 +65,39 @@ class PilotConfig:
                 raise ValueError("Transform ranges must be ordered, finite and positive")
         if self.weights not in {"imagenet_v1", "random"}:
             raise ValueError("weights must be imagenet_v1 or explicit random smoke weights")
+
+    @property
+    def load_size(self):
+        return (self.ad_resize, self.ad_resize) if self.ad_resize is not None else self.image_size
+
+    @property
+    def crop_box(self):
+        if self.ad_resize is None:
+            return None
+        height, width = self.image_size
+        top = int(round((self.ad_resize - height) / 2.0))
+        left = int(round((self.ad_resize - width) / 2.0))
+        return left, top, left + width, top + height
+
+
+def validate_input_geometry(config: PilotConfig, source):
+    if source.output_size != config.load_size:
+        raise ValueError("source resize does not match the configured input geometry")
+    if config.ad_resize is not None and any(r.width != r.height for r in source.records):
+        raise ValueError("the ad crop recipe currently requires square source images")
+
+
+def prediction_geometry(config: PilotConfig, sample):
+    """describe the observed field of view; a crop is never a full native map."""
+    if tuple(sample["image_size"]) != config.load_size:
+        raise ValueError("sample geometry does not match the configured resize")
+    return {
+        "original_size": sample["original_size"].tolist(),
+        "resized_size": list(config.load_size),
+        "image_size": list(config.image_size),
+        "crop_box_xyxy": list(config.crop_box) if config.crop_box is not None else None,
+        "map_coordinates": "model_input_crop" if config.crop_box is not None else "full_frame",
+    }
 
 
 def seed_runtime(seed: int) -> None:
@@ -167,8 +208,9 @@ class PilotTrainer:
             train_data.split,
             train_data.manifest_sha256,
             train_data.output_size,
-        ) != (config.dataset, config.category, "train", config.manifest_sha256, config.image_size):
+        ) != (config.dataset, config.category, "train", config.manifest_sha256, config.load_size):
             raise ValueError("Training source does not match the pinned configuration")
+        validate_input_geometry(config, train_data)
         seed_runtime(config.seed)
         self.backend = backend_factory(config, self.device)
         self.order = BatchOrder(len(train_data), config.batch_size, config.seed + 1)
@@ -219,6 +261,16 @@ class PilotTrainer:
         std = pixels.new_tensor([0.229, 0.224, 0.225]).reshape(1, 3, 1, 1)
         return (pixels - mean) / std
 
+    def prepare_pixels(self, images):
+        pixels = torch.from_numpy(np.stack(images))
+        if tuple(pixels.shape[1:]) != (*self.config.load_size, 3):
+            raise ValueError("expected raw resized HWC RGB images matching load_size")
+        pixels = pixels.permute(0, 3, 1, 2).contiguous().to(self.device)
+        if self.config.crop_box is not None:
+            left, top, right, bottom = self.config.crop_box
+            pixels = pixels[:, :, top:bottom, left:right].contiguous()
+        return pixels
+
     def paired_views(self, pixels):
         count = len(pixels)
         # Draw even for B0; its identity view does not shift any other RNG stream.
@@ -235,8 +287,7 @@ class PilotTrainer:
     def train_step(self):
         indices = self.order.next()
         samples = [self.data[index] for index in indices]
-        pixels = torch.from_numpy(np.stack([sample["image"] for sample in samples]))
-        pixels = pixels.permute(0, 3, 1, 2).contiguous().to(self.device)
+        pixels = self.prepare_pixels([sample["image"] for sample in samples])
         self.backend.adapter.train()
         self.backend.discriminator.train()
         self.adapter_opt.zero_grad(set_to_none=True)
@@ -285,7 +336,7 @@ class PilotTrainer:
     def predict(self, images):
         self.backend.adapter.eval()
         self.backend.discriminator.eval()
-        pixels = torch.from_numpy(np.stack(images)).permute(0, 3, 1, 2).contiguous().to(self.device)
+        pixels = self.prepare_pixels(images)
         with torch.inference_mode():
             features, grids = self.backend.embed(self.normalize(pixels))
             scores = -self.backend.discriminator(self.backend.adapter(features))

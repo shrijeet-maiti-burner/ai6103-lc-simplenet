@@ -41,3 +41,5 @@ review follow-up, 26 october: the builder now rejects unsupported modes before m
 - Ruff lint/format, local Markdown links, preserved-source hashes and `git diff --check` pass.
 
 The runner and its evidence limits are described in [pilot training](pilot-training.md). These automated checks do not establish pretrained convergence, real-defect recall or benchmark performance. Private dataset runs and personal research artifacts remain outside Git.
+
+review follow-up, 26 october: the combined cpu suite passes 47 tests. optional ad cropping matches upstream input tensors exactly on train and validation fixtures, including odd/even resize differences. cropped controls retain exact zero-weight equivalence and cold continuation. the real upstream random-weight checks cover both geometries and verify that the paired runner leaves backbone batch-norm counters unchanged. cropped maps carry explicit crop coordinates and are not restored as full native maps. ad 2 crop requests and rectangular sources under the square ad recipe are rejected.
