@@ -353,9 +353,10 @@ def config_hash(config: PilotConfig):
 
 
 def assert_same_state(left, right):
-    """Exact recursive equality, including optimizers, sampler, BN and RNGs."""
+    """Exact values, including optimizers, sampler, BN and RNGs, after CPU mapping."""
     if isinstance(left, torch.Tensor):
-        torch.testing.assert_close(left, right, rtol=0, atol=0)
+        # Loading can remap CPU optimizer counters/RNGs to CUDA along with the heads.
+        torch.testing.assert_close(left.cpu(), right.cpu(), rtol=0, atol=0)
     elif isinstance(left, dict):
         if left.keys() != right.keys():
             raise AssertionError("State dictionary keys differ")
