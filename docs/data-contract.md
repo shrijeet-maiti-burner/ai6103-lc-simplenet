@@ -8,6 +8,8 @@ Follow [the manifest commands](../manifests/README.md) after acquiring the datas
 
 `NormalManifestDataset` reads one category and split from a manifest pinned by SHA-256. It rejects non-normal labels/masks, unsafe/test paths, duplicate IDs, declared cross-split RGB content and AD 2 folder/split disagreement. Each loaded image must match its frozen file hash, dimensions, source mode and frame/orientation assumptions.
 
+the builder and reader both accept only `RGB` and `L` sources. unsupported modes fail during inventory with the mode and filename, before a manifest is written.
+
 ```python
 import json
 from pathlib import Path
@@ -59,6 +61,8 @@ native_scores = restore_score_map(
 It upsamples the score grid to model-input dimensions, removes bottom/right padding, then resizes the valid map to native dimensions. Interpolation is PIL bilinear in float32. Scores retain their sign and scale; there is no test-dependent normalization or clipping.
 
 This helper does not reverse crops, rotations or arbitrary spatial augmentations. Padding must have been added only at the bottom/right, with the original valid image at the top-left. Map restoration cannot undo changes to model features caused by padding. Future discrete ground-truth masks need separate verified handling; do not interpolate them with this continuous-score helper.
+
+the upstream ad reference uses resize 329 followed by center crop 288. its maps and ground-truth masks must use the same crop coordinates. stretching a cropped map to native size does not restore its missing field of view. the full-frame helper above makes no claim of crop support; ad 2 geometry remains a separate decision.
 
 ## Integration checks
 

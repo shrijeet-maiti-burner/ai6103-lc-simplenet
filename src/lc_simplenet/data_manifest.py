@@ -53,6 +53,8 @@ def _inventory(root: Path, category: str, folder: str, dataset: str) -> list[dic
             raise ValueError("Dataset symlink points outside the declared root")
         raw = path.read_bytes()
         with Image.open(path) as image:
+            if image.mode not in {"RGB", "L"}:
+                raise ValueError(f"unsupported image mode {image.mode}: {path.name}")
             rgb = image.convert("RGB")
             dimensions = f"{rgb.width},{rgb.height},RGB:".encode()
             pixels = hashlib.sha256(dimensions + rgb.tobytes()).hexdigest()

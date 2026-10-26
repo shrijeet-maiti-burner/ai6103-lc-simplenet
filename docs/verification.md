@@ -31,3 +31,5 @@ Verified in a fresh worktree and CPU environment using the frozen lock: Python 3
 - The upstream checkout remains at `351a2b8d4e8cfc944dbccbf9bc6ceda930c6f26b`, with no source changes.
 
 These publication checks use synthetic fixtures and no dataset images or pretrained downloads. They do not establish trained-detector accuracy, padding benefits, official metric parity or private-server performance. Trainer integration and the AD 2 evaluation loader remain pending.
+
+review follow-up, 26 october: the builder now rejects unsupported modes before manifest creation, matching the reader. four regression cases cover `RGBA`, `P`, `LA` and `I;16`; the full cpu suite passes 31 tests. lint, formatting, markdown/source checks and `git diff --check` also pass. crop coordinates remain outside the full-frame restoration helper's contract.
