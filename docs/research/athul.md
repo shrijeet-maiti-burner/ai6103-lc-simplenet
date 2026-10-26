@@ -1,8 +1,8 @@
 # Athul - research notes
 
-GitHub: [athul1810](https://github.com/athul1810). Role: unassigned. Status: open.
+GitHub: [athul1810](https://github.com/athul1810). Workstream: B baseline and training with Umesh. Status: open.
 
-This starter document was created during setup. It contains no research or experiment attributed to Athul. Choose any direction within [the project](../project.md).
+This starter document was created during setup. It contains no research or experiment attributed to Athul. Use the assigned workstream and [shared data contract](../data-contract.md).
 
 ## Question
 

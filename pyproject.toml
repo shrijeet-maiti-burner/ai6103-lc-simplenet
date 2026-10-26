@@ -7,20 +7,20 @@ name = "ai6103-lc-simplenet"
 version = "0.1.0"
 description = "AI6103 paired relighting and score consistency research scaffold"
 requires-python = ">=3.12,<3.13"
-dependencies = ["numpy==1.26.4"]
+dependencies = ["numpy==1.26.4", "pillow==11.3.0"]
 
 [project.optional-dependencies]
 cpu = [
   "torch==2.6.0", "torchvision==0.21.0", "timm==1.0.15",
   "scipy==1.15.3", "scikit-learn==1.6.1", "scikit-image==0.25.2",
   "pandas==2.2.3", "opencv-python==4.11.0.86", "matplotlib==3.10.3",
-  "tensorboard==2.19.0", "click==8.2.1", "tqdm==4.67.1", "pillow==11.3.0",
+  "tensorboard==2.19.0", "click==8.2.1", "tqdm==4.67.1",
 ]
 cuda = [
   "torch==2.6.0", "torchvision==0.21.0", "timm==1.0.15",
   "scipy==1.15.3", "scikit-learn==1.6.1", "scikit-image==0.25.2",
   "pandas==2.2.3", "opencv-python==4.11.0.86", "matplotlib==3.10.3",
-  "tensorboard==2.19.0", "click==8.2.1", "tqdm==4.67.1", "pillow==11.3.0",
+  "tensorboard==2.19.0", "click==8.2.1", "tqdm==4.67.1",
 ]
 
 [dependency-groups]

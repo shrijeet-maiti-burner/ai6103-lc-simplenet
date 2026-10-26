@@ -1,8 +1,8 @@
 # Harsh - research notes
 
-GitHub: [HarshSaand](https://github.com/HarshSaand). Role: unassigned. Status: open.
+GitHub: [HarshSaand](https://github.com/HarshSaand). Workstream: C relighting and consistency. Status: open.
 
-This starter document was created during setup. It contains no research or experiment attributed to Harsh. Choose any direction within [the project](../project.md).
+This starter document was created during setup. It contains no research or experiment attributed to Harsh. Use the assigned workstream and [shared data contract](../data-contract.md).
 
 ## Question
 
