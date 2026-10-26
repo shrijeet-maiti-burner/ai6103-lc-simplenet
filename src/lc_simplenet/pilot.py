@@ -6,6 +6,7 @@ import os
 import random
 import sys
 from dataclasses import asdict, dataclass
+from importlib.metadata import version
 from pathlib import Path
 
 import numpy as np
@@ -186,6 +187,7 @@ class PilotTrainer:
             Path(__file__),
             ROOT / "src/lc_simplenet/losses.py",
             ROOT / "src/lc_simplenet/data.py",
+            ROOT / "src/lc_simplenet/data_manifest.py",
             ROOT / "third_party/SimpleNet/simplenet.py",
             ROOT / "third_party/SimpleNet/common.py",
         ]
@@ -194,7 +196,17 @@ class PilotTrainer:
                 str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths
             },
             "torch": str(torch.__version__),
+            "torchvision": version("torchvision"),
             "numpy": str(np.__version__),
+            "lock_sha256": hashlib.sha256((ROOT / "uv.lock").read_bytes()).hexdigest(),
+            "cuda_runtime": torch.version.cuda,
+            "cudnn": torch.backends.cudnn.version(),
+            "deterministic": torch.are_deterministic_algorithms_enabled(),
+            "cublas_workspace_config": os.environ.get("CUBLAS_WORKSPACE_CONFIG"),
+            "cudnn_benchmark": torch.backends.cudnn.benchmark,
+            "cudnn_deterministic": torch.backends.cudnn.deterministic,
+            "matmul_tf32": torch.backends.cuda.matmul.allow_tf32,
+            "cudnn_tf32": torch.backends.cudnn.allow_tf32,
             "python": sys.version,
             "threads": torch.get_num_threads(),
             "device": torch.cuda.get_device_name(self.device)
