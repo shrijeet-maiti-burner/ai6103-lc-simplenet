@@ -42,4 +42,4 @@ The runner reconstructs a fresh model, reloads the saved heads and reports the m
 
 Scores are unnormalized anomaly scores, not probabilities. Maps observe only the center crop. Evaluation must resize and crop masks with the same geometry; stretching these maps to the native image would invent the missing field of view. No defect labels, test metrics or operating threshold are produced by this command.
 
-[`tests/test_baseline.py`](../tests/test_baseline.py) checks upstream input parity, rejection of rectangular sources, and synthetic training/reload parity. Passing those checks establishes implementation behavior, not detector accuracy. Agree and freeze the [evaluation protocol](protocol.md) before test scoring.
+[`tests/test_baseline.py`](../tests/test_baseline.py) checks upstream input parity, rejection of rectangular sources, and synthetic training/reload parity. Passing those checks establishes implementation behavior, not detector accuracy. See the [development results and artifact handoff](baseline-results.md). D handles evaluation at the evaluation stage, using fixed checkpoints and the [evaluation protocol](protocol.md).

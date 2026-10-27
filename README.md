@@ -2,7 +2,7 @@
 
 AI6103 group project: test whether paired relighting and patch-score consistency reduce lighting-induced false alarms without reducing defect recall.
 
-**Status: data foundation and single-view baseline.** Normal manifest building/loading, full-frame score-map restoration and fixed-final AD baseline training are implemented. Paired training integration and benchmark validation remain pending. No dataset or trained results are included. The selected source is [the revised proposal](references/proposal.pdf); older chat suggestions do not override it.
+**Status: data foundation and single-view baseline.** Normal manifest building/loading, full-frame score-map restoration and fixed-final AD baseline training are implemented. [Three-seed bottle development results](docs/baseline-results.md) and evaluation artifacts are available; benchmark accuracy has not been measured. Paired training integration remains pending. Datasets and model weights are excluded from Git. The selected source is [the revised proposal](references/proposal.pdf); older chat suggestions do not override it.
 
 ## Start
 
@@ -26,6 +26,7 @@ Python 3.12.15 and uv 0.13.0 are the setup baseline. If `uv` is installed only a
 - [Normal data and map contract](docs/data-contract.md): split enforcement, batch layout and native-coordinate scores.
 - [Manifest commands](manifests/README.md): normal-data inventory and holdouts.
 - [Single-view baseline](docs/baseline-training.md): fixed-final AD training, outputs and reload limits.
+- [Baseline results](docs/baseline-results.md): measured training cost, artifact checks and evaluation handoff.
 - [Source review](docs/source-review.md): supplied materials and discrepancies.
 - [Decisions](docs/decisions.md): what is fixed and what remains open.
 - [Verification](docs/verification.md): actual setup checks and limits.
