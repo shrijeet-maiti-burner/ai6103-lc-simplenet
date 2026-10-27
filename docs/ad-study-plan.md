@@ -10,7 +10,7 @@ Use batch 8, resize 329 and center crop 288 throughout the paired controls. Pref
 
 ## Normal-only weight choice
 
-Before the main seeds `[0, 1, 2]`, use tuning seed 3 and 256 updates per trial. Candidate consistency weights are `[0.01, 0.1, 1.0]`; brightness/gamma ranges stay fixed at `[0.8, 1.2]`. Give each variant three trials. B0/B1 repeat their fixed zero-weight configuration per candidate to match this declared budget; those repeats are deterministic controls, not independent seeds.
+Before the main seeds `[0, 1, 2]`, use tuning seed 3 and 256 updates per trial. Candidate consistency weights are `[0.01, 0.1, 1.0]`; brightness/gamma ranges stay fixed at `[0.8, 1.2]`. Each category gets one B1 run and one B2 run per candidate. B1 is shared by all candidates, since reruns at the same seed are identical.
 
 Evaluate all normal-validation images at the four fixed range corners. Select one shared positive weight using category-macro relative B2/B1 patch-score MSE, retaining at least half B1's patch-score standard deviation and no more than 1.25 times its normal/synthetic hinge loss. Choose the smallest weight within 1% of the best eligible proxy. If none qualifies, stop rather than changing the safeguards after seeing the results.
 
@@ -22,4 +22,4 @@ Freeze categories, per-category manifests, horizon, selected weight, source revi
 
 ## Provisional decision, 27 October
 
-B fixed the first AD matrix before any weight-search result: bottle and grid, B0/B1/B2, seeds 0, 1 and 2, 80 source passes (1,680 updates for bottle, 2,160 for grid), batch 8, resize 329 and crop 288, on A40 GPUs. Grid is the cheapest eligible texture by measured paired cost. The weight search uses tuning seed 3, one B1 run per category and one B2 run per candidate. Brightness and gamma stay at the runner defaults, 0.8 to 1.2, until C confirms them; any change reruns B1/B2. The bottle and grid single-view references use the existing fixed-final baseline.
+B fixed the first AD matrix before any weight-search result: bottle and grid, B0/B1/B2, seeds 0, 1 and 2, 80 source passes (1,680 updates for bottle, 2,160 for grid), batch 8, resize 329 and crop 288, on A40 GPUs. Grid is the cheapest eligible texture by measured paired cost. The weight search uses tuning seed 3, one B1 run per category and one B2 run per candidate. Brightness and gamma stay at the runner defaults, 0.8 to 1.2, until C confirms them; any change reruns B1/B2. The bottle and grid single-view references use the existing fixed-final baseline. Results are in [the study results](ad-study-results.md).
