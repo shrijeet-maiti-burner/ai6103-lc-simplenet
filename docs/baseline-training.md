@@ -33,12 +33,16 @@ Each new run directory contains:
 
 | File | Contents |
 |---|---|
-| `checkpoint.pt` | Final adapter/discriminator state and model settings |
+| `checkpoint.pt` | Schema-2 final heads/settings, optimizer/scheduler states, final RNGs and provenance |
+| `initial-rng.pt` | Initial Python, NumPy, Torch and applicable CUDA RNG states |
+| `run.json` | Resolved settings, runtime versions/flags, source hashes, pretrained-weight hash and frozen-backbone fingerprint |
 | `validation_normal.npz` | Normal-validation image IDs, raw max-patch anomaly scores and smoothed 288-by-288 crop maps |
 | `summary.json` | Seed, settings, split counts, source/upstream revisions, dirty flag, manifest/lock/checkpoint hashes, runtime versions, training time, peak training VRAM and reload score difference |
 | `logs/` | Upstream training diagnostics in TensorBoard format |
 
-The runner reconstructs a fresh model, reloads the saved heads and reports the maximum absolute normal-validation image-score difference. It does not save the frozen backbone, optimizer state or RNG state, and does not support continuation. Reloading requires the same pretrained backbone, shape-probe behavior, settings and compatible runtime. Complete RNG/provenance capture for the main study remains separate work.
+The runner reconstructs a fresh model, reloads the saved heads and reports the maximum absolute normal-validation image-score difference. Schema-2 runs preserve optimizer/scheduler states and initial/final RNGs without changing training settings. The CLI does not implement continuation. Reloading still requires the same pretrained backbone, shape-probe behavior, settings and compatible runtime; the frozen backbone weights are not duplicated in the checkpoint.
+
+The published three-seed bottle development archive predates schema 2 and contains heads/settings only. Its original files and hashes remain unchanged. Both formats retain the `state` and `settings` keys for inference loading.
 
 Scores are unnormalized anomaly scores, not probabilities. Maps observe only the center crop. Evaluation must resize and crop masks with the same geometry; stretching these maps to the native image would invent the missing field of view. No defect labels, test metrics or operating threshold are produced by this command.
 
