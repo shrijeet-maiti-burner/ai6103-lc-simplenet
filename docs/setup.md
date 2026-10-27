@@ -48,4 +48,4 @@ uv run python scripts/check_repository.py
 git diff --check
 ```
 
-CI runs lightweight checks on Windows and Linux and the optional CPU scientific checks on Linux. No CI job downloads a dataset or pretrained model. Training, the AD 2 loader and official regional metric are deliberately unfinished; see the [first gate](project.md#first-feasibility-gate).
+CI runs lightweight checks on Windows and Linux and the optional CPU scientific checks on Linux. No CI job downloads a dataset or pretrained model. The [single-view baseline](baseline-training.md) is available; paired training integration, the AD 2 loader and official regional metric remain unfinished. See the [first gate](project.md#first-feasibility-gate).
