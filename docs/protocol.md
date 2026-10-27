@@ -4,7 +4,7 @@ Status: draft operational protocol implementing the revised proposal. Record fin
 
 ## Data and selection
 
-Use [the normal-data and map contract](data-contract.md). Pin the manifest hash in the resolved run configuration and obey its split membership, including AD holdouts that physically remain in `train/good`. Carry original image dimensions through prediction and restore continuous maps to native coordinates before evaluation.
+Use [the normal-data and map contract](data-contract.md). Pin the manifest hash in the resolved run configuration and obey its split membership, including AD holdouts that physically remain in `train/good`. Carry original image dimensions through prediction and restore full-frame continuous maps to native coordinates before evaluation. For the [AD reference crop](baseline-training.md), retain the observed crop coordinates and evaluate against masks resized and cropped with the same geometry. Never stretch a cropped map across the full native image; agree the evaluation geometry before testing.
 
 - MVTec AD: reproduce on selected categories. Derive a fixed normal validation holdout from training data; persist the file list and hash. Do not use defect labels for the split or selection.
 - MVTec AD 2: train separate per-category models on AD 2's own normal training images. Use official normal validation images. AD and AD 2 contain different categories; this is not direct transfer.
