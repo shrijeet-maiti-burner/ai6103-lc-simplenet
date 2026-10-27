@@ -21,6 +21,7 @@ Updated 26 October 2026 (Singapore).
 | AD split and AD 2 lighting metadata | Persist and verify before the experiment matrix |
 | Private server access / submission fields | Not tested; confirm before promising private metrics |
 | Data foundation | Normal manifest builder/reader and continuous-map restoration implemented; see [the contract](data-contract.md) |
-| Main training integration / AD 2 evaluation loader / official PRO implementation | Pending; the data source is not a drop-in upstream trainer replacement |
+| Development training integration | [Fixed-step paired pilot](pilot-training.md) implemented; full upstream reproduction remains pending |
+| AD 2 evaluation loader / official PRO implementation | Pending; normal-only calibration does not replace defect evaluation |
 
 Do not replace score MSE with feature cosine or score L1 because they appeared in an older chat answer. Such changes require an explicit experiment decision. No additional architectures or datasets are part of the initial commitment.
