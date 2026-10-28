@@ -58,12 +58,45 @@ Bottle has 83 test images (63 defective), grid 78 (57 defective). Values are see
 - The upstream single-view recipe is unstable on grid. Its loss sits near 0.0002 and then the discriminator collapses (loss back near 1.0, p_true about 0.2): in the final meta-epoch for seeds 0 and 1, and about four meta-epochs before the end for seed 2, which partly recovers. The fixed final checkpoints score 69.9, 48.1 and 98.2 image AUROC. Upstream's test-selected checkpoint would hide this. Bottle never collapsed.
 - The paired runner did not collapse on grid. On bottle, B0 spiked late on two seeds, and one had not fully settled by the end; B1 and B2 never spiked. Whether relit views stabilize training has not been tested.
 
+## Grid single-view collapse, 28 October
+
+To check whether the grid gap to the paper comes from our code or from upstream's checkpoint rule, the three grid single-view runs were repeated at `eac7968` and scored after every meta-epoch on normal validation and on the test set. Random-number state was saved before each scoring pass and restored after it. Each rerun's final validation scores match the original run exactly, and its final test AUROC equals the table above. This scores the test set 40 times per seed on purpose. It changes no setting and selects nothing. It shows what upstream's rule, which keeps the epoch with the best test AUROC, would report (see upstream [issue #7](https://github.com/DonaldRR/SimpleNet/issues/7)).
+
+Image AUROC (%):
+
+| Seed | Best test epoch (upstream rule) | Meta-epochs 10 to 36, mean (range) | Final (ours) | Collapse |
+|---|---|---|---:|---|
+| 0 | 99.83 (epoch 4) | 98.75 (98.41 to 99.08) | 69.92 | epoch 40 |
+| 1 | 99.08 (epoch 20) | 98.51 (98.25 to 99.08) | 48.12 | epoch 40 |
+| 2 | 99.50 (epoch 9) | 98.45 (98.25 to 99.16) | 98.16 | epoch 37, partly recovers |
+| mean | 99.47 | 98.57 | 72.07 | |
+
+Pixel AUROC over meta-epochs 10 to 36 averages 98.80, 98.90 and 98.82.
+
+- Upstream's rule gives 99.47 on average, close to the paper's 99.7. For seed 0 it picks epoch 4, where the training loss (0.76) has not settled.
+- Between meta-epochs 10 and 36 the single-view baseline averages 98.45 to 98.75 per seed, the level of the paired B0 (98.61) and B1 (98.64). The low single-view number in the main table comes from where training stops.
+- Each collapse starts with a jump in the mean training loss per meta-epoch, from about 0.0002 to 0.78 (seed 0) and 0.61 (seed 1) in the last meta-epoch, and for seed 2 to 0.04 in epoch 37 and 0.86 in epoch 38. Normal-validation score spread rises with it (seed 0: 0.22 to 0.39). Both are normal-only signals that a stopping rule could use, but none was declared before testing, so the baseline keeps the fixed final checkpoint.
+
+## Inference cost
+
+Batch 1 on one A40, CUDA-synchronized, 30 warmup and 300 timed calls, input a normalized 288 × 288 tensor already on the GPU, each model in its own process.
+
+| Model | Network to patch scores | With score map | Peak allocated | Parameters, heads / backbone |
+|---|---:|---:|---:|---|
+| single-view | 12.2 ms | 328 ms | 424 MiB (788 with map) | 3.94M / 68.9M |
+| paired (B0, B1, B2) | 12.1 ms | 16.6 ms | 424 MiB | 3.94M / 68.9M |
+
+- The networks are the same size and take the same time, so relit training and the consistency loss add nothing at inference.
+- The single-view map time is upstream `_predict`, which also resizes the 1536-channel feature map to 288 × 288 and copies it to the CPU without using it for scoring (193 ms on another node). The paired path builds the same score map without that step.
+- The backbone count is the full Wide ResNet-50-2; only layers up to layer3 run.
+
 ## Limits
 
 - Test results have now been seen. Changing a setting from here starts a new study and must disclose this exposure.
+- The grid trajectory above scored the test set at every meta-epoch. It is a diagnostic of upstream's checkpoint rule; no setting or checkpoint was chosen from it.
 - Brightness and gamma ranges are pending C. A change reruns B1 and B2.
 - D's evaluation, including PRO, is separate. These numbers are a development check.
 
 ## Artifacts
 
-The [study release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad-study-bottle-grid-2026-10-27) has the trained heads for all 18 paired runs, the grid single-view checkpoints, normal-validation outputs, run metadata, the weight selection, these test scores and the scoring script. Dataset images and pretrained backbone weights are not included.
+The [study release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad-study-bottle-grid-2026-10-27) has the trained heads for all 18 paired runs, the grid single-view checkpoints, normal-validation outputs, run metadata, the weight selection, these test scores and the scoring script. The [diagnostics release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad-grid-diagnostics-2026-10-28) has the per-epoch grid trajectory, the inference timings and the two scripts behind them. Dataset images and pretrained backbone weights are not included.
