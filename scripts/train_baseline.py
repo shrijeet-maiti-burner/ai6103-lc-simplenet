@@ -1,7 +1,8 @@
 """Train the upstream single-view SimpleNet baseline on one MVTec AD category.
 
 No test images are read. The new run directory receives the final checkpoint,
-raw normal-validation scores/maps and a summary with hashes, runtime and peak VRAM.
+raw normal-validation scores/maps with their crop geometry and a summary with hashes,
+runtime, peak VRAM and reload differences.
 """
 
 import argparse
@@ -21,6 +22,7 @@ from lc_simplenet.baseline import (
     UPSTREAM_AD_INPUT,
     UpstreamInput,
     build_model,
+    center_crop_box,
     load_trained_state,
     predict,
     train_fixed,
@@ -57,6 +59,11 @@ def main() -> None:
     upstream_module("utils").fix_seeds(args.seed, with_cuda=cuda)
     settings = {**UPSTREAM_AD, "meta_epochs": args.meta_epochs}
     resize, imagesize = UPSTREAM_AD_INPUT["resize"], UPSTREAM_AD_INPUT["imagesize"]
+    geometry = {
+        "resize_hw": [resize, resize],
+        "crop_box_tlbr": center_crop_box(resize, imagesize),
+        "map_hw": [imagesize, imagesize],
+    }
 
     def loader(split: str, shuffle: bool):
         source = NormalManifestDataset(
@@ -92,7 +99,8 @@ def main() -> None:
     checkpoint = args.out / "checkpoint.pt"
     torch.save({"state": trained_state(model), "settings": settings}, checkpoint)
     scores = predict(model, validation)
-    np.savez_compressed(args.out / "validation_normal.npz", **scores)
+    arrays = {name: np.asarray(value) for name, value in geometry.items()}
+    np.savez_compressed(args.out / "validation_normal.npz", **scores, **arrays)
 
     reloaded = new_model()
     load_trained_state(reloaded, torch.load(checkpoint, map_location="cpu")["state"])
@@ -103,6 +111,7 @@ def main() -> None:
         "seed": args.seed,
         "settings": settings,
         "input": UPSTREAM_AD_INPUT,
+        "geometry": geometry,
         "train_images": len(train.dataset),
         "validation_images": len(validation.dataset),
         "manifest_sha256": args.manifest_sha256,
@@ -119,6 +128,7 @@ def main() -> None:
         "reload_max_abs_score_diff": float(
             np.abs(again["image_score"] - scores["image_score"]).max()
         ),
+        "reload_max_abs_map_diff": float(np.abs(again["map"] - scores["map"]).max()),
     }
     (args.out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(summary, indent=2))

@@ -68,6 +68,12 @@ class UpstreamInput(torch.utils.data.Dataset):
         return {"image": image, "image_id": sample["image_id"]}
 
 
+def center_crop_box(resize: int, imagesize: int) -> list[int]:
+    """[top, left, bottom, right] of the torchvision center crop in the resized square."""
+    top = int(round((resize - imagesize) / 2.0))
+    return [top, top, top + imagesize, top + imagesize]
+
+
 def build_model(backbone, device, imagesize: int, settings: dict = UPSTREAM_AD):
     model = upstream_module("simplenet").SimpleNet(device)
     model.load(backbone=backbone, device=device, input_shape=(3, imagesize, imagesize), **settings)

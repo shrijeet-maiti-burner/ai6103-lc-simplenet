@@ -34,8 +34,8 @@ Each new run directory contains:
 | File | Contents |
 |---|---|
 | `checkpoint.pt` | Final adapter/discriminator state and model settings |
-| `validation_normal.npz` | Normal-validation image IDs, raw max-patch anomaly scores and smoothed 288-by-288 crop maps |
-| `summary.json` | Seed, settings, split counts, source/upstream revisions, dirty flag, manifest/lock/checkpoint hashes, runtime versions, training time, peak training VRAM and reload score difference |
+| `validation_normal.npz` | Normal-validation image IDs, raw max-patch anomaly scores, smoothed 288-by-288 crop maps, and the geometry: `resize_hw`, `crop_box_tlbr` (`[20, 20, 308, 308]` in the resized canvas) and `map_hw` |
+| `summary.json` | Seed, settings, geometry, split counts, source/upstream revisions, dirty flag, manifest/lock/checkpoint hashes, runtime versions, training time, peak training VRAM and reload score and map differences |
 | `logs/` | Upstream training diagnostics in TensorBoard format |
 
 The runner reconstructs a fresh model, reloads the saved heads and reports the maximum absolute normal-validation image-score difference. It does not save the frozen backbone, optimizer state or RNG state, and does not support continuation. Reloading requires the same pretrained backbone, shape-probe behavior, settings and compatible runtime. Complete RNG/provenance capture for the main study remains separate work.
