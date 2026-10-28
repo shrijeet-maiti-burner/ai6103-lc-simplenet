@@ -99,13 +99,93 @@ def _require_space(root: Path, unpacked_bytes: int) -> None:
         raise ArchiveError(f"Need {needed} bytes including margin; {probe} has {free} bytes free")
 
 
-def _refuse_existing(root: Path, names: list[str], *, force: bool) -> None:
+def _read_acquisition(path: Path) -> dict:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise ArchiveError("Acquisition record is not valid JSON") from exc
+    if type(data) is not dict or type(data.get("archive_sha256")) is not str:
+        raise ArchiveError("Acquisition record is missing archive_sha256")
+    return data
+
+
+def _member_matches(root: Path, item: dict) -> bool:
+    dest = destination_for(root, item["name"])
+    if dest.is_symlink():
+        return False
+    if item["kind"] == "dir":
+        return dest.is_dir()
+    return dest.is_file() and dest.stat().st_size == item["size"]
+
+
+def _members_present(root: Path, entries: list[dict]) -> bool:
+    if not any(item["kind"] == "file" for item in entries):
+        return False
+    return all(_member_matches(root, item) for item in entries)
+
+
+def _existing_member_names(root: Path, names: list[str]) -> list[str]:
+    return [name for name in names if destination_for(root, name).exists()]
+
+
+def _public_report(
+    archive: Path,
+    digest: str,
+    inventory: dict,
+    source_url: str,
+    acquired_at: str,
+    skipped: bool,
+) -> dict:
+    return {
+        "source_url": source_url,
+        "acquired_at_utc": acquired_at,
+        "archive_filename": archive.name,
+        "archive_bytes": archive.stat().st_size,
+        "archive_sha256": digest,
+        "unpacked_bytes": inventory["unpacked_bytes"],
+        "members": inventory["members"],
+        "kinds": inventory["kinds"],
+        "top_level": inventory["top_level"],
+        "extract_completed": True,
+        "extract_skipped": skipped,
+    }
+
+
+def _skip_if_recorded(
+    *,
+    root: Path,
+    digest: str,
+    inventory: dict,
+    names: list[str],
+    acquisition_out: Path | None,
+    force: bool,
+) -> dict | None:
+    """Return the recorded acquisition when extract can be skipped."""
     if force:
-        return
-    collisions = [name for name in names if destination_for(root, name).exists()]
-    if collisions:
-        preview = ", ".join(collisions[:8])
-        raise FileExistsError(f"Refusing to overwrite existing paths: {preview}")
+        return None
+    if acquisition_out is not None and acquisition_out.exists():
+        recorded = _read_acquisition(acquisition_out)
+        if recorded["archive_sha256"] != digest:
+            raise ArchiveError(
+                "Archive SHA-256 differs from the recorded acquisition; "
+                "refusing to overwrite the existing extraction"
+            )
+        recorded_root = recorded.get("extract_root")
+        if recorded_root is not None and Path(recorded_root).resolve() != root:
+            raise ArchiveError(
+                "Extract root differs from the recorded acquisition; refusing to overwrite"
+            )
+        if not recorded.get("extract_completed"):
+            raise ArchiveError("Recorded acquisition is incomplete; refusing to overwrite")
+        if not _members_present(root, inventory["entries"]):
+            raise ArchiveError("Recorded extraction is missing files; refusing to overwrite")
+        return recorded
+    if _existing_member_names(root, names):
+        raise FileExistsError(
+            "Existing extraction conflicts with the archive or recorded acquisition; "
+            "refusing to overwrite"
+        )
+    return None
 
 
 def extract_archive(
@@ -117,7 +197,7 @@ def extract_archive(
     acquisition_out: Path | None = None,
     source_url: str = "manual download; no URL used by this repository",
 ) -> dict:
-    """Hash, inspect, then extract into an empty destination tree."""
+    """Hash, inspect, then extract unless a matching recorded extraction already exists."""
     archive = archive.resolve(strict=True)
     root = root.resolve()
     digest = file_sha256(archive)
@@ -125,9 +205,25 @@ def extract_archive(
         raise ArchiveError("Archive SHA-256 differs from the declared pin")
     inventory = inspect_archive(archive)
     names = [item["name"] for item in inventory["entries"]]
+    recorded = _skip_if_recorded(
+        root=root,
+        digest=digest,
+        inventory=inventory,
+        names=names,
+        acquisition_out=acquisition_out,
+        force=force,
+    )
+    if recorded is not None:
+        return _public_report(
+            archive,
+            digest,
+            inventory,
+            recorded.get("source_url", source_url),
+            recorded.get("acquired_at_utc", ""),
+            True,
+        )
     _require_space(root, inventory["unpacked_bytes"])
     root.mkdir(parents=True, exist_ok=True)
-    _refuse_existing(root, names, force=force)
     with tarfile.open(archive, "r:*") as bundle:
         for member in bundle:
             name = _member_name(member)
@@ -142,18 +238,14 @@ def extract_archive(
             if extracted is None:
                 raise ArchiveError(f"Could not read archive member: {name}")
             dest.write_bytes(extracted.read())
-    report = {
-        "source_url": source_url,
-        "acquired_at_utc": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "archive_filename": archive.name,
-        "archive_bytes": archive.stat().st_size,
-        "archive_sha256": digest,
-        "unpacked_bytes": inventory["unpacked_bytes"],
-        "members": inventory["members"],
-        "kinds": inventory["kinds"],
-        "top_level": inventory["top_level"],
-        "extract_completed": True,
-    }
+    report = _public_report(
+        archive,
+        digest,
+        inventory,
+        source_url,
+        datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        False,
+    )
     if acquisition_out is not None:
         acquisition_out.parent.mkdir(parents=True, exist_ok=True)
         if acquisition_out.exists() and not force:

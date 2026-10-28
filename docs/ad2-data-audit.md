@@ -4,6 +4,8 @@ Procedure for a user-provided official archive. This document does not freeze AD
 
 Expected image counts below are from Heckler-Kram et al., [arXiv:2503.21622v1](https://arxiv.org/html/2503.21622v1), Table IV. They are **paper-reported**, not on-disk measurements. Compare them with `scripts/audit_mvtec_ad2.py` output tagged `source=files`.
 
+Work from branch `ad2-fabric-prep` (based on `feat/b-study-runner`). Dataset archives, extracted images, generated manifests, filled audit JSON, checkpoints and `.env` stay out of Git.
+
 ## Acquire and extract
 
 Download from [MVTec AD 2](https://www.mvtec.com/research-teaching/datasets/mvtec-ad-2) under CC BY-NC-SA 4.0. This repository does not fetch the archive.
@@ -27,7 +29,9 @@ export MVTEC_AD2_ROOT=data/mvtec_ad2
   --weights random
 ```
 
-The pinned fabric normal-manifest SHA-256 is `6f9c589c1b45a0af94e77c3261eb6623236a42c1284538314bea344e63def2f5` (387 train / 43 validation). Rebuilds must match it. `--inspect-only` lists archive members without writing files. Extraction refuses path traversal, links, special files, and overwrites. The builder refuses to replace an existing manifest.
+The pinned fabric normal-manifest SHA-256 is `6f9c589c1b45a0af94e77c3261eb6623236a42c1284538314bea344e63def2f5` (387 train / 43 validation). Rebuilds must match it. `--inspect-only` lists archive members without writing files. Extraction refuses path traversal, links and special files. A second run with the same archive SHA-256 and a matching acquisition record skips extraction; a changed archive or a conflicting tree stops with an error instead of overwriting. The builder refuses to replace an existing manifest.
+
+`scripts/prepare_mvtec_ad2_archive.py` writes `data/audits/ad2-acquisition.json` by default. That file is gitignored.
 
 ## Table IV expected counts
 
@@ -51,18 +55,23 @@ On the fabric archive, duplicate file SHA-256 groups were only:
 
 No duplicate file hashes involved `train/good`, `validation/good`, public RGB, or a second category. Those groups are not a reason to alter the normal manifests.
 
-## Geometry (open team decision)
+## Geometry (pending team agreement)
 
-The [AD baseline](baseline-training.md) uses upstream `Resize(329)` then center crop 288. That path **rejects non-square natives**, so fabric 2448×2048 cannot use it unchanged. The [paired pilot](pilot-training.md) `ad_resize` option is **MVTec AD only**.
+The [AD baseline](baseline-training.md) uses upstream `Resize(329)` then center crop 288. That path **rejects non-square natives**, so fabric 2448×2048 cannot use it unchanged. The [paired pilot](pilot-training.md) `ad_resize` option is **MVTec AD only**. Shared `PilotConfig.image_size` still defaults to 288×288 for bottle/grid; this branch does not change `baseline.py` or `pilot.py`.
 
-**Provisional CPU smoke only** (`scripts/smoke_ad2.py`, not a training recipe): native fabric **2048×2448** (H×W) was full-frame PIL bilinear **stretched** to **288×288**, then ImageNet-normalized. No 329→288 crop. `geometry_frozen` is false. This does **not** freeze AD 2 input geometry and does not change `baseline.py` or `pilot.py`.
+Heckler-Kram et al. (arXiv:2503.21622v1) resize images to **256×256** unless a method says otherwise, and train SimpleNet for **160 epochs**. That is the proposed AD 2 protocol if the team agrees to match the paper baseline: full-frame PIL bilinear resize to 256×256, which **stretches** non-square natives such as fabric 2048×2448 (H×W). It is **not frozen** in training code.
 
-Do not start B0/B1/B2 until the team picks one of:
+**Recorded CPU smoke** (`scripts/smoke_ad2.py`, a pipeline check, not a scientific result): native fabric 2048×2448 was stretched to **288×288**, then ImageNet-normalized. Default `--image-height/--image-width` remain 288 so that check is reproducible. Passing 256 is optional and still not a training recipe. `geometry_frozen` stays false.
 
-1. Aspect-preserving resize and pad, with a recorded valid region for map restoration.
-2. Explicit full-frame stretch to square, documented as a change of native aspect.
+Do not start B0/B1/B2 until the team agrees. If 256×256 full-frame stretch is chosen:
 
-`restore_score_map` restores continuous scores after full-frame resize or bottom/right pad. It cannot undo a crop. Discrete ground-truth masks need a separate rule.
+1. Use the same resize for train, validation and inference (`output_size=(256, 256)`, `ad_resize=None`).
+2. Restore continuous score maps with `restore_score_map(..., original_size=native_hw, image_size=(256, 256))` and no `valid_size` (no pad, no crop). That inverts the same full-frame stretch.
+3. Discrete ground-truth masks need a **separate nearest-neighbor** full-frame resize to 256×256, not `restore_score_map` (bilinear would create fractional labels). Evaluate masks and maps in the same coordinate system.
+4. Do not apply the AD 329→288 crop to AD 2; `restore_score_map` cannot undo a crop.
+5. Implement that geometry in an AD 2-only config, not by changing shared bottle/grid defaults.
+
+Until then, keep pad-versus-stretch as an open choice. The smoke aspect-ratio field uses `h * target_w != w * target_h`.
 
 ## Normal manifests
 
@@ -70,7 +79,7 @@ Reuse [`scripts/build_normal_manifest.py`](../scripts/build_normal_manifest.py).
 
 ## NTU GPU readiness (before B0/B1/B2)
 
-Do not launch the three-variant fabric matrix until geometry is agreed. After copying data and checking out `research/ad2-fabric-prep`:
+Do not launch the three-variant fabric matrix until geometry is agreed. After copying data and checking out `ad2-fabric-prep`:
 
 1. **Environment:** Python 3.12.15, uv 0.13.0, `git submodule update --init --recursive`, then `"$UV" sync --frozen --extra cuda`. Do not mix `--extra cpu` and `--extra cuda`.
 2. **CUDA:** `"$UV" run --frozen --extra cuda python -m lc_simplenet doctor --require-cuda`. Driver must support the pinned PyTorch 2.6.0 / torchvision 0.21.0 CUDA 12.4 wheels.

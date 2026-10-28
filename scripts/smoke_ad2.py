@@ -25,6 +25,13 @@ IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
 
 
+def aspect_ratio_changed(original_hw, target_hw) -> bool:
+    """True when a full-frame resize from original (h, w) to target (h, w) stretches."""
+    height, width = int(original_hw[0]), int(original_hw[1])
+    target_h, target_w = int(target_hw[0]), int(target_hw[1])
+    return height * target_w != width * target_h
+
+
 def _dataset(manifest, root, sha256, split, output_size):
     return NormalManifestDataset(
         manifest,
@@ -88,9 +95,19 @@ def main() -> None:
         _summarize(native_val[i], "validation") for i in range(min(args.val_limit, len(native_val)))
     ]
     load_size = (args.image_height, args.image_width)
-    aspect_change = any(
-        tuple(sample["original_size_hw"]) != list(load_size) for sample in native_samples
-    )
+    aspect_reports = [
+        {
+            "image_id": sample["image_id"],
+            "original_size_hw": [
+                int(sample["original_size_hw"][0]),
+                int(sample["original_size_hw"][1]),
+            ],
+            "target_size_hw": [load_size[0], load_size[1]],
+            "changes_aspect_ratio": aspect_ratio_changed(sample["original_size_hw"], load_size),
+        }
+        for sample in native_samples
+    ]
+    aspect_change = any(item["changes_aspect_ratio"] for item in aspect_reports)
     config = PilotConfig(
         dataset="mvtec_ad2",
         category="fabric",
@@ -143,11 +160,20 @@ def main() -> None:
                 "transform": {
                     "reader": "PIL bilinear full-frame resize",
                     "load_size_hw": list(load_size),
+                    "original_size_hw": sorted(
+                        {tuple(item["original_size_hw"]) for item in aspect_reports}
+                    ),
+                    "target_size_hw": list(load_size),
                     "crop": None,
                     "normalization": {"mean": list(IMAGENET_MEAN), "std": list(IMAGENET_STD)},
+                    "changes_aspect_ratio": aspect_change,
                     "stretches_aspect_ratio": aspect_change,
+                    "samples": aspect_reports,
                     "geometry_frozen": False,
-                    "note": "AD 2 geometry is undecided; smoke reports the stretch applied.",
+                    "note": (
+                        "CPU smoke is a 288x288 pipeline check, not a paper or training result. "
+                        "Proposed AD 2 protocol is 256x256 full-frame stretch; not frozen."
+                    ),
                 },
                 "validation_geometry": geometry,
                 "normalized_finite": True,

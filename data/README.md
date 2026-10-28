@@ -8,7 +8,7 @@ Place local datasets at `data/mvtec_ad/` and `data/mvtec_ad2/`, or set `MVTEC_AD
 export MVTEC_AD2_ARCHIVE=data/fabric.tar.gz
 export MVTEC_AD2_ROOT=data/mvtec_ad2
 uv run python scripts/prepare_mvtec_ad2_archive.py
-uv run python scripts/audit_mvtec_ad2.py --out data/audits/ad2-tree.json
+uv run python scripts/audit_mvtec_ad2.py --root "$MVTEC_AD2_ROOT" --out data/audits/ad2-tree.json
 ```
 
 Before training, record dataset version/archive hashes, category names, relative image paths, split membership, source/acquisition IDs and lighting metadata provenance. AD 2 folder and condition semantics must be verified against its official utilities. Do not repurpose the AD loader by changing only the root path. See [the AD 2 audit notes](../docs/ad2-data-audit.md).
