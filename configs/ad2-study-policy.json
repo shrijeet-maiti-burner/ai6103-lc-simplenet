@@ -1,0 +1,98 @@
+{
+  "status": "draft B proposal, 29 October; not frozen. Categories, source passes and the lighting ranges are pending team agreement. Freeze them before the weight search.",
+  "scope": "AD 2 B0/B1/B2 training for the proposal's main claim. Thresholds and regular/changed-lighting evaluation are D's.",
+  "dataset": "mvtec_ad2",
+  "input": "full-frame bilinear resize to 256 x 256 with no crop, the AD 2 paper's default for its baselines; non-square images change aspect ratio",
+  "image_size": [
+    256,
+    256
+  ],
+  "ad_resize": null,
+  "batch_size": 8,
+  "main_seeds": [
+    0,
+    1,
+    2
+  ],
+  "variants": [
+    "B0",
+    "B1",
+    "B2"
+  ],
+  "validation": "official validation/good folder, regular lighting only",
+  "minimum_normal_validation_images": 20,
+  "selected_categories": "pending",
+  "category_policy": "fabric (prepared) plus further categories chosen from normal image counts, native size and measured cost only, never from test images, test lighting or server feedback",
+  "category_counts_train_validation": {
+    "can": [
+      412,
+      46
+    ],
+    "fabric": [
+      387,
+      43
+    ],
+    "fruit_jelly": [
+      263,
+      37
+    ],
+    "rice": [
+      313,
+      35
+    ],
+    "sheet_metal": [
+      137,
+      19
+    ],
+    "vial": [
+      291,
+      41
+    ],
+    "wallplugs": [
+      293,
+      33
+    ],
+    "walnuts": [
+      432,
+      48
+    ]
+  },
+  "category_counts_source": "paper Table IV (arXiv:2503.21622v1) via docs/ad2-data-audit.md; fabric confirmed on disk (manifest 6f9c589c...). sheet_metal is below the validation minimum.",
+  "source_pass_candidates": [
+    80,
+    160
+  ],
+  "source_passes": "pending",
+  "horizon_note": "80 source passes with two views is 160 input-view passes, the rule used for the MVTec AD study and the same count as the upstream single-view recipe (40 meta-epochs x 4). 160 source passes matches the paper's 160 epochs per view and doubles cost. Fabric at batch 8 is 49 updates per pass: 3,920 or 7,840 updates.",
+  "cost_note": "measure the paired step cost at 256 on fabric before choosing; decoding 2448 x 2048 PNGs may dominate",
+  "brightness": [
+    0.8,
+    1.2
+  ],
+  "gamma": [
+    0.8,
+    1.2
+  ],
+  "lighting_status": "provisional until C confirms; the same ranges as the MVTec AD study",
+  "weight_search": {
+    "seed": 3,
+    "fixed_updates_per_trial": 256,
+    "candidates": [
+      0.01,
+      0.1,
+      1.0
+    ],
+    "data": "AD 2 official normal validation; the MVTec AD selection (1.0) is not carried over",
+    "controls": "one B1 run per category at the tuning seed, shared by all candidates",
+    "proxy": "category-macro mean of B2/B1 normal-validation patch-score MSE ratios at the four fixed brightness/gamma corners",
+    "minimum_patch_std_ratio": 0.5,
+    "maximum_synthetic_hinge_ratio": 1.25,
+    "tie_rule": "smallest positive weight within 1 percent of the best eligible proxy",
+    "no_eligible_candidate": "stop; do not silently change the safeguards or launch B2"
+  },
+  "single_view_reference": "scripts/train_baseline.py --dataset mvtec_ad2 --resize 256 --imagesize 256, 40 meta-epochs, fixed final",
+  "normal_validation_target_fpr": 0.05,
+  "checkpoint_policy": "fixed_final",
+  "test_data_used_for_selection": false,
+  "hardware": "one NVIDIA A40 per run; up to three runs may share one GPU (byte-identical checkpoints verified on MVTec AD)"
+}
