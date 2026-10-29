@@ -69,6 +69,6 @@ One run on an A40 with no other job: median 14.9 training minutes (4.8 for tooth
 uv run --frozen --extra cuda python scripts/reproduce_ad.py screw 0 results/ad-repro-screw-seed0
 ```
 
-`LC_DATA`, `LC_MANIFESTS` and `LC_DEVICE` change the dataset root, manifest folder and device. The committed script is the one that produced these runs, reformatted for lint; its code parses to the same syntax tree and only the usage docstring changed. It has no CPU test.
+`LC_DATA`, `LC_MANIFESTS` and `LC_DEVICE` change the dataset root, manifest folder and device. The committed script is the one that produced these runs, reformatted for lint; its code parses to the same syntax tree and only the usage docstring changed. [`tests/test_reproduce_ad.py`](../tests/test_reproduce_ad.py) runs it and `train_baseline.py` on a tiny CPU fixture with fixed random backbone weights for two meta-epochs. It checks that the checkpoints are identical, so per-epoch scoring leaves training unchanged, and that the reload and scorer differences are 0. The test fails if scoring draws random numbers without restoring the RNG state.
 
 Each run writes `checkpoint.pt`, `validation_normal.npz` (with the crop geometry), `trajectory.jsonl`, `scores.npz` and `summary.json`. The [reproduction release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad-reproduction-2026-10-29) has every run's summary, trajectory and per-epoch scores, the table and the checks. Checkpoints are not released.
