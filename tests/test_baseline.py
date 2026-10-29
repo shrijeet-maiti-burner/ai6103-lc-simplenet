@@ -70,6 +70,41 @@ def test_input_rejects_non_square_sources(tmp_path):
         UpstreamInput(_source(tmp_path, manifest, digest, "train", 33), 28)
 
 
+def test_stretch_resizes_non_square_ad2_full_frame(tmp_path):
+    torch = pytest.importorskip("torch")
+    import torchvision.transforms.functional as TF
+
+    from lc_simplenet.baseline import IMAGENET_MEAN, IMAGENET_STD, UpstreamInput
+
+    rng = np.random.default_rng(0)
+    for split, count in (("train", 3), ("validation", 2)):
+        for i in range(count):
+            path = tmp_path / "fabric" / split / "good" / f"{i:03}.png"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            Image.fromarray(rng.integers(0, 256, (30, 40, 3), dtype=np.uint8)).save(path)
+    records, audit = build_normal_manifest(tmp_path, "mvtec_ad2", ["fabric"])
+    manifest = tmp_path / "ad2.jsonl"
+    write_normal_manifest(records, audit, manifest)
+    digest = hashlib.sha256(manifest.read_bytes()).hexdigest()
+    source = NormalManifestDataset(
+        manifest,
+        tmp_path,
+        dataset="mvtec_ad2",
+        category="fabric",
+        split="train",
+        expected_sha256=digest,
+        output_size=(32, 32),
+    )
+    with pytest.raises(ValueError, match="square"):
+        UpstreamInput(source, 32)
+    for sample in UpstreamInput(source, 32, stretch=True):
+        with Image.open(tmp_path / sample["image_id"]) as image:
+            resized = image.convert("RGB").resize((32, 32), Image.Resampling.BILINEAR)
+        expected = torch.from_numpy(np.asarray(resized, dtype=np.float32) / np.float32(255))
+        expected = TF.normalize(expected.permute(2, 0, 1), IMAGENET_MEAN, IMAGENET_STD)
+        assert torch.equal(sample["image"], expected)
+
+
 def test_final_state_trains_and_reloads_to_identical_scores(tmp_path):
     torch = pytest.importorskip("torch")
     torchvision = pytest.importorskip("torchvision")

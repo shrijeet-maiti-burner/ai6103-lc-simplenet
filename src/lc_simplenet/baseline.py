@@ -47,13 +47,15 @@ class UpstreamInput(torch.utils.data.Dataset):
 
     With ``output_size=(resize, resize)``, the source applies the same PIL bilinear
     resize as upstream ``transforms.Resize(resize)``, but only for square images.
+    ``stretch=True`` also accepts non-square images: the source's full-frame resize
+    then changes their aspect ratio, which upstream never does (AD 2 only).
     """
 
-    def __init__(self, source, imagesize: int):
+    def __init__(self, source, imagesize: int, stretch: bool = False):
         size = source.output_size
         if size is None or size[0] != size[1] or size[0] < imagesize:
             raise ValueError("Source needs a square output_size of at least imagesize")
-        if any(record.width != record.height for record in source.records):
+        if not stretch and any(record.width != record.height for record in source.records):
             raise ValueError("Upstream Resize(resize) is a square resize only for square images")
         self.source, self.imagesize = source, imagesize
 

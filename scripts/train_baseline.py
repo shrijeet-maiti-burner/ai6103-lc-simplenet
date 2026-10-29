@@ -1,8 +1,9 @@
-"""Train the upstream single-view SimpleNet baseline on one MVTec AD category.
+"""Train the upstream single-view SimpleNet baseline on one MVTec AD or AD 2 category.
 
 No test images are read. The new run directory receives the final checkpoint,
 raw normal-validation scores/maps with their crop geometry and a summary with hashes,
-runtime, peak VRAM and reload differences.
+runtime, peak VRAM and reload differences. AD 2 sources are resized full-frame to
+--resize (aspect ratio changes) and not cropped; MVTec AD keeps upstream resize and crop.
 """
 
 import argparse
@@ -43,6 +44,7 @@ def _sha256(path: Path) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--dataset", choices=["mvtec_ad", "mvtec_ad2"], default="mvtec_ad")
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--manifest-sha256", required=True)
     parser.add_argument("--root", type=Path, required=True)
@@ -50,33 +52,39 @@ def main() -> None:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--meta-epochs", type=int, default=UPSTREAM_AD["meta_epochs"])
+    parser.add_argument("--resize", type=int, default=UPSTREAM_AD_INPUT["resize"])
+    parser.add_argument("--imagesize", type=int, default=UPSTREAM_AD_INPUT["imagesize"])
     parser.add_argument("--num-workers", type=int, default=2)
     parser.add_argument("--device", choices=["cpu", "cuda"], default="cuda")
     args = parser.parse_args()
+    stretch = args.dataset == "mvtec_ad2"
+    if stretch and args.resize != args.imagesize:
+        parser.error("AD 2 is resized full-frame without a crop: set --resize equal to --imagesize")
     args.out.mkdir(parents=True, exist_ok=False)
     device = torch.device(args.device)
     cuda = device.type == "cuda"
     upstream_module("utils").fix_seeds(args.seed, with_cuda=cuda)
     settings = {**UPSTREAM_AD, "meta_epochs": args.meta_epochs}
-    resize, imagesize = UPSTREAM_AD_INPUT["resize"], UPSTREAM_AD_INPUT["imagesize"]
+    resize, imagesize = args.resize, args.imagesize
     geometry = {
         "resize_hw": [resize, resize],
         "crop_box_tlbr": center_crop_box(resize, imagesize),
         "map_hw": [imagesize, imagesize],
+        "full_frame_stretch": stretch,
     }
 
     def loader(split: str, shuffle: bool):
         source = NormalManifestDataset(
             args.manifest,
             args.root,
-            dataset="mvtec_ad",
+            dataset=args.dataset,
             category=args.category,
             split=split,
             expected_sha256=args.manifest_sha256,
             output_size=(resize, resize),
         )
         return torch.utils.data.DataLoader(
-            UpstreamInput(source, imagesize),
+            UpstreamInput(source, imagesize, stretch=stretch),
             batch_size=UPSTREAM_AD_INPUT["batch_size"],
             shuffle=shuffle,
             num_workers=args.num_workers,
@@ -110,7 +118,8 @@ def main() -> None:
         "category": args.category,
         "seed": args.seed,
         "settings": settings,
-        "input": UPSTREAM_AD_INPUT,
+        "dataset": args.dataset,
+        "input": {**UPSTREAM_AD_INPUT, "resize": resize, "imagesize": imagesize},
         "geometry": geometry,
         "train_images": len(train.dataset),
         "validation_images": len(validation.dataset),
