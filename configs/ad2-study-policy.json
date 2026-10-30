@@ -1,5 +1,5 @@
 {
-  "status": "draft B proposal, 29 October; not frozen. Categories, source passes and the lighting ranges are pending team agreement. Freeze them before the weight search.",
+  "status": "provisional B decision, 30 October, recorded before any AD 2 image was read. Athul asked B to proceed without waiting; the team may revise categories or passes, and C may revise the lighting ranges (which requires rerunning B1/B2).",
   "scope": "AD 2 B0/B1/B2 training for the proposal's main claim. Thresholds and regular/changed-lighting evaluation are D's.",
   "dataset": "mvtec_ad2",
   "input": "full-frame bilinear resize to 256 x 256 with no crop, the AD 2 paper's default for its baselines; non-square images change aspect ratio",
@@ -21,7 +21,10 @@
   ],
   "validation": "official validation/good folder, regular lighting only",
   "minimum_normal_validation_images": 20,
-  "selected_categories": "pending",
+  "selected_categories": [
+    "fabric",
+    "vial"
+  ],
   "category_policy": "fabric (prepared) plus further categories chosen from normal image counts, native size and measured cost only, never from test images, test lighting or server feedback",
   "category_counts_train_validation": {
     "can": [
@@ -62,7 +65,7 @@
     80,
     160
   ],
-  "source_passes": "pending",
+  "source_passes": 80,
   "horizon_note": "80 source passes with two views is 160 input-view passes, the rule used for the MVTec AD study and the same count as the upstream single-view recipe (40 meta-epochs x 4). 160 source passes matches the paper's 160 epochs per view and doubles cost. Fabric at batch 8 is 49 updates per pass: 3,920 or 7,840 updates.",
   "cost_note": "measure the paired step cost at 256 on fabric before choosing; decoding 2448 x 2048 PNGs may dominate",
   "brightness": [
@@ -94,5 +97,11 @@
   "normal_validation_target_fpr": 0.05,
   "checkpoint_policy": "fixed_final",
   "test_data_used_for_selection": false,
-  "hardware": "one NVIDIA A40 per run; up to three runs may share one GPU (byte-identical checkpoints verified on MVTec AD)"
+  "hardware": "one NVIDIA A40 per run; up to three runs may share one GPU (byte-identical checkpoints verified on MVTec AD)",
+  "selection_note": "fabric is kept as prepared (texture-like). vial is the cheapest eligible category by updates at 80 passes times native megapixels from Table IV (7.9k against 8.4k for fruit_jelly); sheet_metal is below the validation minimum. No image, score or test data was read.",
+  "fixed_updates": {
+    "fabric": 3920,
+    "vial": 2960
+  },
+  "horizon_decision": "80, the MVTec AD rule (160 input-view passes). A synthetic 2448 x 2048 PNG probe measured 1.68 s per paired step at 256, so 160 passes would double an already long matrix."
 }
