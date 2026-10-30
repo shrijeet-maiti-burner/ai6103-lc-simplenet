@@ -1,4 +1,7 @@
 import hashlib
+import importlib.util
+import sys
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -46,6 +49,35 @@ def test_input_matches_upstream_mvtec_train_transform(tmp_path):
         for sample in ours:
             expected = upstream[by_path[str(tmp_path / sample["image_id"])]]["image"]
             assert torch.equal(sample["image"], expected)
+
+
+def test_upstream_imports_write_no_bytecode_into_the_submodule(monkeypatch):
+    pytest.importorskip("torch")
+    from lc_simplenet.baseline import ROOT, upstream_module
+
+    source = ROOT / "third_party/SimpleNet/datasets/mvtec.py"
+    cache = Path(importlib.util.cache_from_source(str(source)))
+    if cache.exists():
+        pytest.skip("a cache from an earlier import already exists")
+    monkeypatch.setattr(sys, "dont_write_bytecode", False)
+    for name in ("datasets", "datasets.mvtec"):
+        monkeypatch.delitem(sys.modules, name, raising=False)
+    upstream_module("datasets.mvtec")
+    assert not cache.exists()
+    assert sys.dont_write_bytecode is False
+
+
+def test_center_crop_box_matches_torchvision():
+    torch = pytest.importorskip("torch")
+    import torchvision.transforms.functional as TF
+
+    from lc_simplenet.baseline import center_crop_box
+
+    assert center_crop_box(329, 288) == [20, 20, 308, 308]
+    for resize, size in ((329, 288), (33, 28), (30, 28)):
+        canvas = torch.arange(resize * resize).reshape(1, resize, resize)
+        top, left, bottom, right = center_crop_box(resize, size)
+        assert torch.equal(TF.center_crop(canvas, [size, size]), canvas[:, top:bottom, left:right])
 
 
 def test_input_rejects_non_square_sources(tmp_path):
