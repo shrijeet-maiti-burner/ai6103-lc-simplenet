@@ -98,7 +98,9 @@
     "maximum_synthetic_hinge_ratio": 1.25,
     "tie_rule": "smallest positive weight within 1 percent of the best eligible proxy",
     "no_eligible_candidate": "stop; do not silently change the safeguards or launch B2",
-    "categories": "all eight; one shared weight from the category-macro proxy"
+    "categories": "all eight; one shared weight from the category-macro proxy",
+    "outcome": "30 October: no candidate met the safeguards in all eight categories; the synthetic-hinge ratio exceeded 1.25 in three or four categories at every weight, including 0.01.",
+    "deviation": "Recorded the same day, before any AD 2 B2 main run finished: B2 is trained anyway at the fixed weight 1.0 that the MVTec AD study selected on 27 October, before any AD 2 data, and is reported as a deviation from the stop rule. 1.0 was not picked from the AD 2 search, where it failed in can, fruit_jelly, rice and vial."
   },
   "single_view_reference": "scripts/train_baseline.py --dataset mvtec_ad2 --resize 256 --imagesize 256, 40 meta-epochs, fixed final",
   "normal_validation_target_fpr": 0.05,
