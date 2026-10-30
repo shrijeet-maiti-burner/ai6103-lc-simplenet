@@ -47,8 +47,21 @@ The paper's own average is 99.6 / 98.1, which matches the first row.
 - 11 of 15 categories are within 1 image point of the paper at the fixed final epoch. Pixel AUROC is within 0.6 points everywhere except grid, wood (−1.16) and transistor (−1.11).
 - Grid is the only failure. Two of three seeds collapse in the last meta-epochs (69.92 and 48.12), and upstream's rule hides it by picking an earlier epoch (99.47). The cause and the training-loss jump are in the grid diagnostics of #4.
 - Without grid, upstream's test-epoch rule is worth about 0.46 image points on average (99.39 against 98.93). The epochs it would pick range from 1 to 39.
-- Screw, pill and cable stay below the paper even with test-epoch selection (−1.00, −0.67 and −0.56 image points). One untested explanation is that we train on 20% fewer images; seeds and library versions are other candidates.
+- Screw, pill and cable stay below the paper even with test-epoch selection (−1.00, −0.67 and −0.56 image points). Training on all of `train/good`, as upstream does, closes about 1.1 points of the screw gap but not the pill gap (next section). Cable was not checked.
 - Tile shows that picking by image AUROC can cost localisation: the best-test-epoch pixel AUROC is 93.71, against 96.97 at the final epoch.
+
+## Training on all of train/good (screw and pill)
+
+To test whether our 20% holdout explains the screw and pill gap, we retrained both on all of `train/good`, seeds 0 to 2. The script is `scripts/reproduce_ad.py` with one change: the training loader reads the train and validation splits together. Its normal-validation scores are then on training images, so these models are a diagnostic and not part of the reported baseline.
+
+| Image / pixel AUROC (%) | Training images | Fixed final | Best test epoch |
+|---|---:|---|---|
+| screw, 80% (reported above) | 256 | 95.75 ± 0.56 / 99.07 ± 0.08 | 97.20 / 98.94 |
+| screw, all of `train/good` | 320 | 96.83 ± 0.85 / 99.10 ± 0.07 | 97.90 / 99.09 |
+| pill, 80% (reported above) | 213 | 97.74 ± 0.59 / 98.41 ± 0.12 | 98.33 / 98.41 |
+| pill, all of `train/good` | 267 | 97.23 ± 0.18 / 98.07 ± 0.09 | 98.55 / 98.32 |
+
+The paper reports 98.2 / 99.3 for screw and 99.0 / 98.6 for pill. On screw, the extra images add 1.08 image points at the final epoch, and with upstream's epoch rule the result is 0.30 below the paper. On pill they do not help (−0.51 at the final epoch, +0.22 under the rule), so its gap stays unexplained. With three seeds and SDs up to 0.85, these differences are indicative, not established. All six runs passed the same checks as the main runs.
 
 ## Checks
 
@@ -71,4 +84,4 @@ uv run --frozen --extra cuda python scripts/reproduce_ad.py screw 0 results/ad-r
 
 `LC_DATA`, `LC_MANIFESTS` and `LC_DEVICE` change the dataset root, manifest folder and device. The committed script is the one that produced these runs, reformatted for lint; its code parses to the same syntax tree and only the usage docstring changed. [`tests/test_reproduce_ad.py`](../tests/test_reproduce_ad.py) runs it and `train_baseline.py` on a tiny CPU fixture with fixed random backbone weights for two meta-epochs. It checks that the checkpoints are identical, so per-epoch scoring leaves training unchanged, and that the reload and scorer differences are 0. The test fails if scoring draws random numbers without restoring the RNG state.
 
-Each run writes `checkpoint.pt`, `validation_normal.npz` (with the crop geometry), `trajectory.jsonl`, `scores.npz` and `summary.json`. The [reproduction release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad-reproduction-2026-10-29) has every run's summary, trajectory and per-epoch scores, the table and the checks. Checkpoints are not released.
+Each run writes `checkpoint.pt`, `validation_normal.npz` (with the crop geometry), `trajectory.jsonl`, `scores.npz` and `summary.json`. The [reproduction release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad-reproduction-2026-10-29) has every run's summary, trajectory and per-epoch scores, the table and the checks, plus a separate archive with the screw and pill full-training runs and their script. Checkpoints are not released.
