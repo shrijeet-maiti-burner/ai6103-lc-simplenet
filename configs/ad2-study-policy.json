@@ -1,5 +1,5 @@
 {
-  "status": "provisional B decision, 30 October, recorded before any AD 2 image was read. Athul asked B to proceed without waiting; the team may revise categories or passes, and C may revise the lighting ranges (which requires rerunning B1/B2).",
+  "status": "provisional B decision, 30 October. Scope widened the same morning to all eight categories at Athul's request, before any AD 2 output (validation or test) was read; fabric and vial were the first choice. The team may revise passes, and C may revise the lighting ranges (which requires rerunning B1/B2).",
   "scope": "AD 2 B0/B1/B2 training for the proposal's main claim. Thresholds and regular/changed-lighting evaluation are D's.",
   "dataset": "mvtec_ad2",
   "input": "full-frame bilinear resize to 256 x 256 with no crop, the AD 2 paper's default for its baselines; non-square images change aspect ratio",
@@ -22,8 +22,14 @@
   "validation": "official validation/good folder, regular lighting only",
   "minimum_normal_validation_images": 20,
   "selected_categories": [
+    "can",
     "fabric",
-    "vial"
+    "fruit_jelly",
+    "rice",
+    "sheet_metal",
+    "vial",
+    "wallplugs",
+    "walnuts"
   ],
   "category_policy": "fabric (prepared) plus further categories chosen from normal image counts, native size and measured cost only, never from test images, test lighting or server feedback",
   "category_counts_train_validation": {
@@ -91,17 +97,24 @@
     "minimum_patch_std_ratio": 0.5,
     "maximum_synthetic_hinge_ratio": 1.25,
     "tie_rule": "smallest positive weight within 1 percent of the best eligible proxy",
-    "no_eligible_candidate": "stop; do not silently change the safeguards or launch B2"
+    "no_eligible_candidate": "stop; do not silently change the safeguards or launch B2",
+    "categories": "all eight; one shared weight from the category-macro proxy"
   },
   "single_view_reference": "scripts/train_baseline.py --dataset mvtec_ad2 --resize 256 --imagesize 256, 40 meta-epochs, fixed final",
   "normal_validation_target_fpr": 0.05,
   "checkpoint_policy": "fixed_final",
   "test_data_used_for_selection": false,
   "hardware": "one NVIDIA A40 per run; up to three runs may share one GPU (byte-identical checkpoints verified on MVTec AD)",
-  "selection_note": "fabric is kept as prepared (texture-like). vial is the cheapest eligible category by updates at 80 passes times native megapixels from Table IV (7.9k against 8.4k for fruit_jelly); sheet_metal is below the validation minimum. No image, score or test data was read.",
+  "selection_note": "all eight categories. sheet_metal has 19 normal-validation images, below the 20 the MVTec AD study required; it is included at Athul's request and its validation-based threshold and diagnostics rest on 19 images. No image, score or test data was read.",
   "fixed_updates": {
+    "can": 4160,
     "fabric": 3920,
-    "vial": 2960
+    "fruit_jelly": 2640,
+    "rice": 3200,
+    "sheet_metal": 1440,
+    "vial": 2960,
+    "wallplugs": 2960,
+    "walnuts": 4320
   },
   "horizon_decision": "80, the MVTec AD rule (160 input-view passes). A synthetic 2448 x 2048 PNG probe measured 1.68 s per paired step at 256, so 160 passes would double an already long matrix."
 }
