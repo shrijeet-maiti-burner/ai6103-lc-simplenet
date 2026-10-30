@@ -37,11 +37,21 @@ UPSTREAM_AD_INPUT = {"batch_size": 8, "resize": 329, "imagesize": 288}
 
 
 def upstream_module(name: str):
-    """Import a module from the pinned, unmodified upstream checkout."""
+    """Import a module from the pinned, unmodified upstream checkout.
+
+    Bytecode writing is off during the import. Upstream ignores only its top-level
+    ``__pycache__``, so new caches in ``datasets/`` would show the submodule as modified
+    and every later run from the checkout would record ``git_dirty``.
+    """
     path = str(ROOT / "third_party/SimpleNet")
     if path not in sys.path:
         sys.path.insert(0, path)
-    return importlib.import_module(name)
+    writes = sys.dont_write_bytecode
+    sys.dont_write_bytecode = True
+    try:
+        return importlib.import_module(name)
+    finally:
+        sys.dont_write_bytecode = writes
 
 
 class UpstreamInput(torch.utils.data.Dataset):
@@ -68,6 +78,12 @@ class UpstreamInput(torch.utils.data.Dataset):
         image = TF.center_crop(image, [self.imagesize, self.imagesize])
         image = TF.normalize(image, IMAGENET_MEAN, IMAGENET_STD)
         return {"image": image, "image_id": sample["image_id"]}
+
+
+def center_crop_box(resize: int, imagesize: int) -> list[int]:
+    """[top, left, bottom, right] of the torchvision center crop in the resized square."""
+    top = int(round((resize - imagesize) / 2.0))
+    return [top, top, top + imagesize, top + imagesize]
 
 
 def build_model(backbone, device, imagesize: int, settings: dict = UPSTREAM_AD):

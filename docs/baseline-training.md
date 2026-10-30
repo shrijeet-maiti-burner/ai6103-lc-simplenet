@@ -36,8 +36,8 @@ Each new run directory contains:
 | `checkpoint.pt` | Schema-2 final heads/settings, optimizer/scheduler states, final RNGs and provenance |
 | `initial-rng.pt` | Initial Python, NumPy, Torch and applicable CUDA RNG states |
 | `run.json` | Resolved settings, runtime versions/flags, source hashes, pretrained-weight hash and frozen-backbone fingerprint |
-| `validation_normal.npz` | Normal-validation image IDs, raw max-patch anomaly scores and smoothed 288-by-288 crop maps |
-| `summary.json` | Seed, settings, split counts, source/upstream revisions, dirty flag, manifest/lock/checkpoint hashes, runtime versions, training time, peak training VRAM and reload score difference |
+| `validation_normal.npz` | Normal-validation image IDs, raw max-patch anomaly scores, smoothed 288-by-288 crop maps, and the geometry: `resize_hw`, `crop_box_tlbr` (`[20, 20, 308, 308]` in the resized canvas) and `map_hw` |
+| `summary.json` | Seed, settings, geometry, split counts, source/upstream revisions, dirty flag, manifest/lock/checkpoint hashes, runtime versions, training time, peak training VRAM and reload score and map differences |
 | `logs/` | Upstream training diagnostics in TensorBoard format |
 
 The runner reconstructs a fresh model, reloads the saved heads and reports the maximum absolute normal-validation image-score difference. Schema-2 runs preserve optimizer/scheduler states and initial/final RNGs without changing training settings. The CLI does not implement continuation. Reloading still requires the same pretrained backbone, shape-probe behavior, settings and compatible runtime; the frozen backbone weights are not duplicated in the checkpoint.
