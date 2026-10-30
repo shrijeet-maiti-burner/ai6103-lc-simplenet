@@ -82,7 +82,7 @@
     0.8,
     1.2
   ],
-  "lighting_status": "provisional until C confirms; the same ranges as the MVTec AD study",
+  "lighting_status": "confirmed by C on 30 October: 0.8 to 1.2 for both B1 and B2, the same ranges as the MVTec AD study",
   "weight_search": {
     "seed": 3,
     "fixed_updates_per_trial": 256,
