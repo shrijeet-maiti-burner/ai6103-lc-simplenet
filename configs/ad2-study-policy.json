@@ -106,6 +106,7 @@
   "test_data_used_for_selection": false,
   "hardware": "one NVIDIA A40 per run; up to three runs may share one GPU (byte-identical checkpoints verified on MVTec AD)",
   "selection_note": "all eight categories. sheet_metal has 19 normal-validation images, below the 20 the MVTec AD study required; it is included at Athul's request and its validation-based threshold and diagnostics rest on 19 images. No image, score or test data was read.",
+  "reporting": "per-category results for all eight, plus two category-macro averages: all eight, and the seven without sheet_metal because of its 19-image validation set. Fixed on 30 October before this study scored any test image; by then only vial's normal-validation diagnostics had been read.",
   "fixed_updates": {
     "can": 4160,
     "fabric": 3920,
