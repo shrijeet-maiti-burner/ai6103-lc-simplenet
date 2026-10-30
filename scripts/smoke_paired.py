@@ -19,7 +19,14 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--image-size", type=int, help="Override configured size for a quick check")
     args = parser.parse_args()
+    config = json.loads((ROOT / "configs/paired-lighting.json").read_text())
+    height, width = config["input_size"]
+    if args.image_size is not None:
+        if args.image_size < 32:
+            parser.error("--image-size must be at least 32")
+        height = width = args.image_size
     torch.set_num_threads(2)
     torch.manual_seed(6103)
     rng = np.random.default_rng(6103)
@@ -32,7 +39,7 @@ def main():
         backbone=backbone,
         layers_to_extract_from=["layer2", "layer3"],
         device=torch.device("cpu"),
-        input_shape=(3, 64, 64),
+        input_shape=(3, height, width),
         pretrain_embed_dimension=1536,
         target_embed_dimension=1536,
         pre_proj=1,
@@ -40,10 +47,9 @@ def main():
         dsc_layers=2,
         train_backbone=False,
     )
-    config = json.loads((ROOT / "configs/paired-lighting.json").read_text())
     pairs = [
         sample_pair(
-            rng.uniform(0.1, 0.9, (64, 64, 3)).astype(np.float32),
+            rng.uniform(0.1, 0.9, (height, width, 3)).astype(np.float32),
             rng=rng,
             brightness_range=tuple(config["brightness_range"]),
             gamma_range=tuple(config["gamma_range"]),
@@ -101,7 +107,9 @@ def main():
         restored = model.discriminator(model.pre_projection(features))
     torch.testing.assert_close(expected, restored, rtol=0, atol=0)
     report = {
-        "scope": "CPU random-weight SimpleNet; synthetic 64px inputs; not benchmark results",
+        "scope": "CPU random-weight SimpleNet; synthetic inputs; not benchmark results",
+        "input_size": [height, width],
+        "patches_per_view": len(a),
         "seed": 6103,
         "smoke_lambda_only": 0.1,
         "losses": {k: v.detach().item() for k, v in terms.items()},

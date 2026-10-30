@@ -2,6 +2,12 @@
 
 Role C supplies the image-pair preparation and paired loss. These components are implemented locally; full SimpleNet training and dataset evaluation have not run.
 
+## Input size
+
+Use **256x256** for the team's AD 2 runs, with identical spatial preprocessing across B0, B1 and B2. This preserves compatibility with the team's existing training. `configs/paired-lighting.json` records `input_size: [256, 256]`. The pair helper does not resize: the data loader must supply 256x256 RGB images after the agreed resize/crop pipeline, then create both lighting views before normalization. Do not independently resize or crop the paired views.
+
+The paired smoke check now reads this size from the config by default. `--image-size 64` is available only for a smaller diagnostic run; it does not change the experiment setting. The exact upstream resize/crop parameters should match the existing team loader, rather than introducing a new crop policy here.
+
 ## Image path
 
 ```text
@@ -121,7 +127,7 @@ From the repository root, with the CPU environment installed:
 
 The preview without an image uses a synthetic texture with a narrow mark. It displays the original and four range corners, with clipping fractions. It demonstrates transforms only. Supply an actual training image to assess detail preservation; the default synthetic preview cannot establish this for MVTec.
 
-The smoke script uses the pinned upstream SimpleNet architecture with a random-weight WideResNet50-2, synthetic 64px inputs and CPU execution. It checks gradients, an optimizer step and exact restored scores after an in-memory checkpoint round trip. Its lambda=0.1 is a smoke setting, not the selected B2 weight. Generated files stay under ignored `results/`.
+The smoke script uses the pinned upstream SimpleNet architecture with a random-weight WideResNet50-2, synthetic inputs at the configured 256x256 size and CPU execution. It checks gradients, an optimizer step and exact restored scores after an in-memory checkpoint round trip. Its lambda=0.1 is a smoke setting, not the selected B2 weight. Generated files stay under ignored `results/`.
 
 Unit verification on 30 October: all 25 tests passed, including matching B1/B2 BatchNorm statistics and raw-score diagnostics before an update. Full dataset training, pretrained behavior, GPU behavior and real-lighting robustness remain unverified here. A and B still need to connect the licensed data and shared training loop; C's components and executable checks are ready for that integration.
 
@@ -134,3 +140,9 @@ Before connecting existing bottle/grid runs, confirm they use `clip(b * x**gamma
 Two independent code/method reviews checked the implementation. Fixed invalid objective settings mutating BatchNorm before rejection, and half-precision reduction overflow (including zero consistency weight). Added validation of public pair inputs. The final CPU suite passes all 34 tests. The CI CPU job also runs the paired SimpleNet smoke script.
 
 Half/bfloat score reductions use FP32, while gradients remain connected to both branches. This protects the loss calculation; full mixed-precision training is not validated by the current CPU check.
+
+## Agreed resolution and verification, 30 October
+
+The team chose 256x256 to retain compatibility with training already underway. The Role C config now records this size; the pair/normalization helpers preserve the loader's dimensions. All variants must share the same loader resize/crop policy. Brightness and gamma remain in [0.8, 1.2].
+
+All 35 unit tests passed, including an explicit configured-size alignment/normalization test. The actual SimpleNet architecture check also passed at 256x256: finite losses, frozen backbone, nonzero adapter/discriminator gradients, a successful optimizer update and exact score restoration after loading saved weights. The default paired CI smoke command now exercises this configured size.

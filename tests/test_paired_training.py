@@ -100,3 +100,27 @@ def test_normalization_rejects_invalid_public_pair(bad):
     pair = LightingPair(np.zeros((3, 4, 3), dtype=np.float32), bad, 1, 1, 0)
     with pytest.raises(ValueError):
         normalized_pair(pair)
+
+
+def test_configured_256_pair_preserves_geometry_and_normalizes():
+    import json
+    from pathlib import Path
+
+    from lc_simplenet.pairs import sample_pair
+
+    config = json.loads(
+        (Path(__file__).resolve().parents[1] / "configs/paired-lighting.json").read_text()
+    )
+    assert config["input_size"] == [256, 256]
+    image = np.zeros((*config["input_size"], 3), dtype=np.float32)
+    image[40:80, 120:124] = 0.5
+    pair = sample_pair(
+        image,
+        rng=np.random.default_rng(6103),
+        brightness_range=tuple(config["brightness_range"]),
+        gamma_range=tuple(config["gamma_range"]),
+    )
+    np.testing.assert_array_equal(pair.original > 0, pair.relit > 0)
+    original, relit = normalized_pair(pair)
+    assert original.shape == relit.shape == (3, 256, 256)
+    assert torch.isfinite(original).all() and torch.isfinite(relit).all()

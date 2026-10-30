@@ -7,5 +7,7 @@
   "placement": "after shared spatial preprocessing, before ImageNet normalization",
   "B1_lambda_score": 0.0,
   "B2_lambda_score": null,
-  "note": "Match relighting RNG, feature-noise policy and batch handling across B1/B2. Select B2 weight on normal validation only."
+  "note": "Match relighting RNG, feature-noise policy and batch handling across B1/B2. Select B2 weight on normal validation only.",
+  "input_size": [256, 256],
+  "spatial_preprocessing": "Shared team resize/crop pipeline producing 256x256; identical across B0, B1 and B2. Pair after spatial preprocessing."
 }

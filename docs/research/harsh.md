@@ -27,3 +27,9 @@ All 25 unit tests passed. The new B1/B2 test confirms identical forward diagnost
 The actual upstream architecture smoke check also passed: frozen backbone, nonzero trainable gradients, successful adapter update and exact saved-weight score restoration. It used synthetic inputs and random weights; no benchmark improvement is claimed.
 
 Final pre-publication review: two independent reviewers checked scientific correctness and implementation. Fixed BatchNorm mutation on invalid settings and half-precision loss overflow, with regression tests and defensive pair validation. All 34 tests pass; the second review found no remaining blocker. The paired architecture smoke check is now included in CPU CI. This review does not replace teammate review before merging.
+
+## Agreed resolution and verification, 30 October
+
+The team chose 256x256 to retain compatibility with training already underway. The Role C config now records this size; the pair/normalization helpers preserve the loader's dimensions. All variants must share the same loader resize/crop policy. Brightness and gamma remain in [0.8, 1.2].
+
+All 35 unit tests passed, including an explicit configured-size alignment/normalization test. The actual SimpleNet architecture check also passed at 256x256: finite losses, frozen backbone, nonzero adapter/discriminator gradients, a successful optimizer update and exact score restoration after loading saved weights. The default paired CI smoke command now exercises this configured size.
