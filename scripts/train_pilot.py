@@ -16,7 +16,7 @@ import torch
 from scipy.ndimage import gaussian_filter
 from torch.nn import functional as F
 
-from lc_simplenet.data import NormalManifestDataset
+from lc_simplenet.data import CachedSource, NormalManifestDataset
 from lc_simplenet.geometry import restore_score_map
 from lc_simplenet.metrics import image_counts, normal_validation_threshold
 from lc_simplenet.normal_validation import paired_normal_metrics
@@ -87,6 +87,11 @@ def main():
     parser.add_argument("--resume", type=Path)
     parser.add_argument("--verify-replay", action="store_true")
     parser.add_argument("--normal-diagnostics", action="store_true")
+    parser.add_argument(
+        "--cache-images",
+        action="store_true",
+        help="Keep decoded, resized images after the first hash-checked read (same results)",
+    )
     args = parser.parse_args()
     if args.steps < 1 or args.threads < 1 or not 0 < args.gpu_memory_fraction <= 1:
         parser.error("steps/threads must be positive; GPU memory fraction must be in (0,1]")
@@ -120,6 +125,8 @@ def main():
     }
     for source in datasets.values():
         validate_input_geometry(config, source)
+    if args.cache_images:
+        datasets = {split: CachedSource(source) for split, source in datasets.items()}
     output.mkdir(parents=True, exist_ok=False)
     metadata = {
         "scope": "development pilot; no defect or benchmark results",

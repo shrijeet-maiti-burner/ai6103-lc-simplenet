@@ -265,3 +265,26 @@ def test_ad_crop_rejects_rectangular_sources_and_wrong_prediction_size():
     engine = trainer(settings, data)
     with pytest.raises(ValueError, match="matching load_size"):
         engine.predict([np.zeros((32, 32, 3), dtype=np.float32)])
+
+
+def test_cached_source_trains_identically_and_reads_each_image_once():
+    from lc_simplenet.data import CachedSource
+
+    class CountingData(TinyData):
+        def __init__(self):
+            self.reads = []
+
+        def __getitem__(self, index):
+            self.reads.append(index)
+            return super().__getitem__(index)
+
+    settings = config(variant="B2", lambda_score=1.0)
+    plain, source = trainer(settings), CountingData()
+    cached = trainer(settings, CachedSource(source))
+    expected = [plain.train_step() for _ in range(5)]
+    assert_same_state(expected, [cached.train_step() for _ in range(5)])
+    assert_same_state(plain.checkpoint(), cached.checkpoint())
+    assert sorted(source.reads) == [0, 1, 2]
+    first = cached.data[0]["image"]
+    first[:] = 0
+    assert cached.data[0]["image"].any()
