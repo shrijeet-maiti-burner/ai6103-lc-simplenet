@@ -7,15 +7,15 @@ from pathlib import Path
 import numpy as np
 import torch
 import torch.nn.functional as F
-from scipy.ndimage import gaussian_filter
 from PIL import Image
+from scipy.ndimage import gaussian_filter
 from sklearn.metrics import roc_auc_score
 
 ROOT = Path.cwd()
 sys.path.insert(0, str(ROOT / "src"))
 
-from lc_simplenet.data import NormalManifestDataset
-from lc_simplenet.pilot import PilotConfig, PilotTrainer
+from lc_simplenet.data import NormalManifestDataset  # noqa: E402
+from lc_simplenet.pilot import PilotConfig, PilotTrainer  # noqa: E402
 
 DATA = ROOT / "data/mvtec_ad2"
 MANIFEST = ROOT / "data/manifests/ad2-fabric.jsonl"
