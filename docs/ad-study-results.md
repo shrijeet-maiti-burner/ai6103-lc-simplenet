@@ -94,7 +94,7 @@ Batch 1 on one A40, CUDA-synchronized, 30 warmup and 300 timed calls, input a no
 
 - Test results have now been seen. Changing a setting from here starts a new study and must disclose this exposure.
 - The grid trajectory above scored the test set at every meta-epoch. It is a diagnostic of upstream's checkpoint rule; no setting or checkpoint was chosen from it.
-- Brightness and gamma ranges are pending C. A change reruns B1 and B2.
+- C confirmed the brightness and gamma ranges, 0.8 to 1.2, on 30 October, so B1 and B2 stand.
 - D's evaluation, including PRO, is separate. These numbers are a development check.
 
 ## Artifacts

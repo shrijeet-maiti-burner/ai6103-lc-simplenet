@@ -16,7 +16,7 @@ Updated 27 October 2026 (Singapore).
 | Current deadlines / team registration | Verify current course announcements; old slide dates are unsuitable |
 | Categories, training budget, image sizes | AD study: bottle and grid, 80 source passes, resize 329 / crop 288, chosen from measured cost (B provisional decision, 27 October; see [plan](ad-study-plan.md)). AD 2 open |
 | AD baseline input | Upstream `run.sh`: resize 329, center crop 288 for images and masks (B decision, 26 October) |
-| Transform ranges / score-loss weight | Brightness/gamma 0.8 to 1.2 until C confirms; AD score-loss weight 1.0, chosen on normal validation (27 October) |
+| Transform ranges / score-loss weight | Brightness/gamma 0.8 to 1.2, confirmed by C on 30 October; AD score-loss weight 1.0, chosen on normal validation (27 October) |
 | Validation FPR target / tolerated recall drop | Open; predeclare before final testing |
 | AD split and AD 2 lighting metadata | Persist and verify before the experiment matrix |
 | Private server access / submission fields | Not tested; confirm before promising private metrics |
