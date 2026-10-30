@@ -32,7 +32,6 @@ for variant in B0 B1 B2; do
         continue
     fi
 
-    mkdir -p "$output"
     resume_args=()
     latest_checkpoint=""
 
@@ -45,6 +44,9 @@ for variant in B0 B1 B2; do
     if [[ -n "$latest_checkpoint" ]]; then
         resume_args=(--resume "$output/$latest_checkpoint")
         echo "Resuming $variant from $latest_checkpoint"
+    elif [[ -d "$output" ]]; then
+        echo "$variant: $output exists without a periodic checkpoint; refusing a fresh start." >&2
+        exit 1
     else
         echo "Starting $variant from step 0"
     fi
@@ -58,6 +60,7 @@ for variant in B0 B1 B2; do
         --device cuda \
         --threads 4 \
         --target-fpr 0.05 \
+        --checkpoint-every 250 \
         "${resume_args[@]}" \
         2>&1 | tee -a "logs/ad2_fabric_${lower}_5000steps_recovery.log"
 

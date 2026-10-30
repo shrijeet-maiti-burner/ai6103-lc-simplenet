@@ -63,7 +63,7 @@ Heckler-Kram et al. (arXiv:2503.21622v1) resize images to **256×256** unless a 
 
 **AD 2 smoke** (`scripts/smoke_ad2.py`, a pipeline check, not a scientific result): the default is now a full-frame resize from native fabric 2048×2448 to **256×256**, then ImageNet normalization. This stretches the native aspect ratio; no crop or padding is applied. `geometry_frozen` remains false pending team agreement. The smoke check is not a training recipe.
 
-Do not start B0/B1/B2 until the team agrees. If 256×256 full-frame stretch is chosen:
+If 256×256 full-frame stretch is used:
 
 1. Use the same resize for train, validation and inference (`output_size=(256, 256)`, `ad_resize=None`).
 2. Restore continuous score maps with `restore_score_map(..., original_size=native_hw, image_size=(256, 256))` and no `valid_size` (no pad, no crop). That inverts the same full-frame stretch.
@@ -77,9 +77,29 @@ Until then, keep pad-versus-stretch as an open choice. The smoke aspect-ratio fi
 
 Reuse [`scripts/build_normal_manifest.py`](../scripts/build_normal_manifest.py). Do not add a second builder. It inventories only `train/good` and `validation/good`. Test directories are not walked.
 
-## NTU GPU readiness (before B0/B1/B2)
+## Exploratory fabric pilots versus the formal AD 2 study
 
-Do not launch the three-variant fabric matrix until geometry is agreed. After copying data and checking out `ad2-fabric-prep`:
+The existing B0/B1/B2 fabric trainings are **exploratory pilots**, not the formal AD 2 study.
+
+- **100-step exploratory runs:** `results/ad2_fabric_{b0,b1,b2}_100steps`. Short pipeline checks.
+- **5,000-step exploratory recovery runs:** `results/ad2_fabric_{b0,b1,b2}_5000steps_recovery`, launched from `scripts/run_ad2_fabric_batch.sh`. Batch-2 fabric pilots with a 5,000-step horizon.
+
+They are distinct from the formal AD 2 study policy in PR #8 (`feat/b-ad2-study`): batch size 8, 80 source passes, seeds 0–2, 256×256 full-frame resize, all eight categories, and normal-only consistency-weight selection. Fabric at that policy is 3,920 optimizer updates, not 5,000. Do not report the exploratory 100-step or 5,000-step fabric numbers as that study, as official AD 2 benchmark results, or as AU-PRO.
+
+### Previous public-test evaluation
+
+`fabric/test_public` is labelled public test data (156 images: 66 good / 90 bad). The 100-step B0/B1/B2 exploratory checkpoints were evaluated on this split by `scripts/evaluate_ad2.py`. That evaluation:
+
+- is not an official AD 2 benchmark result
+- records pixel AUROC at 256×256, which is not AU-PRO
+- cannot establish lighting robustness from pooled lighting conditions
+- must not be used to select models, thresholds, or hyperparameters
+
+Existing public-evaluation outputs under `results/ad2_fabric_public_evaluation` belong to those 100-step checkpoints. The 5,000-step recovery runs use a separate evaluation directory. Further formal evaluation is coordinated with Aryaman. Do not add private-test scoring here.
+
+## NTU GPU readiness
+
+After copying data and checking out the intended branch:
 
 1. **Environment:** Python 3.12.15, uv 0.13.0, `git submodule update --init --recursive`, then `"$UV" sync --frozen --extra cuda`. Do not mix `--extra cpu` and `--extra cuda`.
 2. **CUDA:** `"$UV" run --frozen --extra cuda python -m lc_simplenet doctor --require-cuda`. Driver must support the pinned PyTorch 2.6.0 / torchvision 0.21.0 CUDA 12.4 wheels.
@@ -95,4 +115,4 @@ Do not launch the three-variant fabric matrix until geometry is agreed. After co
   --weights imagenet_v1
 ```
 
-Stop there. No B0/B1/B2, no three-seed training, no test-label evaluation.
+The CUDA smoke is a pipeline check. Exploratory fabric pilots above are not a substitute for the formal PR #8 protocol, and they are not test-driven model selection.
