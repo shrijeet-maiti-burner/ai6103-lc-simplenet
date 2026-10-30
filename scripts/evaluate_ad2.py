@@ -33,17 +33,13 @@ SIZE = (256, 256)
 def read_image(path):
     with Image.open(path) as im:
         native_size = (im.height, im.width)
-        im = im.convert("RGB").resize(
-            (SIZE[1], SIZE[0]), Image.Resampling.BILINEAR
-        )
+        im = im.convert("RGB").resize((SIZE[1], SIZE[0]), Image.Resampling.BILINEAR)
         return np.asarray(im, dtype=np.float32) / 255.0, native_size
 
 
 def read_mask(path):
     with Image.open(path) as im:
-        im = im.convert("L").resize(
-            (SIZE[1], SIZE[0]), Image.Resampling.NEAREST
-        )
+        im = im.convert("L").resize((SIZE[1], SIZE[0]), Image.Resampling.NEAREST)
         return np.asarray(im) > 0
 
 
@@ -59,8 +55,12 @@ def evaluate(variant, config_file, run_dir):
         raise ValueError(f"{variant}: unexpected variant or input size")
 
     train = NormalManifestDataset(
-        MANIFEST, DATA, dataset="mvtec_ad2", category="fabric",
-        split="train", expected_sha256=config.manifest_sha256,
+        MANIFEST,
+        DATA,
+        dataset="mvtec_ad2",
+        category="fabric",
+        split="train",
+        expected_sha256=config.manifest_sha256,
         output_size=config.load_size,
     )
     model = PilotTrainer(config, train, device="cuda")
@@ -73,9 +73,7 @@ def evaluate(variant, config_file, run_dir):
     model.backend.discriminator.load_state_dict(saved["discriminator"])
     model.step = saved["step"]
 
-    threshold = float(
-        json.loads(result_file.read_text())["calibration"]["threshold"]
-    )
+    threshold = float(json.loads(result_file.read_text())["calibration"]["threshold"])
 
     images = [(p, 0) for p in sorted((PUBLIC / "good").glob("*.png"))]
     images += [(p, 1) for p in sorted((PUBLIC / "bad").glob("*.png"))]
@@ -93,9 +91,11 @@ def evaluate(variant, config_file, run_dir):
 
         # Upsample patch scores to 256x256, then smooth consistently.
         tensor = torch.as_tensor(patch_map, dtype=torch.float32)[None, None]
-        upsampled = F.interpolate(
-            tensor, size=SIZE, mode="bilinear", align_corners=False
-        )[0, 0].cpu().numpy()
+        upsampled = (
+            F.interpolate(tensor, size=SIZE, mode="bilinear", align_corners=False)[0, 0]
+            .cpu()
+            .numpy()
+        )
         score_map = gaussian_filter(upsampled, sigma=4.0)
 
         if label:
@@ -111,14 +111,16 @@ def evaluate(variant, config_file, run_dir):
         image_scores.append(image_score)
         image_labels.append(label)
 
-        rows.append({
-            "image": path.name,
-            "label": label,
-            "image_score": image_score,
-            "threshold": threshold,
-            "predicted_anomaly": int(image_score > threshold),
-            "mask": f"{path.stem}_mask.png" if label else "",
-        })
+        rows.append(
+            {
+                "image": path.name,
+                "label": label,
+                "image_score": image_score,
+                "threshold": threshold,
+                "predicted_anomaly": int(image_score > threshold),
+                "mask": f"{path.stem}_mask.png" if label else "",
+            }
+        )
 
     scores = np.asarray(image_scores)
     labels = np.asarray(image_labels)
@@ -169,10 +171,7 @@ def main():
         raise RuntimeError("CUDA is unavailable. Run this on your allocated GPU node.")
 
     OUT.mkdir(parents=True, exist_ok=True)
-    results = [
-        evaluate(name, config, run)
-        for name, (config, run) in RUNS.items()
-    ]
+    results = [evaluate(name, config, run) for name, (config, run) in RUNS.items()]
     comparison = [
         {
             "variant": r["variant"],

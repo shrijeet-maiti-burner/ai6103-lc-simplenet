@@ -189,11 +189,13 @@ def main():
                     periodic_checkpoint = output / f"checkpoint-{trainer.step:06d}.pt"
                     trainer.save(periodic_checkpoint)
                     print(
-                        json.dumps({
-                            "event": "checkpoint_saved",
-                            "step": trainer.step,
-                            "path": str(periodic_checkpoint),
-                        }),
+                        json.dumps(
+                            {
+                                "event": "checkpoint_saved",
+                                "step": trainer.step,
+                                "path": str(periodic_checkpoint),
+                            }
+                        ),
                         flush=True,
                     )
         checkpoint = output / "final.pt"
