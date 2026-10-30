@@ -1,0 +1,11 @@
+{
+  "status": "implementation settings; inspect training pairs before study freeze",
+  "brightness_range": [0.8, 1.2],
+  "gamma_range": [0.8, 1.2],
+  "sampling": "independent uniform, one brightness/gamma pair per image",
+  "transform": "clip(brightness * image**gamma, 0, 1)",
+  "placement": "after shared spatial preprocessing, before ImageNet normalization",
+  "B1_lambda_score": 0.0,
+  "B2_lambda_score": null,
+  "note": "Match relighting RNG, feature-noise policy and batch handling across B1/B2. Select B2 weight on normal validation only."
+}
