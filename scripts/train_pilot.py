@@ -170,7 +170,9 @@ def main():
         metadata["initialization_seconds"] = time.perf_counter() - started
         write_json(output / "run.json", metadata)
         timings = []
-        with (output / "train.jsonl").open("x", encoding="utf-8") as log:
+        log_path = output / "train.jsonl"
+        log_mode = "a" if args.resume and log_path.exists() else "x"
+        with log_path.open(log_mode, encoding="utf-8") as log:
             while trainer.step < args.steps:
                 if args.device == "cuda":
                     torch.cuda.synchronize()
@@ -183,6 +185,17 @@ def main():
                 log.write(json.dumps(record, allow_nan=False) + "\n")
                 log.flush()
                 print(json.dumps(record), flush=True)
+                if trainer.step % 250 == 0:
+                    periodic_checkpoint = output / f"checkpoint-{trainer.step:06d}.pt"
+                    trainer.save(periodic_checkpoint)
+                    print(
+                        json.dumps({
+                            "event": "checkpoint_saved",
+                            "step": trainer.step,
+                            "path": str(periodic_checkpoint),
+                        }),
+                        flush=True,
+                    )
         checkpoint = output / "final.pt"
         trainer.save(checkpoint)
         replay = None

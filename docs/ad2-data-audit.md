@@ -61,7 +61,7 @@ The [AD baseline](baseline-training.md) uses upstream `Resize(329)` then center 
 
 Heckler-Kram et al. (arXiv:2503.21622v1) resize images to **256×256** unless a method says otherwise, and train SimpleNet for **160 epochs**. That is the proposed AD 2 protocol if the team agrees to match the paper baseline: full-frame PIL bilinear resize to 256×256, which **stretches** non-square natives such as fabric 2048×2448 (H×W). It is **not frozen** in training code.
 
-**Recorded CPU smoke** (`scripts/smoke_ad2.py`, a pipeline check, not a scientific result): native fabric 2048×2448 was stretched to **288×288**, then ImageNet-normalized. Default `--image-height/--image-width` remain 288 so that check is reproducible. Passing 256 is optional and still not a training recipe. `geometry_frozen` stays false.
+**AD 2 smoke** (`scripts/smoke_ad2.py`, a pipeline check, not a scientific result): the default is now a full-frame resize from native fabric 2048×2448 to **256×256**, then ImageNet normalization. This stretches the native aspect ratio; no crop or padding is applied. `geometry_frozen` remains false pending team agreement. The smoke check is not a training recipe.
 
 Do not start B0/B1/B2 until the team agrees. If 256×256 full-frame stretch is chosen:
 

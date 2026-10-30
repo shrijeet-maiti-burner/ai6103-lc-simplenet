@@ -48,3 +48,11 @@ def test_smoke_script_uses_cross_product_not_tuple_list_compare():
     assert 'tuple(sample["original_size_hw"]) != list(load_size)' not in text
     assert "height * target_w != width * target_h" in text
     assert "from lc_simplenet.geometry" not in text
+
+
+def test_smoke_defaults_to_256_square_full_frame():
+    text = SMOKE.read_text(encoding="utf-8")
+    assert 'parser.add_argument("--image-height", type=int, default=256)' in text
+    assert 'parser.add_argument("--image-width", type=int, default=256)' in text
+    assert '"crop": None' in text
+    assert '"geometry_frozen": False' in text

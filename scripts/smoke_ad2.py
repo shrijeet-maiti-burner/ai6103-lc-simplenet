@@ -66,8 +66,8 @@ def main() -> None:
     parser.add_argument("--root", type=Path, help="Overrides MVTEC_AD2_ROOT")
     parser.add_argument("--device", choices=["cpu", "cuda"], default="cpu")
     parser.add_argument("--weights", choices=["random", "imagenet_v1"], default="random")
-    parser.add_argument("--image-height", type=int, default=288)
-    parser.add_argument("--image-width", type=int, default=288)
+    parser.add_argument("--image-height", type=int, default=256)
+    parser.add_argument("--image-width", type=int, default=256)
     parser.add_argument("--train-limit", type=int, default=4)
     parser.add_argument("--val-limit", type=int, default=2)
     parser.add_argument("--atol", type=float, default=0.0)
@@ -171,8 +171,8 @@ def main() -> None:
                     "samples": aspect_reports,
                     "geometry_frozen": False,
                     "note": (
-                        "CPU smoke is a 288x288 pipeline check, not a paper or training result. "
-                        "Proposed AD 2 protocol is 256x256 full-frame stretch; not frozen."
+                        "Smoke is a 256x256 full-frame pipeline check, not a training result. "
+                        "AD 2 geometry: 256x256 full-frame stretch; no crop or padding."
                     ),
                 },
                 "validation_geometry": geometry,
