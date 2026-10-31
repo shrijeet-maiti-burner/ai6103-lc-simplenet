@@ -11,8 +11,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CATEGORIES = [
-    "can", "fabric", "fruit_jelly", "rice",
-    "sheet_metal", "vial", "wallplugs", "walnuts",
+    "can",
+    "fabric",
+    "fruit_jelly",
+    "rice",
+    "sheet_metal",
+    "vial",
+    "wallplugs",
+    "walnuts",
 ]
 CANDIDATES = [0.01, 0.1, 1.0]
 CORNERS = [[0.8, 0.8], [0.8, 1.2], [1.2, 0.8], [1.2, 1.2]]
@@ -75,21 +81,12 @@ def select_weight(baselines, trials):
                 }
                 continue
 
-            std_ratio = (
-                current["patch_score_std"] / base["patch_score_std"]
-            )
-            hinge_ratio = (
-                current["synthetic_hinge"] /
-                max(base["synthetic_hinge"], 1e-12)
-            )
-            mse_ratio = (
-                current["pair_mse"] / max(base["pair_mse"], 1e-12)
-            )
+            std_ratio = current["patch_score_std"] / base["patch_score_std"]
+            hinge_ratio = current["synthetic_hinge"] / max(base["synthetic_hinge"], 1e-12)
+            mse_ratio = current["pair_mse"] / max(base["pair_mse"], 1e-12)
 
             category_ok = (
-                std_ratio >= 0.5
-                and current["synthetic_hinge"]
-                <= 1.25 * base["synthetic_hinge"]
+                std_ratio >= 0.5 and current["synthetic_hinge"] <= 1.25 * base["synthetic_hinge"]
             )
             eligible = eligible and category_ok
             ratios.append(mse_ratio)
@@ -101,19 +98,21 @@ def select_weight(baselines, trials):
                 "synthetic_hinge_ratio": hinge_ratio,
             }
 
-        evaluations.append({
-            "lambda_score": weight,
-            "eligible": bool(eligible),
-            "category_macro_relative_pair_mse": (
-                sum(ratios) / len(ratios) if len(ratios) == len(CATEGORIES) else None
-            ),
-            "category_checks": category_checks,
-        })
+        evaluations.append(
+            {
+                "lambda_score": weight,
+                "eligible": bool(eligible),
+                "category_macro_relative_pair_mse": (
+                    sum(ratios) / len(ratios) if len(ratios) == len(CATEGORIES) else None
+                ),
+                "category_checks": category_checks,
+            }
+        )
 
     feasible = [
-        row for row in evaluations
-        if row["eligible"]
-        and row["category_macro_relative_pair_mse"] is not None
+        row
+        for row in evaluations
+        if row["eligible"] and row["category_macro_relative_pair_mse"] is not None
     ]
 
     if not feasible:
@@ -156,6 +155,7 @@ def main():
 
     if args.device == "cuda":
         import torch
+
         if not torch.cuda.is_available():
             raise RuntimeError("CUDA is unavailable; request a GPU allocation first")
 
@@ -170,11 +170,17 @@ def main():
     if expected_categories != CATEGORIES or study["categories"] != CATEGORIES:
         raise ValueError("Category scope differs from the frozen eight-category policy")
 
-    for key in ("image_size", "batch_size", "main_seeds",
-                "variants", "source_passes", "brightness", "gamma"):
+    for key in (
+        "image_size",
+        "batch_size",
+        "main_seeds",
+        "variants",
+        "source_passes",
+        "brightness",
+        "gamma",
+    ):
         if policy[key] != study[key]:
-            raise ValueError(f"Policy/config mismatch for {key}: "
-                             f"{policy[key]} != {study[key]}")
+            raise ValueError(f"Policy/config mismatch for {key}: {policy[key]} != {study[key]}")
 
     if study["tuning_seed"] != SEED:
         raise ValueError("Tuning seed differs from the frozen selection seed")
@@ -203,10 +209,8 @@ def main():
     for key, expected in expected_selection.items():
         if selection.get(key) != expected:
             raise ValueError(
-                f"B2 policy mismatch for {key}: "
-                f"{selection.get(key)!r} != {expected!r}"
+                f"B2 policy mismatch for {key}: {selection.get(key)!r} != {expected!r}"
             )
-
 
     manifest_dir = ROOT / "references/ad2-normal-manifests"
     output_root = ROOT / "results/ad2-b2-selection-array"
@@ -267,15 +271,24 @@ def main():
         write_json(config_path, config)
 
         command = [
-            sys.executable, "scripts/train_pilot.py",
-            "--config", str(config_path),
-            "--manifest", str(manifest),
-            "--root", str(args.root),
-            "--output", str(run_dir),
-            "--steps", str(UPDATES),
-            "--device", args.device,
-            "--threads", str(args.threads),
-            "--gpu-memory-fraction", str(args.gpu_memory_fraction),
+            sys.executable,
+            "scripts/train_pilot.py",
+            "--config",
+            str(config_path),
+            "--manifest",
+            str(manifest),
+            "--root",
+            str(args.root),
+            "--output",
+            str(run_dir),
+            "--steps",
+            str(UPDATES),
+            "--device",
+            args.device,
+            "--threads",
+            str(args.threads),
+            "--gpu-memory-fraction",
+            str(args.gpu_memory_fraction),
             "--normal-diagnostics",
         ]
 
@@ -309,9 +322,7 @@ def main():
     }
     result["candidate_runs"] = {
         category: {
-            str(weight): str(
-                output_root / category / "B2" / str(weight) / f"seed-{SEED}"
-            )
+            str(weight): str(output_root / category / "B2" / str(weight) / f"seed-{SEED}")
             for weight in CANDIDATES
         }
         for category in CATEGORIES

@@ -55,8 +55,7 @@ for category, total in steps.items():
 
             print(
                 "  Seed {}: {}/{} | {:.1f}% | Epoch {} | Loss {:.6f}".format(
-                    seed, step, total, pct,
-                    d.get("epoch", "?"), float(d.get("loss", 0))
+                    seed, step, total, pct, d.get("epoch", "?"), float(d.get("loss", 0))
                 )
             )
 

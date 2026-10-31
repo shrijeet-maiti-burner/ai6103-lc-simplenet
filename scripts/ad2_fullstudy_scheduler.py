@@ -10,19 +10,30 @@ QUEUE = ROOT / "results/ad2-full-study/ad2-task-queue.json"
 RUNNER = ROOT / "scripts/ad2_concurrent_batch.py"
 
 BATCHES = [
-    ("fabric", "B0"), ("fabric", "B1"),
-    ("fruit_jelly", "B0"), ("fruit_jelly", "B1"),
-    ("rice", "B0"), ("rice", "B1"),
-    ("sheet_metal", "B0"), ("sheet_metal", "B1"),
-    ("vial", "B0"), ("vial", "B1"),
-    ("wallplugs", "B0"), ("wallplugs", "B1"),
-    ("walnuts", "B0"), ("walnuts", "B1"),
+    ("fabric", "B0"),
+    ("fabric", "B1"),
+    ("fruit_jelly", "B0"),
+    ("fruit_jelly", "B1"),
+    ("rice", "B0"),
+    ("rice", "B1"),
+    ("sheet_metal", "B0"),
+    ("sheet_metal", "B1"),
+    ("vial", "B0"),
+    ("vial", "B1"),
+    ("wallplugs", "B0"),
+    ("wallplugs", "B1"),
+    ("walnuts", "B0"),
+    ("walnuts", "B1"),
 ]
 
 REQUIRED = [
-    "final.pt", "run.json", "result.json",
-    "validation-scores.json", "normal-diagnostics.json",
+    "final.pt",
+    "run.json",
+    "result.json",
+    "validation-scores.json",
+    "normal-diagnostics.json",
 ]
+
 
 def complete(task):
     out = ROOT / task["output"]
@@ -33,6 +44,7 @@ def complete(task):
         return result.get("status") == "completed" and result.get("steps") == task["steps"]
     except Exception:
         return False
+
 
 def main():
     allocation = os.environ.get("AD2_ALLOCATION")
@@ -46,10 +58,11 @@ def main():
 
     # Preflight the complete allocation before launching training.
     for category, variant in selected_batches:
-        batch = [t for t in tasks if
-                 t["category"] == category and
-                 t["variant"] == variant and
-                 t["seed"] in (0, 1, 2)]
+        batch = [
+            t
+            for t in tasks
+            if t["category"] == category and t["variant"] == variant and t["seed"] in (0, 1, 2)
+        ]
         if len(batch) != 3:
             raise RuntimeError(f"Expected 3 seeds: {category}/{variant}")
 
@@ -64,8 +77,7 @@ def main():
 
     # Protect the six previously completed can runs.
     for category, variant in [("can", "B0"), ("can", "B1")]:
-        batch = [t for t in tasks if
-                 t["category"] == category and t["variant"] == variant]
+        batch = [t for t in tasks if t["category"] == category and t["variant"] == variant]
         if len(batch) != 3 or not all(complete(t) for t in batch):
             raise RuntimeError(f"Previously completed {category}/{variant} failed verification")
 
@@ -74,8 +86,7 @@ def main():
         return
 
     for index, (category, variant) in enumerate(selected_batches, 1):
-        print(f"\n===== {index}/{len(selected_batches)}: {category}/{variant} =====",
-              flush=True)
+        print(f"\n===== {index}/{len(selected_batches)}: {category}/{variant} =====", flush=True)
 
         env = os.environ.copy()
         env["AD2_CATEGORY"] = category
@@ -90,14 +101,14 @@ def main():
         if result.returncode != 0:
             raise SystemExit(f"STOPPED: {category}/{variant} failed")
 
-        batch = [t for t in tasks if
-                 t["category"] == category and t["variant"] == variant]
+        batch = [t for t in tasks if t["category"] == category and t["variant"] == variant]
         if not all(complete(t) for t in batch):
             raise SystemExit(f"STOPPED: verification failed for {category}/{variant}")
 
         print(f"VERIFIED: {category}/{variant}", flush=True)
 
     print(f"ALLOCATION {allocation} COMPLETED SUCCESSFULLY")
+
 
 if __name__ == "__main__":
     main()

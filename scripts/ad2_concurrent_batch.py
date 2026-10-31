@@ -35,10 +35,7 @@ def complete(task):
         return False
     try:
         result = read_json(out / "result.json")
-        return (
-            result.get("status") == "completed"
-            and result.get("steps") == task["steps"]
-        )
+        return result.get("status") == "completed" and result.get("steps") == task["steps"]
     except Exception:
         return False
 
@@ -48,10 +45,9 @@ def main():
     study = read_json(STUDY)
 
     selected = [
-        t for t in queue["tasks"]
-        if t["category"] == CATEGORY
-        and t["variant"] == VARIANT
-        and t["seed"] in SEEDS
+        t
+        for t in queue["tasks"]
+        if t["category"] == CATEGORY and t["variant"] == VARIANT and t["seed"] in SEEDS
     ]
     selected.sort(key=lambda t: t["seed"])
 
@@ -70,9 +66,7 @@ def main():
             print(f"Already complete; preserving: {out}")
             continue
         if out.exists():
-            raise RuntimeError(
-                f"Incomplete output exists; refusing to overwrite: {out}"
-            )
+            raise RuntimeError(f"Incomplete output exists; refusing to overwrite: {out}")
 
         config = {
             "dataset": study["dataset"],
@@ -89,9 +83,7 @@ def main():
             "weights": "imagenet_v1",
         }
 
-        config_path = CONFIG_DIR / (
-            f'{CATEGORY}-{VARIANT}-seed-{task["seed"]}.json'
-        )
+        config_path = CONFIG_DIR / (f"{CATEGORY}-{VARIANT}-seed-{task['seed']}.json")
 
         if config_path.exists():
             if read_json(config_path) != config:
@@ -124,16 +116,26 @@ def main():
             raise RuntimeError(f"Log already exists; refusing overwrite: {log_path}")
 
         command = [
-            sys.executable, str(TRAINER),
-            "--config", str(config_path),
-            "--manifest", str(ROOT / task["manifest"]),
-            "--root", str(Path.home() / "datasets/mvtec_ad_2"),
-            "--output", str(out),
-            "--steps", str(task["steps"]),
-            "--device", "cuda",
-            "--threads", "2",
-            "--gpu-memory-fraction", "0.25",
-            "--target-fpr", str(study["normal_validation_target_fpr"]),
+            sys.executable,
+            str(TRAINER),
+            "--config",
+            str(config_path),
+            "--manifest",
+            str(ROOT / task["manifest"]),
+            "--root",
+            str(Path.home() / "datasets/mvtec_ad_2"),
+            "--output",
+            str(out),
+            "--steps",
+            str(task["steps"]),
+            "--device",
+            "cuda",
+            "--threads",
+            "2",
+            "--gpu-memory-fraction",
+            "0.25",
+            "--target-fpr",
+            str(study["normal_validation_target_fpr"]),
             "--normal-diagnostics",
             "--cache-images",
         ]
@@ -160,8 +162,7 @@ def main():
         code = process.wait()
         log.close()
         print(
-            f"Seed {task['seed']} exited with code {code}; "
-            f"log: {log_path}",
+            f"Seed {task['seed']} exited with code {code}; log: {log_path}",
             flush=True,
         )
         if code != 0:
@@ -173,11 +174,13 @@ def main():
     for task, _, _, _ in processes:
         out = ROOT / task["output"]
         ok = complete(task)
-        results.append({
-            "seed": task["seed"],
-            "complete": ok,
-            "output": str(out.relative_to(ROOT)),
-        })
+        results.append(
+            {
+                "seed": task["seed"],
+                "complete": ok,
+                "output": str(out.relative_to(ROOT)),
+            }
+        )
         if not ok and not any(x[0] == task["seed"] for x in failures):
             failures.append((task["seed"], "missing/incomplete outputs"))
 

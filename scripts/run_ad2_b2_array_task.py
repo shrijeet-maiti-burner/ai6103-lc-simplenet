@@ -9,16 +9,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-CATEGORIES = [
-    "can", "fabric", "fruit_jelly", "rice",
-    "sheet_metal", "vial", "wallplugs", "walnuts"
-]
+CATEGORIES = ["can", "fabric", "fruit_jelly", "rice", "sheet_metal", "vial", "wallplugs", "walnuts"]
 CANDIDATES = [0.01, 0.1, 1.0]
 SEED = 3
 UPDATES = 256
 
+
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
 
 def build_tasks():
     tasks = []
@@ -27,6 +26,7 @@ def build_tasks():
         for weight in CANDIDATES:
             tasks.append((category, "B2", weight, str(weight)))
     return tasks
+
 
 def main():
     index = int(os.environ["SLURM_ARRAY_TASK_ID"])
@@ -64,9 +64,7 @@ def main():
         return
 
     if run_dir.exists():
-        raise FileExistsError(
-            f"Incomplete output exists; preserving it: {run_dir}"
-        )
+        raise FileExistsError(f"Incomplete output exists; preserving it: {run_dir}")
 
     config = {
         "dataset": "mvtec_ad2",
@@ -80,34 +78,37 @@ def main():
         "ad_resize": None,
         "brightness": [0.8, 1.2],
         "gamma": [0.8, 1.2],
-        "weights": "imagenet_v1"
+        "weights": "imagenet_v1",
     }
 
     config_dir = output_root / "configs"
     config_dir.mkdir(parents=True, exist_ok=True)
-    config_path = config_dir / (
-        f"{category}-{variant}-{tag}-seed{SEED}.json"
-    )
+    config_path = config_dir / (f"{category}-{variant}-{tag}-seed{SEED}.json")
     config_path.write_text(json.dumps(config, indent=2) + "\n")
 
     command = [
         sys.executable,
         "scripts/train_pilot.py",
-        "--config", str(config_path),
-        "--manifest", str(manifest),
-        "--root", str(Path.home() / "datasets/mvtec_ad_2"),
-        "--output", str(run_dir),
-        "--steps", str(UPDATES),
-        "--device", "cuda",
-        "--threads", "4",
-        "--gpu-memory-fraction", "0.8",
-        "--normal-diagnostics"
+        "--config",
+        str(config_path),
+        "--manifest",
+        str(manifest),
+        "--root",
+        str(Path.home() / "datasets/mvtec_ad_2"),
+        "--output",
+        str(run_dir),
+        "--steps",
+        str(UPDATES),
+        "--device",
+        "cuda",
+        "--threads",
+        "4",
+        "--gpu-memory-fraction",
+        "0.8",
+        "--normal-diagnostics",
     ]
 
-    print(
-        f"Starting task {index}: {category} {variant} {tag}",
-        flush=True
-    )
+    print(f"Starting task {index}: {category} {variant} {tag}", flush=True)
     subprocess.run(command, cwd=ROOT, check=True)
 
     if not metrics.is_file() or not checkpoint.is_file():
