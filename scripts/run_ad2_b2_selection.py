@@ -48,7 +48,7 @@ def validate_metrics(metrics, expected_hash, category, variant, weight):
 
     for key in ("pair_mse", "patch_score_std", "synthetic_hinge"):
         value = metrics.get(key)
-        if not isinstance(value, (int, float)) or not math.isfinite(value):
+        if not isinstance(value, int | float) or not math.isfinite(value):
             raise ValueError(f"{category}/{variant}/{weight}: invalid {key}")
 
     if metrics["pair_mse"] < 0 or metrics["patch_score_std"] < 0:

@@ -1,7 +1,6 @@
 import json
-import time
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 steps = {
     "can": 4160,
@@ -23,10 +22,10 @@ print("Updated:", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 print("=" * 85)
 
 for category, total in steps.items():
-    print("\n{} ({} steps per seed)".format(category.upper(), total))
+    print(f"\n{category.upper()} ({total} steps per seed)")
 
     for seed in range(3):
-        folder = root / category / "B2" / "seed-{}".format(seed)
+        folder = root / category / "B2" / f"seed-{seed}"
         path = folder / "train.jsonl"
         result_path = folder / "result.json"
 
@@ -34,20 +33,20 @@ for category, total in steps.items():
             try:
                 result = json.loads(result_path.read_text())
                 if result.get("status") == "completed" and result.get("steps") == total:
-                    print("  Seed {}: COMPLETE | {}/{} | 100.0%".format(seed, total, total))
+                    print(f"  Seed {seed}: COMPLETE | {total}/{total} | 100.0%")
                     completed += 1
                     continue
             except Exception:
                 pass
 
         if not path.exists():
-            print("  Seed {}: WAITING".format(seed))
+            print(f"  Seed {seed}: WAITING")
             continue
 
         try:
             lines = path.read_text().splitlines()
             if not lines:
-                print("  Seed {}: INITIALISING".format(seed))
+                print(f"  Seed {seed}: INITIALISING")
                 continue
 
             d = json.loads(lines[-1])
@@ -65,8 +64,8 @@ for category, total in steps.items():
                 active += 1
 
         except Exception:
-            print("  Seed {}: WRITING / READING".format(seed))
+            print(f"  Seed {seed}: WRITING / READING")
 
 print("\n" + "=" * 85)
-print("VERIFIED COMPLETE: {}/24 runs".format(completed))
-print("CURRENTLY IN PROGRESS: {} runs".format(active))
+print(f"VERIFIED COMPLETE: {completed}/24 runs")
+print(f"CURRENTLY IN PROGRESS: {active} runs")
