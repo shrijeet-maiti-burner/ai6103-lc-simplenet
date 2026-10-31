@@ -1,0 +1,29 @@
+{
+  "category": "sheet_metal",
+  "variant": "B0",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "concurrent_processes": 3,
+  "elapsed_seconds": 556.431096364744,
+  "results": [
+    {
+      "seed": 0,
+      "complete": true,
+      "output": "results/ad2-full-study/sheet_metal/B0/seed-0"
+    },
+    {
+      "seed": 1,
+      "complete": true,
+      "output": "results/ad2-full-study/sheet_metal/B0/seed-1"
+    },
+    {
+      "seed": 2,
+      "complete": true,
+      "output": "results/ad2-full-study/sheet_metal/B0/seed-2"
+    }
+  ],
+  "failures": []
+}

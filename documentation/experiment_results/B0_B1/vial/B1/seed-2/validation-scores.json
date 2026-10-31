@@ -1,0 +1,781 @@
+[
+  {
+    "image_id": "vial/validation/good/000_regular.png",
+    "label": 0,
+    "score": -0.052992671728134155,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/001_regular.png",
+    "label": 0,
+    "score": 0.12799441814422607,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/002_regular.png",
+    "label": 0,
+    "score": -0.06951862573623657,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/003_regular.png",
+    "label": 0,
+    "score": 0.22641849517822266,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/004_regular.png",
+    "label": 0,
+    "score": 0.3414836823940277,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/005_regular.png",
+    "label": 0,
+    "score": 1.620908260345459,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/006_regular.png",
+    "label": 0,
+    "score": 0.6942352652549744,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/007_regular.png",
+    "label": 0,
+    "score": -0.15891671180725098,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/008_regular.png",
+    "label": 0,
+    "score": 0.16572552919387817,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/009_regular.png",
+    "label": 0,
+    "score": 1.3131009340286255,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/010_regular.png",
+    "label": 0,
+    "score": 0.2037954032421112,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/011_regular.png",
+    "label": 0,
+    "score": 0.20586752891540527,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/012_regular.png",
+    "label": 0,
+    "score": 0.015904486179351807,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/013_regular.png",
+    "label": 0,
+    "score": 0.6466362476348877,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/014_regular.png",
+    "label": 0,
+    "score": 0.04013228416442871,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/015_regular.png",
+    "label": 0,
+    "score": 0.7757503390312195,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/016_regular.png",
+    "label": 0,
+    "score": 0.4717909097671509,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/017_regular.png",
+    "label": 0,
+    "score": 0.47173458337783813,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/018_regular.png",
+    "label": 0,
+    "score": 0.40003305673599243,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/019_regular.png",
+    "label": 0,
+    "score": 0.12816129624843597,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/020_regular.png",
+    "label": 0,
+    "score": 0.12925046682357788,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/021_regular.png",
+    "label": 0,
+    "score": 0.14305925369262695,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/022_regular.png",
+    "label": 0,
+    "score": 0.2811160087585449,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/023_regular.png",
+    "label": 0,
+    "score": 0.5158241987228394,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/024_regular.png",
+    "label": 0,
+    "score": 0.20552515983581543,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/025_regular.png",
+    "label": 0,
+    "score": 0.12198090553283691,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/026_regular.png",
+    "label": 0,
+    "score": 0.40109097957611084,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/027_regular.png",
+    "label": 0,
+    "score": 0.16926199197769165,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/028_regular.png",
+    "label": 0,
+    "score": 0.01319873332977295,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/029_regular.png",
+    "label": 0,
+    "score": 0.2742777466773987,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/030_regular.png",
+    "label": 0,
+    "score": 0.4346940517425537,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/031_regular.png",
+    "label": 0,
+    "score": 0.30868837237358093,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/032_regular.png",
+    "label": 0,
+    "score": 0.4964025318622589,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/033_regular.png",
+    "label": 0,
+    "score": 0.9698526859283447,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/034_regular.png",
+    "label": 0,
+    "score": 0.24155181646347046,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/035_regular.png",
+    "label": 0,
+    "score": 0.2809538245201111,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/036_regular.png",
+    "label": 0,
+    "score": 0.017204999923706055,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/037_regular.png",
+    "label": 0,
+    "score": 0.3824518620967865,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/038_regular.png",
+    "label": 0,
+    "score": 0.9722665548324585,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/039_regular.png",
+    "label": 0,
+    "score": 0.04622030258178711,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "vial/validation/good/040_regular.png",
+    "label": 0,
+    "score": 0.008080542087554932,
+    "original_size": [
+      1900,
+      1400
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  }
+]

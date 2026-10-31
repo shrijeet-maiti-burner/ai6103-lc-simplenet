@@ -1,0 +1,58 @@
+{
+  "study_name": "mvtec_ad2_full_study",
+  "dataset": "mvtec_ad2",
+  "status": "implementation",
+  "categories": [
+    "can",
+    "fabric",
+    "fruit_jelly",
+    "rice",
+    "sheet_metal",
+    "vial",
+    "wallplugs",
+    "walnuts"
+  ],
+  "variants": ["B0", "B1", "B2"],
+  "main_seeds": [0, 1, 2],
+  "tuning_seed": 3,
+  "image_size": [256, 256],
+  "ad_resize": null,
+  "batch_size": 8,
+  "source_passes": 80,
+  "brightness": [0.8, 1.2],
+  "gamma": [0.8, 1.2],
+  "checkpoint_policy": "fixed_final",
+  "normal_validation_target_fpr": 0.05,
+  "test_data_used_for_selection": false,
+  "category_counts": {
+    "can": {"train": 412, "validation": 46, "updates": 4160},
+    "fabric": {"train": 387, "validation": 43, "updates": 3920},
+    "fruit_jelly": {"train": 263, "validation": 37, "updates": 2640},
+    "rice": {"train": 313, "validation": 35, "updates": 3200},
+    "sheet_metal": {"train": 137, "validation": 19, "updates": 1440},
+    "vial": {"train": 291, "validation": 41, "updates": 2960},
+    "wallplugs": {"train": 293, "validation": 33, "updates": 2960},
+    "walnuts": {"train": 432, "validation": 48, "updates": 4320}
+  },
+  "b2_selection": {
+    "updates_per_trial": 256,
+    "candidates": [0.01, 0.1, 1.0],
+    "shared_b1_control_per_category": true,
+    "validation_only": true,
+    "brightness_gamma_corners": [
+      [0.8, 0.8],
+      [0.8, 1.2],
+      [1.2, 0.8],
+      [1.2, 1.2]
+    ],
+    "minimum_patch_std_ratio": 0.5,
+    "maximum_synthetic_hinge_ratio": 1.25,
+    "tie_tolerance": 0.01,
+    "no_eligible_candidate": "stop"
+  },
+  "reporting": {
+    "per_category": true,
+    "macro_all_eight": true,
+    "macro_without_sheet_metal": true
+  }
+}

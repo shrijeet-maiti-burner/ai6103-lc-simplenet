@@ -1,0 +1,705 @@
+[
+  {
+    "image_id": "fruit_jelly/validation/good/000_regular.png",
+    "label": 0,
+    "score": -0.006936609745025635,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/001_regular.png",
+    "label": 0,
+    "score": 1.2700438499450684,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/002_regular.png",
+    "label": 0,
+    "score": 0.18529599905014038,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/003_regular.png",
+    "label": 0,
+    "score": 0.5923492908477783,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/004_regular.png",
+    "label": 0,
+    "score": 0.516589879989624,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/005_regular.png",
+    "label": 0,
+    "score": -0.022845983505249023,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/006_regular.png",
+    "label": 0,
+    "score": 0.4823400676250458,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/007_regular.png",
+    "label": 0,
+    "score": 0.11361917853355408,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/008_regular.png",
+    "label": 0,
+    "score": 0.8425356149673462,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/009_regular.png",
+    "label": 0,
+    "score": 0.22612571716308594,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/010_regular.png",
+    "label": 0,
+    "score": 0.2771473526954651,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/011_regular.png",
+    "label": 0,
+    "score": 0.6217895150184631,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/012_regular.png",
+    "label": 0,
+    "score": 0.5236250758171082,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/013_regular.png",
+    "label": 0,
+    "score": 0.5228867530822754,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/014_regular.png",
+    "label": 0,
+    "score": 0.33523523807525635,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/015_regular.png",
+    "label": 0,
+    "score": 0.15359210968017578,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/016_regular.png",
+    "label": 0,
+    "score": 0.30699583888053894,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/017_regular.png",
+    "label": 0,
+    "score": 0.431042343378067,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/018_regular.png",
+    "label": 0,
+    "score": 0.20447301864624023,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/019_regular.png",
+    "label": 0,
+    "score": 1.3372623920440674,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/020_regular.png",
+    "label": 0,
+    "score": 0.36516618728637695,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/021_regular.png",
+    "label": 0,
+    "score": 0.9015406370162964,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/022_regular.png",
+    "label": 0,
+    "score": 0.1315332055091858,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/023_regular.png",
+    "label": 0,
+    "score": 0.35176753997802734,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/024_regular.png",
+    "label": 0,
+    "score": 0.4167073667049408,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/025_regular.png",
+    "label": 0,
+    "score": 0.7467788457870483,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/026_regular.png",
+    "label": 0,
+    "score": 0.5420718789100647,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/027_regular.png",
+    "label": 0,
+    "score": 0.4190542697906494,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/028_regular.png",
+    "label": 0,
+    "score": 0.5777902007102966,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/029_regular.png",
+    "label": 0,
+    "score": 0.05212593078613281,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/030_regular.png",
+    "label": 0,
+    "score": 0.04703807830810547,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/031_regular.png",
+    "label": 0,
+    "score": 0.1486034095287323,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/032_regular.png",
+    "label": 0,
+    "score": 0.6305599808692932,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/033_regular.png",
+    "label": 0,
+    "score": 1.0861622095108032,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/034_regular.png",
+    "label": 0,
+    "score": 0.0705365538597107,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/035_regular.png",
+    "label": 0,
+    "score": 0.8421144485473633,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "fruit_jelly/validation/good/036_regular.png",
+    "label": 0,
+    "score": 0.35835567116737366,
+    "original_size": [
+      1520,
+      2100
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  }
+]

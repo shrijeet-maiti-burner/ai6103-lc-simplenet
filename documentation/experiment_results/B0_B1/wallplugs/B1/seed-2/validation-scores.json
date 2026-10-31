@@ -1,0 +1,629 @@
+[
+  {
+    "image_id": "wallplugs/validation/good/000_regular.png",
+    "label": 0,
+    "score": 0.07299426198005676,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/001_regular.png",
+    "label": 0,
+    "score": 0.6132525205612183,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/002_regular.png",
+    "label": 0,
+    "score": 0.5106785297393799,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/003_regular.png",
+    "label": 0,
+    "score": 0.16472434997558594,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/004_regular.png",
+    "label": 0,
+    "score": 0.5327374339103699,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/005_regular.png",
+    "label": 0,
+    "score": 0.294094443321228,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/006_regular.png",
+    "label": 0,
+    "score": 0.2707132399082184,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/007_regular.png",
+    "label": 0,
+    "score": 0.7219949960708618,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/008_regular.png",
+    "label": 0,
+    "score": 0.15922051668167114,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/009_regular.png",
+    "label": 0,
+    "score": 0.12261569499969482,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/010_regular.png",
+    "label": 0,
+    "score": 0.2553226053714752,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/011_regular.png",
+    "label": 0,
+    "score": 0.11372661590576172,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/012_regular.png",
+    "label": 0,
+    "score": 0.2027742862701416,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/013_regular.png",
+    "label": 0,
+    "score": 0.2939074635505676,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/014_regular.png",
+    "label": 0,
+    "score": 0.20536279678344727,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/015_regular.png",
+    "label": 0,
+    "score": 0.2476218342781067,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/016_regular.png",
+    "label": 0,
+    "score": 0.12448577582836151,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/017_regular.png",
+    "label": 0,
+    "score": 0.6398958563804626,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/018_regular.png",
+    "label": 0,
+    "score": 0.62929767370224,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/019_regular.png",
+    "label": 0,
+    "score": 0.2848861813545227,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/020_regular.png",
+    "label": 0,
+    "score": 0.3164776563644409,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/021_regular.png",
+    "label": 0,
+    "score": 0.42340829968452454,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/022_regular.png",
+    "label": 0,
+    "score": 0.18867528438568115,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/023_regular.png",
+    "label": 0,
+    "score": 0.4779961407184601,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/024_regular.png",
+    "label": 0,
+    "score": 0.3706192970275879,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/025_regular.png",
+    "label": 0,
+    "score": 0.18495553731918335,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/026_regular.png",
+    "label": 0,
+    "score": -0.0037208199501037598,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/027_regular.png",
+    "label": 0,
+    "score": 0.6888063549995422,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/028_regular.png",
+    "label": 0,
+    "score": 0.8380178809165955,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/029_regular.png",
+    "label": 0,
+    "score": 0.3261205554008484,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/030_regular.png",
+    "label": 0,
+    "score": 0.3531583845615387,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/031_regular.png",
+    "label": 0,
+    "score": 0.17230093479156494,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "wallplugs/validation/good/032_regular.png",
+    "label": 0,
+    "score": 0.35330113768577576,
+    "original_size": [
+      2048,
+      2448
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  }
+]

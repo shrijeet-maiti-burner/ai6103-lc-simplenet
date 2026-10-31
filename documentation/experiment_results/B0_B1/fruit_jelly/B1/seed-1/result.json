@@ -1,0 +1,35 @@
+{
+  "status": "completed",
+  "scope": "development pilot; no defect or benchmark results",
+  "steps": 2640,
+  "trainable_sha256": "f66f1e8295903f4a770b5d80041204c2f8458a6ec06a6daaf8146a4dba0ed20c",
+  "checkpoint_sha256": "d50f767f6a944efd8a2f322cfa6af863b1996cc23d2614bb1ad5fd04874e2dee",
+  "validation_scores_sha256": "9d581ef2a424cd3099f24b99e9eaa67457e45929326a1925a5dfc9abb84ee2e3",
+  "calibration": {
+    "method": "higher empirical quantile; strict score > threshold",
+    "target_fpr": 0.05,
+    "threshold": 1.6399152278900146,
+    "false_positives": 1,
+    "normal_images": 37,
+    "true_positives": 0,
+    "defective_images": 0,
+    "fpr": 0.02702702702702703,
+    "recall": null
+  },
+  "native_map_shape": [
+    1520,
+    2100
+  ],
+  "crop_map_shape": null,
+  "replay": null,
+  "training_timing": {
+    "steps": 2640,
+    "warmup_steps": 2,
+    "median_seconds_after_warmup": 0.3873827219940722,
+    "total_seconds_including_load": 1042.8903928194195
+  },
+  "process_peak_rss_bytes": 2220773376,
+  "peak_cuda_allocated_bytes": 5158084096,
+  "peak_cuda_reserved_bytes": 6050283520,
+  "total_seconds": 1059.294844553806
+}

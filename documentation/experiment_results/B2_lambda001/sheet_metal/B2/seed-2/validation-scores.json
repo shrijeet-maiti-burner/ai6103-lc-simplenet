@@ -1,0 +1,363 @@
+[
+  {
+    "image_id": "sheet_metal/validation/good/000_regular.png",
+    "label": 0,
+    "score": 0.2278592884540558,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/001_regular.png",
+    "label": 0,
+    "score": 0.11024665832519531,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/002_regular.png",
+    "label": 0,
+    "score": 0.351002961397171,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/003_regular.png",
+    "label": 0,
+    "score": 0.4517461657524109,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/004_regular.png",
+    "label": 0,
+    "score": 0.32117438316345215,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/005_regular.png",
+    "label": 0,
+    "score": -0.07022184133529663,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/006_regular.png",
+    "label": 0,
+    "score": 0.19800102710723877,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/007_regular.png",
+    "label": 0,
+    "score": 0.08658045530319214,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/008_regular.png",
+    "label": 0,
+    "score": 0.16468456387519836,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/009_regular.png",
+    "label": 0,
+    "score": 0.10069358348846436,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/010_regular.png",
+    "label": 0,
+    "score": 0.19264256954193115,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/011_regular.png",
+    "label": 0,
+    "score": 0.14844363927841187,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/012_regular.png",
+    "label": 0,
+    "score": 0.2420932650566101,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/013_regular.png",
+    "label": 0,
+    "score": 0.16366252303123474,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/014_regular.png",
+    "label": 0,
+    "score": 0.27850961685180664,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/015_regular.png",
+    "label": 0,
+    "score": 0.1131066083908081,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/016_regular.png",
+    "label": 0,
+    "score": 0.13602207601070404,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/017_regular.png",
+    "label": 0,
+    "score": 0.5041177272796631,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "sheet_metal/validation/good/018_regular.png",
+    "label": 0,
+    "score": 0.7545742988586426,
+    "original_size": [
+      1056,
+      4224
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  }
+]

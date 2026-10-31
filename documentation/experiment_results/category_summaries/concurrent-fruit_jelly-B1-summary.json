@@ -1,0 +1,29 @@
+{
+  "category": "fruit_jelly",
+  "variant": "B1",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "concurrent_processes": 3,
+  "elapsed_seconds": 1063.1336695468053,
+  "results": [
+    {
+      "seed": 0,
+      "complete": true,
+      "output": "results/ad2-full-study/fruit_jelly/B1/seed-0"
+    },
+    {
+      "seed": 1,
+      "complete": true,
+      "output": "results/ad2-full-study/fruit_jelly/B1/seed-1"
+    },
+    {
+      "seed": 2,
+      "complete": true,
+      "output": "results/ad2-full-study/fruit_jelly/B1/seed-2"
+    }
+  ],
+  "failures": []
+}

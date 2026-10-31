@@ -1,0 +1,123 @@
+{
+  "scope": "development pilot; no defect or benchmark results",
+  "config": {
+    "dataset": "mvtec_ad2",
+    "category": "rice",
+    "manifest_sha256": "6b9b3a25822b4b911611e19455db92c8a85d05517cf43b17d6f677a5f7a0f614",
+    "variant": "B0",
+    "lambda_score": 0.0,
+    "seed": 0,
+    "batch_size": 8,
+    "image_size": [
+      256,
+      256
+    ],
+    "ad_resize": null,
+    "noise_std": 0.015,
+    "margin": 0.5,
+    "adapter_lr": 0.0001,
+    "discriminator_lr": 0.0002,
+    "brightness": [
+      0.8,
+      1.2
+    ],
+    "gamma": [
+      0.8,
+      1.2
+    ],
+    "weights": "imagenet_v1"
+  },
+  "config_sha256": "451a9d100f3c0df1b189f72d44488cc10db20ca935199002a35d73974b1d329d",
+  "arguments": {
+    "config": "/home/msai/umesh001/ai6103-lc-simplenet/results/ad2-full-study/configs/rice-B0-seed-0.json",
+    "manifest": "/home/msai/umesh001/ai6103-lc-simplenet/references/ad2-normal-manifests/rice.json",
+    "root": "/home/msai/umesh001/datasets/mvtec_ad_2",
+    "output": "/home/msai/umesh001/ai6103-lc-simplenet/results/ad2-full-study/rice/B0/seed-0",
+    "steps": 3200,
+    "device": "cuda",
+    "threads": 2,
+    "gpu_memory_fraction": 0.25,
+    "target_fpr": 0.05,
+    "resume": null,
+    "verify_replay": false,
+    "normal_diagnostics": true,
+    "cache_images": true
+  },
+  "git_commit": "17437e297dd1d4179d4569621074a87c83fdb2c5",
+  "git_status": "M third_party/SimpleNet\n?? configs/ad2-full-study.json\n?? configs/smoke-can-B0.json\n?? configs/smoke-can-B1.json\n?? configs/smoke-can-B2.json\n?? extract_fabric.sbatch\n?? logs/\n?? references/ad2-normal-manifests/\n?? scripts/ad2-can-B0-seed0.sbatch\n?? scripts/ad2-can-B0-seed1.sbatch\n?? scripts/ad2_b2_array.sbatch\n?? scripts/ad2_b2_batch.sbatch\n?? scripts/ad2_b2_remaining.sbatch\n?? scripts/ad2_chain.sbatch\n?? scripts/ad2_chain_worker.py\n?? scripts/ad2_concurrent_batch.py\n?? scripts/ad2_concurrent_benchmark.sbatch\n?? scripts/ad2_fullstudy_batch.sbatch\n?? scripts/ad2_fullstudy_scheduler.py\n?? scripts/run_ad2_b2_array_task.py\n?? scripts/run_ad2_b2_selection.py\n?? scripts/run_ad2_b2_selection.py.preflight-backup\n?? scripts/run_ad2_fabric_batch.sh.backup\n?? scripts/run_ad2_matrix.py\n?? scripts/train_pilot.py.backup\n?? src/lc_simplenet/pilot.py.backup",
+  "git_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "upstream_commit": "351a2b8d4e8cfc944dbccbf9bc6ceda930c6f26b",
+  "lock_sha256": "3d3b9dd4995622d26fb3077f8000255f974a03c715ebe764a64eeedac3e53aa2",
+  "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+  "platform": "Linux-5.14.0-503.14.1.el9_5.x86_64-x86_64-with-glibc2.34",
+  "torch": "2.11.0+cu128",
+  "cuda_runtime": "12.8",
+  "gpu": "NVIDIA A40",
+  "split_counts": {
+    "train": 313,
+    "validation": 35
+  },
+  "target_fpr": 0.05,
+  "checkpoint_policy": "fixed final step",
+  "runner_sha256": "1148b514dc8b2e6013035c5c15bc668588a23d3b927c4620fb9dc2f1f9d226c6",
+  "postprocessing": "raw -D patch maps; image=max patch; bilinear align_corners=False to input, Gaussian sigma=4 input pixels; PIL bilinear to native",
+  "weight_file": "wide_resnet50_2-95faca4d.pth",
+  "continuation_contract": {
+    "runtime": {
+      "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+      "platform": "Linux-5.14.0-503.14.1.el9_5.x86_64-x86_64-with-glibc2.34",
+      "packages": {
+        "numpy": "2.4.6",
+        "pillow": "12.3.0",
+        "torch": "2.11.0+cu128",
+        "torchvision": "0.26.0+cu128",
+        "timm": null,
+        "scipy": "1.17.1",
+        "scikit-learn": "1.9.1",
+        "scikit-image": "0.26.0",
+        "opencv-python": "5.0.0.93"
+      },
+      "cuda_runtime": "12.8",
+      "cudnn": 91900,
+      "device_type": "cuda",
+      "device": "NVIDIA A40",
+      "torch_threads": 2,
+      "deterministic_algorithms": true,
+      "cudnn_deterministic": true,
+      "cudnn_benchmark": false,
+      "matmul_tf32": false,
+      "cudnn_tf32": false
+    },
+    "sources": {
+      "src/lc_simplenet/pilot.py": "bb71dc2f858bf1c52a76512a166aa8792d15738a500470623f2992c304a0dbb9",
+      "src/lc_simplenet/losses.py": "8c7f21fca1ff9daf18ceace4b42539afe48793c683c355c3e57cb8fe8ebfa1a8",
+      "src/lc_simplenet/data.py": "b3182b759553dfb1f0a3e4086de478c97522b68cfdfb1cdfc6de8288a56b5ae7",
+      "src/lc_simplenet/data_manifest.py": "75344b1d3e33019ddc12a33886472ac1c601e65e9dbda31a980c25cb311bab9b",
+      "src/lc_simplenet/provenance.py": "aba127ee0ab9268e1dc68a3ee283193d3c9f1122e16d28955c52c372de8515a9",
+      "src/lc_simplenet/normal_validation.py": "c19c20b1c3d0a0eecbfbe7046450699479d91498b6dfcfbc9ddc5509f17075ec",
+      "scripts/train_pilot.py": "1148b514dc8b2e6013035c5c15bc668588a23d3b927c4620fb9dc2f1f9d226c6",
+      "third_party/SimpleNet/simplenet.py": "c1a7329f6b7c44d8b9b6f73c9c0e895bab4a5bd02100080060b250de5ce51240",
+      "third_party/SimpleNet/common.py": "5114aa877e4dc57c5582e53ae366ad8544f11dafed2131239e6ed6a6acbe887a"
+    },
+    "torch": "2.11.0+cu128",
+    "torchvision": "0.26.0+cu128",
+    "numpy": "2.4.6",
+    "lock_sha256": "3d3b9dd4995622d26fb3077f8000255f974a03c715ebe764a64eeedac3e53aa2",
+    "cuda_runtime": "12.8",
+    "cudnn": 91900,
+    "deterministic": true,
+    "cublas_workspace_config": ":4096:8",
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "matmul_tf32": false,
+    "cudnn_tf32": false,
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "threads": 2,
+    "device": "NVIDIA A40"
+  },
+  "encoder_sha256": "aa373db6792ab7d661690bd10e1897c76de2abfb7039145c871709ac02ab3509",
+  "weight_file_sha256": "95faca4d11227dddf8633dbb5ff6c8a9003c1aa5b8945c73834b8007b10950b8",
+  "start_step": 0,
+  "initial_trainable_sha256": "37e9888a8ae7731ce3a59264ccb14c6ccde4a688487cc3a99bbf8ab29cedcae9",
+  "initialization_seconds": 6.174009304493666
+}

@@ -1,0 +1,29 @@
+{
+  "category": "wallplugs",
+  "variant": "B1",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "concurrent_processes": 3,
+  "elapsed_seconds": 1179.7168158460408,
+  "results": [
+    {
+      "seed": 0,
+      "complete": true,
+      "output": "results/ad2-full-study/wallplugs/B1/seed-0"
+    },
+    {
+      "seed": 1,
+      "complete": true,
+      "output": "results/ad2-full-study/wallplugs/B1/seed-1"
+    },
+    {
+      "seed": 2,
+      "complete": true,
+      "output": "results/ad2-full-study/wallplugs/B1/seed-2"
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,876 @@
+[
+  {
+    "image_id": "can/validation/good/000_regular.png",
+    "label": 0,
+    "score": -0.5570635795593262,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/001_regular.png",
+    "label": 0,
+    "score": -0.0528101921081543,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/002_regular.png",
+    "label": 0,
+    "score": 0.24991166591644287,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/003_regular.png",
+    "label": 0,
+    "score": -0.33542507886886597,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/004_regular.png",
+    "label": 0,
+    "score": -0.4241093397140503,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/005_regular.png",
+    "label": 0,
+    "score": -0.4037531614303589,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/006_regular.png",
+    "label": 0,
+    "score": 0.06637001037597656,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/007_regular.png",
+    "label": 0,
+    "score": 0.134008526802063,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/008_regular.png",
+    "label": 0,
+    "score": -0.22765421867370605,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/009_regular.png",
+    "label": 0,
+    "score": -0.09677165746688843,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/010_regular.png",
+    "label": 0,
+    "score": -0.38365668058395386,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/011_regular.png",
+    "label": 0,
+    "score": 0.26795661449432373,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/012_regular.png",
+    "label": 0,
+    "score": 0.1768530011177063,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/013_regular.png",
+    "label": 0,
+    "score": -0.17860698699951172,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/014_regular.png",
+    "label": 0,
+    "score": 0.3215979039669037,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/015_regular.png",
+    "label": 0,
+    "score": -0.2427552044391632,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/016_regular.png",
+    "label": 0,
+    "score": -0.044874727725982666,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/017_regular.png",
+    "label": 0,
+    "score": -0.21305494010448456,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/018_regular.png",
+    "label": 0,
+    "score": 0.5968937873840332,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/019_regular.png",
+    "label": 0,
+    "score": -0.4692956507205963,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/020_regular.png",
+    "label": 0,
+    "score": 0.022728443145751953,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/021_regular.png",
+    "label": 0,
+    "score": -0.18630754947662354,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/022_regular.png",
+    "label": 0,
+    "score": 0.16345536708831787,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/023_regular.png",
+    "label": 0,
+    "score": 0.21576368808746338,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/024_regular.png",
+    "label": 0,
+    "score": 0.167199969291687,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/025_regular.png",
+    "label": 0,
+    "score": 0.14399933815002441,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/026_regular.png",
+    "label": 0,
+    "score": -0.1325610876083374,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/027_regular.png",
+    "label": 0,
+    "score": -0.31733280420303345,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/028_regular.png",
+    "label": 0,
+    "score": 0.015734434127807617,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/029_regular.png",
+    "label": 0,
+    "score": 0.01973903179168701,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/030_regular.png",
+    "label": 0,
+    "score": -0.426499605178833,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/031_regular.png",
+    "label": 0,
+    "score": -0.2647482752799988,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/032_regular.png",
+    "label": 0,
+    "score": 0.16335320472717285,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/033_regular.png",
+    "label": 0,
+    "score": -0.47115302085876465,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/034_regular.png",
+    "label": 0,
+    "score": -0.2907123267650604,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/035_regular.png",
+    "label": 0,
+    "score": 0.13642263412475586,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/036_regular.png",
+    "label": 0,
+    "score": -0.4354606866836548,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/037_regular.png",
+    "label": 0,
+    "score": -0.13866591453552246,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/038_regular.png",
+    "label": 0,
+    "score": -0.17532336711883545,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/039_regular.png",
+    "label": 0,
+    "score": 0.3282712697982788,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/040_regular.png",
+    "label": 0,
+    "score": -0.07193459570407867,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/041_regular.png",
+    "label": 0,
+    "score": -0.21473827958106995,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/042_regular.png",
+    "label": 0,
+    "score": -0.3419422507286072,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/043_regular.png",
+    "label": 0,
+    "score": -0.2482256293296814,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/044_regular.png",
+    "label": 0,
+    "score": 0.0030944347381591797,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  },
+  {
+    "image_id": "can/validation/good/045_regular.png",
+    "label": 0,
+    "score": -0.44949081540107727,
+    "original_size": [
+      1024,
+      2232
+    ],
+    "resized_size": [
+      256,
+      256
+    ],
+    "image_size": [
+      256,
+      256
+    ],
+    "crop_box_xyxy": null,
+    "map_coordinates": "full_frame"
+  }
+]

@@ -1,0 +1,726 @@
+{
+  "study": "mvtec_ad2_full_study",
+  "created_by": "ad2_chain_worker.py",
+  "tasks": [
+    {
+      "category": "can",
+      "variant": "B0",
+      "seed": 0,
+      "steps": 4160,
+      "manifest": "references/ad2-normal-manifests/can.json",
+      "manifest_sha256": "b0f0133e871626dcc03a6780d9d0e0e9a982a3e3a1e95798d2f1ed513cba4092",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/can/B0/seed-0"
+    },
+    {
+      "category": "can",
+      "variant": "B0",
+      "seed": 1,
+      "steps": 4160,
+      "manifest": "references/ad2-normal-manifests/can.json",
+      "manifest_sha256": "b0f0133e871626dcc03a6780d9d0e0e9a982a3e3a1e95798d2f1ed513cba4092",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/can/B0/seed-1"
+    },
+    {
+      "category": "can",
+      "variant": "B0",
+      "seed": 2,
+      "steps": 4160,
+      "manifest": "references/ad2-normal-manifests/can.json",
+      "manifest_sha256": "b0f0133e871626dcc03a6780d9d0e0e9a982a3e3a1e95798d2f1ed513cba4092",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/can/B0/seed-2"
+    },
+    {
+      "category": "can",
+      "variant": "B1",
+      "seed": 0,
+      "steps": 4160,
+      "manifest": "references/ad2-normal-manifests/can.json",
+      "manifest_sha256": "b0f0133e871626dcc03a6780d9d0e0e9a982a3e3a1e95798d2f1ed513cba4092",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/can/B1/seed-0"
+    },
+    {
+      "category": "can",
+      "variant": "B1",
+      "seed": 1,
+      "steps": 4160,
+      "manifest": "references/ad2-normal-manifests/can.json",
+      "manifest_sha256": "b0f0133e871626dcc03a6780d9d0e0e9a982a3e3a1e95798d2f1ed513cba4092",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/can/B1/seed-1"
+    },
+    {
+      "category": "can",
+      "variant": "B1",
+      "seed": 2,
+      "steps": 4160,
+      "manifest": "references/ad2-normal-manifests/can.json",
+      "manifest_sha256": "b0f0133e871626dcc03a6780d9d0e0e9a982a3e3a1e95798d2f1ed513cba4092",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/can/B1/seed-2"
+    },
+    {
+      "category": "can",
+      "variant": "B2",
+      "seed": 0,
+      "steps": 4160,
+      "manifest": "references/ad2-normal-manifests/can.json",
+      "manifest_sha256": "b0f0133e871626dcc03a6780d9d0e0e9a982a3e3a1e95798d2f1ed513cba4092",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/can/B2/seed-0"
+    },
+    {
+      "category": "can",
+      "variant": "B2",
+      "seed": 1,
+      "steps": 4160,
+      "manifest": "references/ad2-normal-manifests/can.json",
+      "manifest_sha256": "b0f0133e871626dcc03a6780d9d0e0e9a982a3e3a1e95798d2f1ed513cba4092",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/can/B2/seed-1"
+    },
+    {
+      "category": "can",
+      "variant": "B2",
+      "seed": 2,
+      "steps": 4160,
+      "manifest": "references/ad2-normal-manifests/can.json",
+      "manifest_sha256": "b0f0133e871626dcc03a6780d9d0e0e9a982a3e3a1e95798d2f1ed513cba4092",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/can/B2/seed-2"
+    },
+    {
+      "category": "fabric",
+      "variant": "B0",
+      "seed": 0,
+      "steps": 3920,
+      "manifest": "references/ad2-normal-manifests/fabric.json",
+      "manifest_sha256": "6f9c589c1b45a0af94e77c3261eb6623236a42c1284538314bea344e63def2f5",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/fabric/B0/seed-0"
+    },
+    {
+      "category": "fabric",
+      "variant": "B0",
+      "seed": 1,
+      "steps": 3920,
+      "manifest": "references/ad2-normal-manifests/fabric.json",
+      "manifest_sha256": "6f9c589c1b45a0af94e77c3261eb6623236a42c1284538314bea344e63def2f5",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/fabric/B0/seed-1"
+    },
+    {
+      "category": "fabric",
+      "variant": "B0",
+      "seed": 2,
+      "steps": 3920,
+      "manifest": "references/ad2-normal-manifests/fabric.json",
+      "manifest_sha256": "6f9c589c1b45a0af94e77c3261eb6623236a42c1284538314bea344e63def2f5",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/fabric/B0/seed-2"
+    },
+    {
+      "category": "fabric",
+      "variant": "B1",
+      "seed": 0,
+      "steps": 3920,
+      "manifest": "references/ad2-normal-manifests/fabric.json",
+      "manifest_sha256": "6f9c589c1b45a0af94e77c3261eb6623236a42c1284538314bea344e63def2f5",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/fabric/B1/seed-0"
+    },
+    {
+      "category": "fabric",
+      "variant": "B1",
+      "seed": 1,
+      "steps": 3920,
+      "manifest": "references/ad2-normal-manifests/fabric.json",
+      "manifest_sha256": "6f9c589c1b45a0af94e77c3261eb6623236a42c1284538314bea344e63def2f5",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/fabric/B1/seed-1"
+    },
+    {
+      "category": "fabric",
+      "variant": "B1",
+      "seed": 2,
+      "steps": 3920,
+      "manifest": "references/ad2-normal-manifests/fabric.json",
+      "manifest_sha256": "6f9c589c1b45a0af94e77c3261eb6623236a42c1284538314bea344e63def2f5",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/fabric/B1/seed-2"
+    },
+    {
+      "category": "fabric",
+      "variant": "B2",
+      "seed": 0,
+      "steps": 3920,
+      "manifest": "references/ad2-normal-manifests/fabric.json",
+      "manifest_sha256": "6f9c589c1b45a0af94e77c3261eb6623236a42c1284538314bea344e63def2f5",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/fabric/B2/seed-0"
+    },
+    {
+      "category": "fabric",
+      "variant": "B2",
+      "seed": 1,
+      "steps": 3920,
+      "manifest": "references/ad2-normal-manifests/fabric.json",
+      "manifest_sha256": "6f9c589c1b45a0af94e77c3261eb6623236a42c1284538314bea344e63def2f5",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/fabric/B2/seed-1"
+    },
+    {
+      "category": "fabric",
+      "variant": "B2",
+      "seed": 2,
+      "steps": 3920,
+      "manifest": "references/ad2-normal-manifests/fabric.json",
+      "manifest_sha256": "6f9c589c1b45a0af94e77c3261eb6623236a42c1284538314bea344e63def2f5",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/fabric/B2/seed-2"
+    },
+    {
+      "category": "fruit_jelly",
+      "variant": "B0",
+      "seed": 0,
+      "steps": 2640,
+      "manifest": "references/ad2-normal-manifests/fruit_jelly.json",
+      "manifest_sha256": "b0c213be92ef667e38c917a33c13039ac616e0744b9edfaf27da35c64764b687",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/fruit_jelly/B0/seed-0"
+    },
+    {
+      "category": "fruit_jelly",
+      "variant": "B0",
+      "seed": 1,
+      "steps": 2640,
+      "manifest": "references/ad2-normal-manifests/fruit_jelly.json",
+      "manifest_sha256": "b0c213be92ef667e38c917a33c13039ac616e0744b9edfaf27da35c64764b687",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/fruit_jelly/B0/seed-1"
+    },
+    {
+      "category": "fruit_jelly",
+      "variant": "B0",
+      "seed": 2,
+      "steps": 2640,
+      "manifest": "references/ad2-normal-manifests/fruit_jelly.json",
+      "manifest_sha256": "b0c213be92ef667e38c917a33c13039ac616e0744b9edfaf27da35c64764b687",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/fruit_jelly/B0/seed-2"
+    },
+    {
+      "category": "fruit_jelly",
+      "variant": "B1",
+      "seed": 0,
+      "steps": 2640,
+      "manifest": "references/ad2-normal-manifests/fruit_jelly.json",
+      "manifest_sha256": "b0c213be92ef667e38c917a33c13039ac616e0744b9edfaf27da35c64764b687",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/fruit_jelly/B1/seed-0"
+    },
+    {
+      "category": "fruit_jelly",
+      "variant": "B1",
+      "seed": 1,
+      "steps": 2640,
+      "manifest": "references/ad2-normal-manifests/fruit_jelly.json",
+      "manifest_sha256": "b0c213be92ef667e38c917a33c13039ac616e0744b9edfaf27da35c64764b687",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/fruit_jelly/B1/seed-1"
+    },
+    {
+      "category": "fruit_jelly",
+      "variant": "B1",
+      "seed": 2,
+      "steps": 2640,
+      "manifest": "references/ad2-normal-manifests/fruit_jelly.json",
+      "manifest_sha256": "b0c213be92ef667e38c917a33c13039ac616e0744b9edfaf27da35c64764b687",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/fruit_jelly/B1/seed-2"
+    },
+    {
+      "category": "fruit_jelly",
+      "variant": "B2",
+      "seed": 0,
+      "steps": 2640,
+      "manifest": "references/ad2-normal-manifests/fruit_jelly.json",
+      "manifest_sha256": "b0c213be92ef667e38c917a33c13039ac616e0744b9edfaf27da35c64764b687",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/fruit_jelly/B2/seed-0"
+    },
+    {
+      "category": "fruit_jelly",
+      "variant": "B2",
+      "seed": 1,
+      "steps": 2640,
+      "manifest": "references/ad2-normal-manifests/fruit_jelly.json",
+      "manifest_sha256": "b0c213be92ef667e38c917a33c13039ac616e0744b9edfaf27da35c64764b687",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/fruit_jelly/B2/seed-1"
+    },
+    {
+      "category": "fruit_jelly",
+      "variant": "B2",
+      "seed": 2,
+      "steps": 2640,
+      "manifest": "references/ad2-normal-manifests/fruit_jelly.json",
+      "manifest_sha256": "b0c213be92ef667e38c917a33c13039ac616e0744b9edfaf27da35c64764b687",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/fruit_jelly/B2/seed-2"
+    },
+    {
+      "category": "rice",
+      "variant": "B0",
+      "seed": 0,
+      "steps": 3200,
+      "manifest": "references/ad2-normal-manifests/rice.json",
+      "manifest_sha256": "6b9b3a25822b4b911611e19455db92c8a85d05517cf43b17d6f677a5f7a0f614",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/rice/B0/seed-0"
+    },
+    {
+      "category": "rice",
+      "variant": "B0",
+      "seed": 1,
+      "steps": 3200,
+      "manifest": "references/ad2-normal-manifests/rice.json",
+      "manifest_sha256": "6b9b3a25822b4b911611e19455db92c8a85d05517cf43b17d6f677a5f7a0f614",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/rice/B0/seed-1"
+    },
+    {
+      "category": "rice",
+      "variant": "B0",
+      "seed": 2,
+      "steps": 3200,
+      "manifest": "references/ad2-normal-manifests/rice.json",
+      "manifest_sha256": "6b9b3a25822b4b911611e19455db92c8a85d05517cf43b17d6f677a5f7a0f614",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/rice/B0/seed-2"
+    },
+    {
+      "category": "rice",
+      "variant": "B1",
+      "seed": 0,
+      "steps": 3200,
+      "manifest": "references/ad2-normal-manifests/rice.json",
+      "manifest_sha256": "6b9b3a25822b4b911611e19455db92c8a85d05517cf43b17d6f677a5f7a0f614",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/rice/B1/seed-0"
+    },
+    {
+      "category": "rice",
+      "variant": "B1",
+      "seed": 1,
+      "steps": 3200,
+      "manifest": "references/ad2-normal-manifests/rice.json",
+      "manifest_sha256": "6b9b3a25822b4b911611e19455db92c8a85d05517cf43b17d6f677a5f7a0f614",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/rice/B1/seed-1"
+    },
+    {
+      "category": "rice",
+      "variant": "B1",
+      "seed": 2,
+      "steps": 3200,
+      "manifest": "references/ad2-normal-manifests/rice.json",
+      "manifest_sha256": "6b9b3a25822b4b911611e19455db92c8a85d05517cf43b17d6f677a5f7a0f614",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/rice/B1/seed-2"
+    },
+    {
+      "category": "rice",
+      "variant": "B2",
+      "seed": 0,
+      "steps": 3200,
+      "manifest": "references/ad2-normal-manifests/rice.json",
+      "manifest_sha256": "6b9b3a25822b4b911611e19455db92c8a85d05517cf43b17d6f677a5f7a0f614",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/rice/B2/seed-0"
+    },
+    {
+      "category": "rice",
+      "variant": "B2",
+      "seed": 1,
+      "steps": 3200,
+      "manifest": "references/ad2-normal-manifests/rice.json",
+      "manifest_sha256": "6b9b3a25822b4b911611e19455db92c8a85d05517cf43b17d6f677a5f7a0f614",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/rice/B2/seed-1"
+    },
+    {
+      "category": "rice",
+      "variant": "B2",
+      "seed": 2,
+      "steps": 3200,
+      "manifest": "references/ad2-normal-manifests/rice.json",
+      "manifest_sha256": "6b9b3a25822b4b911611e19455db92c8a85d05517cf43b17d6f677a5f7a0f614",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/rice/B2/seed-2"
+    },
+    {
+      "category": "sheet_metal",
+      "variant": "B0",
+      "seed": 0,
+      "steps": 1440,
+      "manifest": "references/ad2-normal-manifests/sheet_metal.json",
+      "manifest_sha256": "b7e66b79d5290d838b9aa324f4539ee362f6ed86aaf0efe26290e12110427800",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/sheet_metal/B0/seed-0"
+    },
+    {
+      "category": "sheet_metal",
+      "variant": "B0",
+      "seed": 1,
+      "steps": 1440,
+      "manifest": "references/ad2-normal-manifests/sheet_metal.json",
+      "manifest_sha256": "b7e66b79d5290d838b9aa324f4539ee362f6ed86aaf0efe26290e12110427800",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/sheet_metal/B0/seed-1"
+    },
+    {
+      "category": "sheet_metal",
+      "variant": "B0",
+      "seed": 2,
+      "steps": 1440,
+      "manifest": "references/ad2-normal-manifests/sheet_metal.json",
+      "manifest_sha256": "b7e66b79d5290d838b9aa324f4539ee362f6ed86aaf0efe26290e12110427800",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/sheet_metal/B0/seed-2"
+    },
+    {
+      "category": "sheet_metal",
+      "variant": "B1",
+      "seed": 0,
+      "steps": 1440,
+      "manifest": "references/ad2-normal-manifests/sheet_metal.json",
+      "manifest_sha256": "b7e66b79d5290d838b9aa324f4539ee362f6ed86aaf0efe26290e12110427800",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/sheet_metal/B1/seed-0"
+    },
+    {
+      "category": "sheet_metal",
+      "variant": "B1",
+      "seed": 1,
+      "steps": 1440,
+      "manifest": "references/ad2-normal-manifests/sheet_metal.json",
+      "manifest_sha256": "b7e66b79d5290d838b9aa324f4539ee362f6ed86aaf0efe26290e12110427800",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/sheet_metal/B1/seed-1"
+    },
+    {
+      "category": "sheet_metal",
+      "variant": "B1",
+      "seed": 2,
+      "steps": 1440,
+      "manifest": "references/ad2-normal-manifests/sheet_metal.json",
+      "manifest_sha256": "b7e66b79d5290d838b9aa324f4539ee362f6ed86aaf0efe26290e12110427800",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/sheet_metal/B1/seed-2"
+    },
+    {
+      "category": "sheet_metal",
+      "variant": "B2",
+      "seed": 0,
+      "steps": 1440,
+      "manifest": "references/ad2-normal-manifests/sheet_metal.json",
+      "manifest_sha256": "b7e66b79d5290d838b9aa324f4539ee362f6ed86aaf0efe26290e12110427800",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/sheet_metal/B2/seed-0"
+    },
+    {
+      "category": "sheet_metal",
+      "variant": "B2",
+      "seed": 1,
+      "steps": 1440,
+      "manifest": "references/ad2-normal-manifests/sheet_metal.json",
+      "manifest_sha256": "b7e66b79d5290d838b9aa324f4539ee362f6ed86aaf0efe26290e12110427800",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/sheet_metal/B2/seed-1"
+    },
+    {
+      "category": "sheet_metal",
+      "variant": "B2",
+      "seed": 2,
+      "steps": 1440,
+      "manifest": "references/ad2-normal-manifests/sheet_metal.json",
+      "manifest_sha256": "b7e66b79d5290d838b9aa324f4539ee362f6ed86aaf0efe26290e12110427800",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/sheet_metal/B2/seed-2"
+    },
+    {
+      "category": "vial",
+      "variant": "B0",
+      "seed": 0,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/vial.json",
+      "manifest_sha256": "cf01786962914dbea609488852e6d7230cf255e1440db412ebcf078cd3d4fcc8",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/vial/B0/seed-0"
+    },
+    {
+      "category": "vial",
+      "variant": "B0",
+      "seed": 1,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/vial.json",
+      "manifest_sha256": "cf01786962914dbea609488852e6d7230cf255e1440db412ebcf078cd3d4fcc8",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/vial/B0/seed-1"
+    },
+    {
+      "category": "vial",
+      "variant": "B0",
+      "seed": 2,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/vial.json",
+      "manifest_sha256": "cf01786962914dbea609488852e6d7230cf255e1440db412ebcf078cd3d4fcc8",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/vial/B0/seed-2"
+    },
+    {
+      "category": "vial",
+      "variant": "B1",
+      "seed": 0,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/vial.json",
+      "manifest_sha256": "cf01786962914dbea609488852e6d7230cf255e1440db412ebcf078cd3d4fcc8",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/vial/B1/seed-0"
+    },
+    {
+      "category": "vial",
+      "variant": "B1",
+      "seed": 1,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/vial.json",
+      "manifest_sha256": "cf01786962914dbea609488852e6d7230cf255e1440db412ebcf078cd3d4fcc8",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/vial/B1/seed-1"
+    },
+    {
+      "category": "vial",
+      "variant": "B1",
+      "seed": 2,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/vial.json",
+      "manifest_sha256": "cf01786962914dbea609488852e6d7230cf255e1440db412ebcf078cd3d4fcc8",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/vial/B1/seed-2"
+    },
+    {
+      "category": "vial",
+      "variant": "B2",
+      "seed": 0,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/vial.json",
+      "manifest_sha256": "cf01786962914dbea609488852e6d7230cf255e1440db412ebcf078cd3d4fcc8",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/vial/B2/seed-0"
+    },
+    {
+      "category": "vial",
+      "variant": "B2",
+      "seed": 1,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/vial.json",
+      "manifest_sha256": "cf01786962914dbea609488852e6d7230cf255e1440db412ebcf078cd3d4fcc8",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/vial/B2/seed-1"
+    },
+    {
+      "category": "vial",
+      "variant": "B2",
+      "seed": 2,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/vial.json",
+      "manifest_sha256": "cf01786962914dbea609488852e6d7230cf255e1440db412ebcf078cd3d4fcc8",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/vial/B2/seed-2"
+    },
+    {
+      "category": "wallplugs",
+      "variant": "B0",
+      "seed": 0,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/wallplugs.json",
+      "manifest_sha256": "cc1a960f00564da27022172d557f793d2ab232539d27af610d20d3839676e0e3",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/wallplugs/B0/seed-0"
+    },
+    {
+      "category": "wallplugs",
+      "variant": "B0",
+      "seed": 1,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/wallplugs.json",
+      "manifest_sha256": "cc1a960f00564da27022172d557f793d2ab232539d27af610d20d3839676e0e3",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/wallplugs/B0/seed-1"
+    },
+    {
+      "category": "wallplugs",
+      "variant": "B0",
+      "seed": 2,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/wallplugs.json",
+      "manifest_sha256": "cc1a960f00564da27022172d557f793d2ab232539d27af610d20d3839676e0e3",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/wallplugs/B0/seed-2"
+    },
+    {
+      "category": "wallplugs",
+      "variant": "B1",
+      "seed": 0,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/wallplugs.json",
+      "manifest_sha256": "cc1a960f00564da27022172d557f793d2ab232539d27af610d20d3839676e0e3",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/wallplugs/B1/seed-0"
+    },
+    {
+      "category": "wallplugs",
+      "variant": "B1",
+      "seed": 1,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/wallplugs.json",
+      "manifest_sha256": "cc1a960f00564da27022172d557f793d2ab232539d27af610d20d3839676e0e3",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/wallplugs/B1/seed-1"
+    },
+    {
+      "category": "wallplugs",
+      "variant": "B1",
+      "seed": 2,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/wallplugs.json",
+      "manifest_sha256": "cc1a960f00564da27022172d557f793d2ab232539d27af610d20d3839676e0e3",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/wallplugs/B1/seed-2"
+    },
+    {
+      "category": "wallplugs",
+      "variant": "B2",
+      "seed": 0,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/wallplugs.json",
+      "manifest_sha256": "cc1a960f00564da27022172d557f793d2ab232539d27af610d20d3839676e0e3",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/wallplugs/B2/seed-0"
+    },
+    {
+      "category": "wallplugs",
+      "variant": "B2",
+      "seed": 1,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/wallplugs.json",
+      "manifest_sha256": "cc1a960f00564da27022172d557f793d2ab232539d27af610d20d3839676e0e3",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/wallplugs/B2/seed-1"
+    },
+    {
+      "category": "wallplugs",
+      "variant": "B2",
+      "seed": 2,
+      "steps": 2960,
+      "manifest": "references/ad2-normal-manifests/wallplugs.json",
+      "manifest_sha256": "cc1a960f00564da27022172d557f793d2ab232539d27af610d20d3839676e0e3",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/wallplugs/B2/seed-2"
+    },
+    {
+      "category": "walnuts",
+      "variant": "B0",
+      "seed": 0,
+      "steps": 4320,
+      "manifest": "references/ad2-normal-manifests/walnuts.json",
+      "manifest_sha256": "5f305f2f673e96e5bf5ae10292229e61ab636323781d74abd214a277fc0e73f2",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/walnuts/B0/seed-0"
+    },
+    {
+      "category": "walnuts",
+      "variant": "B0",
+      "seed": 1,
+      "steps": 4320,
+      "manifest": "references/ad2-normal-manifests/walnuts.json",
+      "manifest_sha256": "5f305f2f673e96e5bf5ae10292229e61ab636323781d74abd214a277fc0e73f2",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/walnuts/B0/seed-1"
+    },
+    {
+      "category": "walnuts",
+      "variant": "B0",
+      "seed": 2,
+      "steps": 4320,
+      "manifest": "references/ad2-normal-manifests/walnuts.json",
+      "manifest_sha256": "5f305f2f673e96e5bf5ae10292229e61ab636323781d74abd214a277fc0e73f2",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/walnuts/B0/seed-2"
+    },
+    {
+      "category": "walnuts",
+      "variant": "B1",
+      "seed": 0,
+      "steps": 4320,
+      "manifest": "references/ad2-normal-manifests/walnuts.json",
+      "manifest_sha256": "5f305f2f673e96e5bf5ae10292229e61ab636323781d74abd214a277fc0e73f2",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/walnuts/B1/seed-0"
+    },
+    {
+      "category": "walnuts",
+      "variant": "B1",
+      "seed": 1,
+      "steps": 4320,
+      "manifest": "references/ad2-normal-manifests/walnuts.json",
+      "manifest_sha256": "5f305f2f673e96e5bf5ae10292229e61ab636323781d74abd214a277fc0e73f2",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/walnuts/B1/seed-1"
+    },
+    {
+      "category": "walnuts",
+      "variant": "B1",
+      "seed": 2,
+      "steps": 4320,
+      "manifest": "references/ad2-normal-manifests/walnuts.json",
+      "manifest_sha256": "5f305f2f673e96e5bf5ae10292229e61ab636323781d74abd214a277fc0e73f2",
+      "lambda_score": 0.0,
+      "output": "results/ad2-full-study/walnuts/B1/seed-2"
+    },
+    {
+      "category": "walnuts",
+      "variant": "B2",
+      "seed": 0,
+      "steps": 4320,
+      "manifest": "references/ad2-normal-manifests/walnuts.json",
+      "manifest_sha256": "5f305f2f673e96e5bf5ae10292229e61ab636323781d74abd214a277fc0e73f2",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/walnuts/B2/seed-0"
+    },
+    {
+      "category": "walnuts",
+      "variant": "B2",
+      "seed": 1,
+      "steps": 4320,
+      "manifest": "references/ad2-normal-manifests/walnuts.json",
+      "manifest_sha256": "5f305f2f673e96e5bf5ae10292229e61ab636323781d74abd214a277fc0e73f2",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/walnuts/B2/seed-1"
+    },
+    {
+      "category": "walnuts",
+      "variant": "B2",
+      "seed": 2,
+      "steps": 4320,
+      "manifest": "references/ad2-normal-manifests/walnuts.json",
+      "manifest_sha256": "5f305f2f673e96e5bf5ae10292229e61ab636323781d74abd214a277fc0e73f2",
+      "lambda_score": 0.01,
+      "output": "results/ad2-full-study/walnuts/B2/seed-2"
+    }
+  ]
+}

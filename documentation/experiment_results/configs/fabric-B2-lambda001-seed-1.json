@@ -1,0 +1,23 @@
+{
+  "dataset": "mvtec_ad2",
+  "category": "fabric",
+  "manifest_sha256": "6f9c589c1b45a0af94e77c3261eb6623236a42c1284538314bea344e63def2f5",
+  "variant": "B2",
+  "lambda_score": 0.01,
+  "seed": 1,
+  "batch_size": 8,
+  "image_size": [
+    256,
+    256
+  ],
+  "ad_resize": null,
+  "brightness": [
+    0.8,
+    1.2
+  ],
+  "gamma": [
+    0.8,
+    1.2
+  ],
+  "weights": "imagenet_v1"
+}

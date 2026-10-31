@@ -1,0 +1,33 @@
+{
+  "category": "wallplugs",
+  "variant": "B2",
+  "lambda_score": 0.01,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "concurrent_processes": 3,
+  "elapsed_seconds": 1164.9358467413113,
+  "results": [
+    {
+      "seed": 0,
+      "complete": true,
+      "steps": 2960,
+      "output": "results/ad2-b2-full-lambda001/wallplugs/B2/seed-0"
+    },
+    {
+      "seed": 1,
+      "complete": true,
+      "steps": 2960,
+      "output": "results/ad2-b2-full-lambda001/wallplugs/B2/seed-1"
+    },
+    {
+      "seed": 2,
+      "complete": true,
+      "steps": 2960,
+      "output": "results/ad2-b2-full-lambda001/wallplugs/B2/seed-2"
+    }
+  ],
+  "failures": []
+}

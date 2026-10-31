@@ -1,0 +1,19 @@
+{
+  "dataset": "mvtec_ad2",
+  "categories": [
+    "wallplugs"
+  ],
+  "split_policy": "official",
+  "holdout_seed": null,
+  "requested_val_fraction": null,
+  "records": 326,
+  "counts": {
+    "wallplugs/train": 293,
+    "wallplugs/validation": 33
+  },
+  "duplicate_rgb_groups": 0,
+  "cross_split_rgb_groups": 0,
+  "test_directories_read": false,
+  "scope": "normal-data inventory only; not an acquisition-group or test-set audit",
+  "manifest_sha256": "cc1a960f00564da27022172d557f793d2ab232539d27af610d20d3839676e0e3"
+}

@@ -1,0 +1,29 @@
+{
+  "scope": "normal-validation diagnostics; no defect sensitivity is established",
+  "images": 48,
+  "manifest_sha256": "5f305f2f673e96e5bf5ae10292229e61ab636323781d74abd214a277fc0e73f2",
+  "lighting_corners": [
+    [
+      0.8,
+      0.8
+    ],
+    [
+      0.8,
+      1.2
+    ],
+    [
+      1.2,
+      0.8
+    ],
+    [
+      1.2,
+      1.2
+    ]
+  ],
+  "pair_mse": 0.014402089737510929,
+  "patch_score_std": 0.30561497807502747,
+  "synthetic_hinge": 0.009530576776645224,
+  "synthetic_gap": 2.6094423085451126,
+  "newly_clipped_fraction": 0.00042608050529461633,
+  "noise_seed": 8103
+}
