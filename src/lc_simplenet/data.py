@@ -32,7 +32,8 @@ class NormalManifestDataset:
     ``image`` is float32 HWC RGB in [0, 1]. Geometry is native unless output_size
     (height, width) explicitly requests full-image bilinear resizing. No crop,
     relighting or normalization is implicit. Torch's default collation yields
-    BHWC; the trainer must convert to BCHW after relighting, then normalize.
+    BHWC; the trainer must explicitly convert to BCHW before the backbone.
+    relighting operates on raw pixels and must precede normalization.
     This source is not a drop-in replacement for upstream's training interface.
     """
 
