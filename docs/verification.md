@@ -30,6 +30,16 @@ Verified in a fresh worktree and CPU environment using the frozen lock: Python 3
 - The CPU upstream smoke again produced nonzero adapter/discriminator gradients with the backbone frozen. It used random weights and 64px synthetic inputs.
 - The upstream checkout remains at `351a2b8d4e8cfc944dbccbf9bc6ceda930c6f26b`, with no source changes.
 
-These publication checks use synthetic fixtures and no dataset images or pretrained downloads. They do not establish trained-detector accuracy, padding benefits, official metric parity or private-server performance. Trainer integration and the AD 2 evaluation loader remain pending.
+These publication checks use synthetic fixtures and no dataset images or pretrained downloads. They do not establish trained-detector accuracy, padding benefits, official metric parity or private-server performance. The AD 2 evaluation loader remains pending; pilot integration is checked below.
 
-review follow-up, 26 october: the builder now rejects unsupported modes before manifest creation, matching the reader. four regression cases cover `RGBA`, `P`, `LA` and `I;16`; the full cpu suite passes 31 tests. lint, formatting, markdown/source checks and `git diff --check` also pass. crop coordinates remain outside the full-frame restoration helper's contract.
+review follow-up, 26 october: the builder now rejects unsupported modes before manifest creation, matching the reader. four regression cases cover `RGBA`, `P`, `LA` and `I;16`; the data branch's full cpu suite passes 31 tests. lint, formatting, markdown/source checks and `git diff --check` also pass. crop coordinates remain outside the full-frame restoration helper's contract.
+
+## Pilot integration, 26 October 2026
+
+- The full CPU suite passes 33 tests. Six new tests cover exact B1/B2 equivalence at zero consistency weight, cold continuation across an epoch boundary, nonzero consistency updates, aligned photometric pairs, rejected validation/incompatible checkpoint sources, and an update/prediction/cold continuation through the pinned upstream components.
+- The upstream test uses random weights and synthetic 64px images, without dataset or pretrained downloads. It checks exact next-update metrics, trainable-state hash and raw predictions after reconstruction; the backbone state remains unchanged.
+- Ruff lint/format, local Markdown links, preserved-source hashes and `git diff --check` pass.
+
+The runner and its evidence limits are described in [pilot training](pilot-training.md). These automated checks do not establish pretrained convergence, real-defect recall or benchmark performance. Private dataset runs and personal research artifacts remain outside Git.
+
+review follow-up, 26 october: the combined cpu suite passes 47 tests. optional ad cropping matches upstream input tensors exactly on train and validation fixtures, including odd/even resize differences. cropped controls retain exact zero-weight equivalence and cold continuation. the real upstream random-weight checks cover both geometries and verify that the paired runner leaves backbone batch-norm counters unchanged. cropped maps carry explicit crop coordinates and are not restored as full native maps. ad 2 crop requests and rectangular sources under the square ad recipe are rejected.
