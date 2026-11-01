@@ -1,8 +1,8 @@
 # Shrijeet - research notes
 
-GitHub: [shrijeet-maiti-burner](https://github.com/shrijeet-maiti-burner). Role: unassigned. Status: open.
+GitHub: [shrijeet-maiti-burner](https://github.com/shrijeet-maiti-burner). Workstream: A data; E demo/report/video; overall review. Status: open.
 
-This starter document was created during setup. It contains no research or experiment attributed to Shrijeet. Choose any direction within [the project](../project.md).
+This starter document was created during setup. It contains no research or experiment attributed to Shrijeet. Use the assigned workstream and [shared data contract](../data-contract.md).
 
 ## Question
 

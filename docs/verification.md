@@ -19,3 +19,17 @@ Verified locally on 16 October 2026 (Singapore). No dataset-backed training or b
 The architecture smoke downloads no pretrained weights and uses no images from either dataset. It proves basic compatibility and the intended gradient path, not baseline accuracy, full-resolution feasibility, defect preservation or convergence. The complete upstream training/PRO path is not certified by these checks.
 
 GitHub CI runs the lightweight suite on Windows/Linux and CPU model contracts on Linux. Its status is visible in the repository Actions tab; it is separate from the local checks above.
+
+## Shared data contract, 26 October 2026
+
+Verified in a fresh worktree and CPU environment using the frozen lock: Python 3.12.15, uv 0.13.0, torch 2.6.0+cpu and torchvision 0.21.0+cpu.
+
+- 27 tests passed, covering the original scientific helpers, normal manifest generation/loading and continuous score-map restoration.
+- Ruff lint and formatting passed for all 15 project Python files.
+- Markdown links and three preserved-source hashes passed; `git diff --check` passed.
+- The CPU upstream smoke again produced nonzero adapter/discriminator gradients with the backbone frozen. It used random weights and 64px synthetic inputs.
+- The upstream checkout remains at `351a2b8d4e8cfc944dbccbf9bc6ceda930c6f26b`, with no source changes.
+
+These publication checks use synthetic fixtures and no dataset images or pretrained downloads. They do not establish trained-detector accuracy, padding benefits, official metric parity or private-server performance. Trainer integration and the AD 2 evaluation loader remain pending.
+
+review follow-up, 26 october: the builder now rejects unsupported modes before manifest creation, matching the reader. four regression cases cover `RGBA`, `P`, `LA` and `I;16`; the full cpu suite passes 31 tests. lint, formatting, markdown/source checks and `git diff --check` also pass. crop coordinates remain outside the full-frame restoration helper's contract.

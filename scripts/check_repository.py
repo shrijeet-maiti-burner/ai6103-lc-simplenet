@@ -12,7 +12,7 @@ def main() -> None:
     errors = []
     paths = [ROOT / "README.md", ROOT / "CONTRIBUTING.md", ROOT / "THIRD_PARTY.md"]
     paths += list((ROOT / "docs").rglob("*.md"))
-    paths += [ROOT / p / "README.md" for p in ("data", "results", "report")]
+    paths += [ROOT / p / "README.md" for p in ("data", "results", "report", "manifests")]
     for path in paths:
         text = path.read_text(encoding="utf-8")
         if text.count("```") % 2:

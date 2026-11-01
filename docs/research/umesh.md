@@ -1,8 +1,8 @@
 # Umesh - research notes
 
-GitHub: [umeshgjh](https://github.com/umeshgjh). Role: unassigned. Status: open.
+GitHub: [umeshgjh](https://github.com/umeshgjh). Workstream: B baseline and training with Athul. Status: open.
 
-This starter document was created during setup. It contains no research or experiment attributed to Umesh. Choose any direction within [the project](../project.md).
+This starter document was created during setup. It contains no research or experiment attributed to Umesh. Use the assigned workstream and [shared data contract](../data-contract.md).
 
 ## Question
 
