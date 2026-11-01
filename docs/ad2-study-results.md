@@ -82,7 +82,7 @@ Mean over the three seeds. Pair MSE is the patch-score change across the four br
 
 ## Second environment (#11)
 
-#11 repeats B0, B1 and B2 at 0.01 for all eight categories and three seeds. Data manifests, initial weights, source hashes and run settings match the runs here. The software does not: torch 2.11.0, CUDA 12.8 and cuDNN 9.19 under Python 3.11, against the locked torch 2.6.0, CUDA 12.4 and cuDNN 9.1 under Python 3.12 used here. Training losses first differ at step 1 to 3 and then drift apart.
+#11 repeats B0, B1 and B2 at 0.01 for all eight categories and three seeds. Data manifests, initial weights, source hashes and training configs match the runs here. The software does not: torch 2.11.0, CUDA 12.8 and cuDNN 9.19 under Python 3.11, against the locked torch 2.6.0, CUDA 12.4 and cuDNN 9.1 under Python 3.12 used here. Runtime options differ too. 69 of its runs used 2 CPU threads and a GPU memory cap of 0.25; the three can B0 runs used 4 threads and a cap of 0.8, and two of them ran without the image cache. None checked checkpoint replay. Every run here used 3 threads, no memory cap, the cache and the replay check. Training losses first differ at step 1 to 3 and then drift apart.
 
 - Seed means agree within 20% for pair MSE and within 25% for score spread.
 - B1 lowers pair MSE against B0 by 5.9 to 132 times there.
