@@ -2,7 +2,7 @@
 
 AI6103 group project: test whether paired relighting and patch-score consistency reduce lighting-induced false alarms without reducing defect recall.
 
-**Status: development training.** Normal manifest loading, paired-view pilot training, checkpoint continuation and normal-only calibration are implemented. Benchmark validation remains pending. No dataset or trained results are included. The selected source is [the revised proposal](references/proposal.pdf); older chat suggestions do not override it.
+**Status: development training.** Normal manifest loading, fixed-final single-view AD training and paired-view pilot training with checkpoint continuation are implemented. [Three-seed bottle development results](docs/baseline-results.md) and evaluation artifacts are available; benchmark accuracy has not been measured. Datasets and model weights are excluded from Git. The selected source is [the revised proposal](references/proposal.pdf); older chat suggestions do not override it.
 
 ## Start
 
@@ -26,6 +26,8 @@ Python 3.12.15 and uv 0.13.0 are the setup baseline. If `uv` is installed only a
 - [Normal data and map contract](docs/data-contract.md): split enforcement, batch layout and native-coordinate scores.
 - [Pilot training](docs/pilot-training.md): matched controls, local run command, checkpoints and evidence limits.
 - [Manifest commands](manifests/README.md): normal-data inventory and holdouts.
+- [Single-view baseline](docs/baseline-training.md): fixed-final AD training, outputs and reload limits.
+- [Baseline results](docs/baseline-results.md): measured training cost, artifact checks and evaluation handoff.
 - [Source review](docs/source-review.md): supplied materials and discrepancies.
 - [Decisions](docs/decisions.md): what is fixed and what remains open.
 - [Verification](docs/verification.md): actual setup checks and limits.
@@ -45,4 +47,4 @@ data/                local dataset instructions; images ignored
 results/             evidence convention; run outputs ignored
 ```
 
-The full baseline reproduction, AD 2 evaluation loader and official metrics remain pending. The pilot reuses upstream components and replaces its test-driven training loop. See [the audit](docs/source-review.md#upstream-code).
+The full experiment matrix, AD 2 evaluation loader and official metrics remain pending. The pinned upstream training entry point selects checkpoints using test labels and must not be used unchanged for this study. The single-view runner calls only its discriminator-training loop; the paired runner reuses its components with a fixed-step loop. See [the audit](docs/source-review.md#upstream-code).

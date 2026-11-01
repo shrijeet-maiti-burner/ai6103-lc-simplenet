@@ -15,6 +15,7 @@ Updated 26 October 2026 (Singapore).
 | Professor approval / novelty judgement | Not found in supplied material |
 | Current deadlines / team registration | Verify current course announcements; old slide dates are unsuitable |
 | Categories, training budget, image sizes | Open until baseline profiling; no score-driven category selection |
+| AD baseline input | Upstream `run.sh`: resize 329, center crop 288 for images and masks (B decision, 26 October) |
 | Transform ranges / score-loss weight | Open; normal training/validation evidence only |
 | Validation FPR target / tolerated recall drop | Open; predeclare before final testing |
 | AD split and AD 2 lighting metadata | Persist and verify before the experiment matrix |
