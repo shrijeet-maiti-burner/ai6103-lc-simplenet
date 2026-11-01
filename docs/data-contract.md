@@ -1,6 +1,6 @@
 # Normal data and score-map geometry
 
-Status: implemented source and geometry helpers; trainer integration is pending. B/C/D must use one explicit input/map contract before experiments. This document does not freeze study categories, resolution, padding or augmentation settings.
+status: normal-image loading, full-frame restoration and the [paired pilot](pilot-training.md) are implemented. b/c/d must agree on the input/map contract before the main experiments. this document does not freeze categories, resolution, padding or augmentation settings.
 
 ## Build and pin the normal data
 
@@ -41,7 +41,7 @@ AD validation files physically remain in `train/good`; the manifest field contro
 
 Native geometry is the default. Explicit `output_size=(height, width)` uses full-image PIL bilinear resizing; it stretches aspect ratio if the requested ratio differs. The reader adds no crop, padding, augmentation or normalization. Grayscale sources become three identical RGB channels. It returns no fake masks.
 
-Pair order: shared geometry -> HWC brightness/gamma transform -> stack/permute BCHW -> ImageNet normalization -> frozen backbone -> trainable adapter/discriminator. Torch's default collation returns **BHWC**. The trainer must permute explicitly and use the same image identity/geometry for both branches. The source does not replace upstream's trainer interface automatically.
+pair order: shared geometry -> brightness/gamma on raw rgb in [0, 1] -> imagenet normalization -> frozen backbone -> trainable adapter/discriminator. torch's default collation returns **BHWC**; the trainer must explicitly convert to **BCHW** before the backbone. relighting may operate on the raw hwc array or raw bchw tensor, always before normalization. both branches must share image identity and geometry. the source does not replace upstream's trainer interface automatically.
 
 ## Restore continuous prediction maps
 
@@ -66,4 +66,4 @@ the upstream ad reference uses resize 329 followed by center crop 288. its maps 
 
 ## Integration checks
 
-Tests cover split isolation, byte/manifest drift, paths/labels, grayscale and batch layout, explicit resize metadata, padding removal before native resizing, border signals and invalid maps. Training still needs a shared resolved configuration, deterministic paired RNG, validation-only checkpoint/calibration rules and official evaluation parity. Keep the original [protocol](protocol.md) and [upstream audit](source-review.md#upstream-code) in force.
+tests cover split isolation, byte/manifest drift, paths/labels, grayscale and batch layout, resize metadata, padding removal before native resizing, border signals and invalid maps. the pilot adds explicit crop coordinates, deterministic paired rng, fixed final checkpoints and normal-only calibration. official evaluation parity and the frozen study configuration remain pending. keep the [protocol](protocol.md) and [upstream audit](source-review.md#upstream-code) in force.
