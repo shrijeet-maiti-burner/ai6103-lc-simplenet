@@ -100,7 +100,9 @@
     "no_eligible_candidate": "stop; do not silently change the safeguards or launch B2",
     "categories": "all eight; one shared weight from the category-macro proxy",
     "outcome": "30 October: no candidate met the safeguards in all eight categories; the synthetic-hinge ratio exceeded 1.25 in three or four categories at every weight, including 0.01.",
-    "deviation": "Recorded the same day, before any AD 2 B2 main run finished: B2 is trained anyway at the fixed weight 1.0 that the MVTec AD study selected on 27 October, before any AD 2 data, and is reported as a deviation from the stop rule. 1.0 was not picked from the AD 2 search, where it failed in can, fruit_jelly, rice and vial."
+    "deviation": "Recorded the same day, before any AD 2 B2 main run finished: B2 is trained anyway at the fixed weight 1.0 that the MVTec AD study selected on 27 October, before any AD 2 data, and is reported as a deviation from the stop rule. 1.0 was not picked from the AD 2 search, where it failed in can, fruit_jelly, rice and vial.",
+    "full_run_rule": "Written 31 October 13:43 +08, before any full-length B2 run at 0.01 or 0.1 existed; the 1.0 runs were known. The same safeguards and objective, applied to seed 0-2 means of full-length runs at each candidate. If no weight passes, B2 is exploratory and every weight is reported as an ablation.",
+    "full_run_outcome": "31 October: no candidate passed (0.01 fails fabric and rice, 0.1 fails vial, 1.0 fails five categories). B0 against B1 is the main comparison. B2 at 0.01, 0.1 and 1.0 goes to test scoring as an ablation; no weight is chosen from test results. See docs/ad2-study-results.md."
   },
   "single_view_reference": "scripts/train_baseline.py --dataset mvtec_ad2 --resize 256 --imagesize 256, 40 meta-epochs, fixed final",
   "normal_validation_target_fpr": 0.05,
