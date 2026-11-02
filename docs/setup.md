@@ -2,6 +2,21 @@
 
 Use Git, Python 3.12 and uv 0.13.0. `.python-version` selects Python 3.12.15. The committed `uv.lock` fixes transitive dependencies and wheel sources. Python 3.10's global PyTorch installation was not used or changed.
 
+## uv 0.13.0 pin
+
+`[tool.uv] required-version = "==0.13.0"` in `pyproject.toml` is exact. A newer PATH binary (for example 0.13.5) refuses `uv sync`. Do not loosen the pin and do not run `uv self update 0.13.0` if other projects need the newer binary.
+
+Keep a 0.13.0 executable beside PATH and call it explicitly:
+
+```bash
+# one-time install of the 0.13.0 binary into a local directory, then:
+export UV="$HOME/.local/uv-0.13.0/uv"
+"$UV" --version    # must print 0.13.0
+"$UV" sync --frozen --extra cpu
+```
+
+Leave the global `uv` on PATH unchanged.
+
 ```powershell
 git submodule update --init --recursive
 uv sync --frozen
