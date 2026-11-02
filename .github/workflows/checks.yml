@@ -36,3 +36,4 @@ jobs:
       - run: uv sync --frozen --extra cpu
       - run: uv run --frozen --extra cpu pytest
       - run: uv run --frozen --extra cpu python scripts/smoke_upstream.py
+      - run: uv run --frozen --extra cpu python scripts/smoke_paired.py
