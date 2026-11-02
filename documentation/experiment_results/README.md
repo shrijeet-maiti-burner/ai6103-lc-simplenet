@@ -10,7 +10,7 @@ b1 lowers normal pair mse versus b0 in every category, by 5.915–132.066 times.
 
 all runs use python 3.11.16, torch 2.11.0+cu128 and an a40. the main study uses the locked python 3.12 / torch 2.6+cu124 environment. every replicate run records a dirty source tree and no replay. source hashes remain in the artifact metadata, but the dirty/untracked training state is not fully reconstructible from the named git commit. exact independent reproduction is therefore not established.
 
-the three can b0 runs used four threads, no decoded-image cache and a 0.8 gpu-memory fraction; the remaining runs used two threads, caching and a 0.25 fraction. retain that distinction for any runtime comparison. it is not evidence of training-speed improvement.
+the three can b0 runs used four threads and a 0.8 gpu-memory fraction; seeds 0 and 1 had the decoded-image cache off, while seed 2 used it. the remaining 69 runs used two threads, caching and a 0.25 fraction. retain that distinction for any runtime comparison. it is not evidence of training-speed improvement.
 
 ## retrieve and audit
 
