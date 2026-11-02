@@ -31,6 +31,7 @@ Python 3.12.15 and uv 0.13.0 are the setup baseline. If `uv` is installed only a
 - [Source review](docs/source-review.md): supplied materials and discrepancies.
 - [Decisions](docs/decisions.md): what is fixed and what remains open.
 - [Verification](docs/verification.md): actual setup checks and limits.
+- [AD 2 data audit](docs/ad2-data-audit.md): archive extract, Table IV expected counts, and the formal study's 256×256 full-frame resize, separate from the fabric smoke check.
 
 ## Structure
 
