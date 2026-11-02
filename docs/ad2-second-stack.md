@@ -2,7 +2,7 @@
 
 Author: umeshgjh
 
-This note records the normal-data manifests for a finished second-stack AD 2 run. The 72 run directories are not in Git. They are packaged separately and copied byte for byte from commit `ab0313d03c5769f004febf54b82dd1b0169ba2ae`.
+This note records the normal-data manifests for a finished second-stack AD 2 run. The 72 run directories are not in Git. They are published in [`dev-ad2-replicate-2026-11-02`](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-replicate-2026-11-02), built from commit `ab0313d03c5769f004febf54b82dd1b0169ba2ae`.
 
 The numeric comparison is already in [the AD 2 study results](ad2-study-results.md), under "Second environment (#11)". This note does not add another results table and does not replace `configs/ad2-study-policy.json`.
 
@@ -30,8 +30,8 @@ The manifests are `references/ad2-normal-manifests/<category>.json`. Each audit 
 
 ## What the package does not contain
 
-No checkpoint file is included. The recorded checkpoint hashes were not checked. In every result, `replay` is null and `verify_replay` is false.
+No checkpoint file is included. The recorded checkpoint hashes were not checked. Every `run.json` has `verify_replay` set to false. Every `result.json` has `replay` set to null.
 
-The original `run.json` files still contain their absolute paths and dirty `git_status` entries. Those bytes were not rewritten.
+The published release redacts cluster home paths in the 72 `run.json` files to `<local-path>`. `artifact-manifest.json` keeps the original hash of every file. The release notes state that the other 474 files are byte-identical to the source commit. This is not an unredacted copy of the `run.json` files.
 
 Do not pool these runs with the locked-stack study. Nothing here shows that the two stacks produced the same weights, that a B2 weight was selected, or that any test image was scored.
