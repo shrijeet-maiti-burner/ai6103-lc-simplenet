@@ -40,24 +40,42 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _method(path: Path, variant: str) -> str:
+def _label(variant: str, weight) -> str:
+    return f"B2@{weight:g}" if variant == "B2" and weight is not None else variant
+
+
+def _identify(path: Path) -> tuple[str, str, int] | None:
+    """(category, method, seed) from `run.json`, else from `<category>/<variant>/seed-<n>`.
+
+    `run.json` is preferred so any directory layout works, e.g. the release's flat
+    `<category>-<variant>-seed<k>` folders.
+    """
     run_file = path / "run.json"
-    if variant == "B2" and run_file.exists():
-        weight = json.loads(run_file.read_text(encoding="utf-8"))["config"]["lambda_score"]
-        return f"B2@{weight:g}"
-    return variant
+    if run_file.exists():
+        config = json.loads(run_file.read_text(encoding="utf-8")).get("config", {})
+        if {"category", "variant", "seed"} <= config.keys():
+            return (
+                config["category"],
+                _label(config["variant"], config.get("lambda_score")),
+                int(config["seed"]),
+            )
+    match = re.fullmatch(r"seed-(\d+)", path.name)
+    if not match or path.parent.parent == path.parent:
+        return None
+    weight = None
+    if run_file.exists():
+        weight = (
+            json.loads(run_file.read_text(encoding="utf-8")).get("config", {}).get("lambda_score")
+        )
+    return path.parent.parent.name, _label(path.parent.name, weight), int(match[1])
 
 
 def discover_runs(root: Path) -> list[RunRef]:
     runs = []
     for scores in sorted(root.rglob(VALIDATION_FILE)):
-        path = scores.parent
-        match = re.fullmatch(r"seed-(\d+)", path.name)
-        if not match or path.parent.parent == path.parent:
-            continue
-        runs.append(
-            RunRef(path.parent.parent.name, _method(path, path.parent.name), int(match[1]), path)
-        )
+        identity = _identify(scores.parent)
+        if identity:
+            runs.append(RunRef(*identity, scores.parent))
     keys = [(r.category, r.method, r.seed) for r in runs]
     if len(set(keys)) != len(keys):
         raise ValueError("Two run directories share a category, method and seed")

@@ -53,6 +53,18 @@ def test_end_to_end_tables_and_missing_runs(tmp_path):
     assert {s["seeds"] for s in summary} == {"2"}
 
 
+def test_flat_release_layout_is_read_from_run_json(tmp_path):
+    path = tmp_path / "paired" / "can-B2-seed1"
+    path.mkdir(parents=True)
+    (path / "validation-scores.json").write_text(
+        json.dumps([{"image_id": "v0", "label": 0, "score": 0.5}])
+    )
+    config = {"category": "can", "variant": "B2", "seed": 1, "lambda_score": 0.1}
+    (path / "run.json").write_text(json.dumps({"config": config}))
+    (run,) = discover_runs(tmp_path)
+    assert (run.category, run.method, run.seed) == ("can", "B2@0.1", 1)
+
+
 def test_duplicate_runs_rejected(tmp_path):
     make_run(tmp_path / "a", "can", "B0", 0, test=False)
     make_run(tmp_path / "b", "can", "B0", 0, test=False)

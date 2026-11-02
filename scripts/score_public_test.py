@@ -1,9 +1,9 @@
 """Score an AD 2 category's public test images with a finished run's final head.
 
 Writes `test-scores.json`, `test-maps.npz` and `test-scores.meta.json` into the run directory
-(which must hold `run.json` and `final.pt`); existing files are never overwritten. The run's
-saved validation scores are re-derived for a few images first, as a guard against a wrong
-geometry, score direction or checkpoint.
+(which must hold `run.json` and `final.pt`, or the release's `heads.pt`); existing files are
+never overwritten. The run's saved validation scores are re-derived for a few images first, as a
+guard against a wrong geometry, score direction or checkpoint.
 
     python scripts/score_public_test.py --run-dir results/ad2-full-study/can/B1/seed-0 \
         --root data/mvtec_ad_2 --device cuda
@@ -28,6 +28,7 @@ from lc_simplenet.public_scoring import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
+CHECKPOINT_NAMES = ("final.pt", "heads.pt")
 
 
 def sha256(path: Path) -> str:
@@ -41,15 +42,24 @@ def config_from(raw: dict) -> PilotConfig:
     return PilotConfig(**raw)
 
 
+def checkpoint_path(run_dir: Path) -> Path:
+    """`final.pt` from our own training runs, `heads.pt` from the released study."""
+    for name in CHECKPOINT_NAMES:
+        if (run_dir / name).exists():
+            return run_dir / name
+    raise FileNotFoundError(f"No {' or '.join(CHECKPOINT_NAMES)} in {run_dir}")
+
+
 def load_head(run_dir: Path, device: torch.device):
     run = json.loads((run_dir / "run.json").read_text(encoding="utf-8"))
     config = config_from(run["config"])
     if config.dataset != "mvtec_ad2" or config.ad_resize is not None:
         raise ValueError("Public-test scoring supports full-frame AD 2 runs only")
     backend = UpstreamBackend(config, device)
-    state = torch.load(run_dir / "final.pt", map_location=device, weights_only=True)
+    checkpoint = checkpoint_path(run_dir)
+    state = torch.load(checkpoint, map_location=device, weights_only=True)
     if config_from(state["config"]) != config:
-        raise ValueError("final.pt configuration differs from run.json")
+        raise ValueError(f"{checkpoint.name} configuration differs from run.json")
     if state["encoder_hash"] != backend.encoder_hash:
         raise ValueError("Frozen encoder differs from the checkpoint")
     backend.adapter.load_state_dict(state["adapter"])
@@ -115,7 +125,8 @@ def main() -> None:
         "normal": sum(r["label"] == 0 for r in rows),
         "defective": sum(r["label"] == 1 for r in rows),
         "image_ids_sha256": ids_hash,
-        "final_pt_sha256": sha256(run_dir / "final.pt"),
+        "checkpoint_file": checkpoint_path(run_dir).name,
+        "checkpoint_sha256": sha256(checkpoint_path(run_dir)),
         "run_config_sha256": run.get("config_sha256"),
         "validation_rescored": args.check_validation,
         "map": "bilinear to input size, Gaussian sigma 4; coordinates full_frame at image_size",
