@@ -6,7 +6,7 @@ Development results for the provisional AD study in [the plan](ad-study-plan.md)
 
 - Bottle and grid; B0, B1 and B2; seeds 0, 1 and 2; batch 8; resize 329, center crop 288; brightness and gamma 0.8 to 1.2.
 - 80 source passes: 1,680 updates for bottle and 2,160 for grid. One A40 per run, 15 to 18 minutes each.
-- Paired runs use the #2 runner with the normal diagnostics from this branch (`cce0cb4`). The single-view references are the #3 baseline (`eac7968`; bottle seed 0 at `4c91c64`, see [baseline results](baseline-results.md)).
+- Paired runs use the #2 runner with the normal diagnostics from this branch (`cce0cb4`). The single-view references are the #3 baseline: grid at `eac7968`, bottle seeds 1 and 2 at `e94f57c`, and bottle seed 0 at `4c91c64`, a commit lost in a rebase. All six were rerun at `22fed6a` and gave the same checkpoints; bottle seed 0's is `3f3452bd46b6a9a4429c10af59f35b4fdc7cfcb4922578ccfd0b70120753d656` (see [baseline results](baseline-results.md)).
 - All 18 paired runs completed their fixed horizon with exact checkpoint replay. The three grid single-view runs reload with zero score difference.
 
 ## Consistency weight
@@ -19,7 +19,7 @@ Tuning seed 3, 256 updates, normal validation only. Ratios are B2 over B1; the s
 | 0.1 | 0.96 | 1.13 | 1.05 | 0.88 | 1.14 | yes |
 | 1.0 | 0.56 | 1.16 | 0.86 | 0.91 | 0.71 | yes |
 
-The rule chose 1.0. Bottle drove the choice; grid showed no gain in this short search.
+The rule chose 1.0. Bottle drove the choice; grid showed no gain in this short search. `scripts/select_consistency_weight.py` reads the eight search runs and writes `selection.json`, which holds every trial's metrics and is in the study release.
 
 ## Normal validation
 
@@ -34,7 +34,7 @@ Mean over the three seeds. Pair MSE is the patch-score change across the four br
 | grid | B1 | 0.0221 | 0.279 | 0.016 |
 | grid | B2 | 0.0114 | 0.248 | 0.008 |
 
-Against B1, B2 lowers pair MSE by 71% on bottle and 48% on grid, and the score spread by 21% and 11%. On bottle, B2's synthetic hinge is above B1's on two of three seeds.
+Against B1, B2 lowers pair MSE by 71% on bottle and 48% on grid, and the score spread by 21% and 11%. On bottle, B2's synthetic hinge is above B1's on two of three seeds, and the ratio of the seed means is 1.27, above the 1.25 limit (grid 0.49). The rule applied that limit only to the seed-3 search, so the choice stands, but the full-run check later written for AD 2 would rule out 1.0 on bottle.
 
 ## Test AUROC (%)
 
