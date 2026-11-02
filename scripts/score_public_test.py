@@ -18,7 +18,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from lc_simplenet.pilot import PilotConfig, UpstreamBackend
+from lc_simplenet.pilot import PilotConfig, UpstreamBackend, seed_runtime
 from lc_simplenet.public_scoring import (
     condition_from_name,
     list_public_test,
@@ -55,6 +55,7 @@ def load_head(run_dir: Path, device: torch.device):
     config = config_from(run["config"])
     if config.dataset != "mvtec_ad2" or config.ad_resize is not None:
         raise ValueError("Public-test scoring supports full-frame AD 2 runs only")
+    seed_runtime(config.seed)  # training's numerics: deterministic kernels, TF32 off
     backend = UpstreamBackend(config, device)
     checkpoint = checkpoint_path(run_dir)
     state = torch.load(checkpoint, map_location=device, weights_only=True)
