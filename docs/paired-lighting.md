@@ -1,12 +1,12 @@
 # Paired lighting: integration handoff
 
-Role C supplies the image-pair preparation and paired loss. These components are implemented locally; full SimpleNet training and dataset evaluation have not run.
+Role C supplies image-pair preparation and a paired-loss interface. The shared runner already implements the intended objective and has completed the locked AD 2 training study. These helpers are an independently checked interface, not a retroactive replacement for that run source. See the [study results](ad2-study-results.md).
 
 ## Input size
 
 Use **256x256** for the team's AD 2 runs, with identical spatial preprocessing across B0, B1 and B2. This preserves compatibility with the team's existing training. `configs/paired-lighting.json` records `input_size: [256, 256]`. The pair helper does not resize: the data loader must supply 256x256 RGB images after the agreed resize/crop pipeline, then create both lighting views before normalization. Do not independently resize or crop the paired views.
 
-The paired smoke check now reads this size from the config by default. `--image-size 64` is available only for a smaller diagnostic run; it does not change the experiment setting. The exact upstream resize/crop parameters should match the existing team loader, rather than introducing a new crop policy here.
+The paired smoke check reads this size from the config by default. `--image-size 64` is a smaller diagnostic run, not the experiment setting. The formal AD 2 study uses full-frame 256x256 bilinear resizing without a crop; the faithful AD reference separately uses resize 329 and center crop 288.
 
 ## Image path
 
@@ -133,7 +133,7 @@ Unit verification on 30 October: all 25 tests passed, including matching B1/B2 B
 
 Architecture check on 30 October: passed on CPU. Adapter and discriminator gradients were nonzero, the backbone had no gradients, the adapter changed after its optimizer step, and reloaded adapter/discriminator weights reproduced evaluation scores exactly. This is implementation evidence only. Local output: `results/role-c/smoke.json`.
 
-Before connecting existing bottle/grid runs, confirm they use `clip(b * x**gamma, 0, 1)` before normalization. Matching parameter ranges alone does not match implementations if brightness/gamma order or clipping order differs. The existing run code is not present on the fetched main branch, so that compatibility is not yet verified.
+The shared runner applies `clip(b * x**gamma, 0, 1)` before normalization. Matching ranges alone does not imply matched numerical behavior: `pairs.py` uses NumPy transformations and a NumPy RNG, while the completed runner uses Torch transformations and independent Torch streams. Keep the original run source and provenance rather than substituting one sampler into finished experiments.
 
 ## Pre-publication review
 
@@ -146,3 +146,9 @@ Half/bfloat score reductions use FP32, while gradients remain connected to both 
 The team chose 256x256 to retain compatibility with training already underway. The Role C config now records this size; the pair/normalization helpers preserve the loader's dimensions. All variants must share the same loader resize/crop policy. Brightness and gamma remain in [0.8, 1.2].
 
 All 35 unit tests passed, including an explicit configured-size alignment/normalization test. The actual SimpleNet architecture check also passed at 256x256: finite losses, frozen backbone, nonzero adapter/discriminator gradients, a successful optimizer update and exact score restoration after loading saved weights. The default paired CI smoke command now exercises this configured size.
+
+## integration check, 2 november
+
+`tests/test_runner_objective_parity.py` compares this helper with `PilotTrainer.train_step` on the same adapted features and independent per-view noise. It checks identity/relit controls, zero/positive consistency weights, two seeds, partial batches and a new epoch. Losses, gradients, BatchNorm buffers, optimizer updates and random-stream continuation are compared. Different float32 reduction groupings use explicit rounding tolerances; this is not a bitwise-equivalence or pretrained-accuracy claim.
+
+The seed-3 AD 2 search admitted no consistency weight. All full-length B2 weights are disclosed ablations, and no weight passes the full-run safeguards. See the frozen [policy](../configs/ad2-study-policy.json). Historical test counts above describe their dated checks, not the current combined suite. No finished run is rerouted through the helper, and `pilot.py` remains unchanged by this parity check.

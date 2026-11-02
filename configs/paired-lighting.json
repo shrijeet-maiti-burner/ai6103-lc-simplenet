@@ -1,5 +1,5 @@
 {
-  "status": "implementation settings; inspect training pairs before study freeze",
+  "status": "interface settings matched to the frozen AD 2 study; no B2 weight selected",
   "brightness_range": [0.8, 1.2],
   "gamma_range": [0.8, 1.2],
   "sampling": "independent uniform, one brightness/gamma pair per image",
@@ -7,7 +7,8 @@
   "placement": "after shared spatial preprocessing, before ImageNet normalization",
   "B1_lambda_score": 0.0,
   "B2_lambda_score": null,
-  "note": "Match relighting RNG, feature-noise policy and batch handling across B1/B2. Select B2 weight on normal validation only.",
+  "B2_ablation_weights": [0.01, 0.1, 1.0],
+  "note": "No candidate passed the normal-only safeguards. Keep all B2 weights as ablations; do not select from test outcomes. Preserve matched RNG, noise and batch handling.",
   "input_size": [256, 256],
-  "spatial_preprocessing": "Shared team resize/crop pipeline producing 256x256; identical across B0, B1 and B2. Pair after spatial preprocessing."
+  "spatial_preprocessing": "Full-frame bilinear resize to 256x256 without cropping, identical across B0/B1/B2. Pair before ImageNet normalization."
 }

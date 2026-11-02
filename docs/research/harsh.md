@@ -1,6 +1,6 @@
 # Harsh - paired lighting
 
-GitHub: [HarshSaand](https://github.com/HarshSaand). Role C: paired lighting and consistency. Status: local implementation tested; trainer integration pending.
+GitHub: [HarshSaand](https://github.com/HarshSaand). Role C: paired lighting and consistency. Status: components tested; shared-runner parity checked in review; real-lighting evaluation pending. Dated entries below retain their original scope.
 
 ## Question
 
