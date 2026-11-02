@@ -90,3 +90,32 @@ def test_load_scores_rejects_duplicates(tmp_path):
     path.write_text(json.dumps(good * 2))
     with pytest.raises(ValueError):
         load_scores(path)
+
+
+def test_optional_lighting_pools_reuse_calibration_and_keep_suffix_groups():
+    val = rows([(s, 0) for s in range(5)], "v")
+    test = rows([(1, 0), (4, 0), (5, 1), (2, 1)], "t")
+    conditions = dict(
+        zip(
+            [r["image_id"] for r in test],
+            ["regular", "overexposed", "underexposed", "shift_4"],
+            strict=True,
+        )
+    )
+    original = evaluate_run(val, test, 0.25, conditions)
+    result = evaluate_run(val, test, 0.25, conditions, lighting_aggregates=True)
+    assert result["calibration"] == original["calibration"]
+    for name, row in original["conditions"].items():
+        assert row == result["conditions"][name]
+    assert result["conditions"]["nonregular"]["normal_images"] == 1
+    assert result["conditions"]["nonregular"]["defective_images"] == 2
+    assert result["conditions"]["exposure_changed"]["recall"] == 1.0
+    assert result["conditions"]["additional_light"]["recall"] == 0.0
+    assert result["conditions"]["additional_light"]["fpr"] is None
+
+
+@pytest.mark.parametrize("name", ["all", "nonregular", "exposure_changed", "additional_light"])
+def test_condition_names_cannot_overwrite_or_duplicate_aggregate_groups(name):
+    val = rows([(s, 0) for s in range(5)], "v")
+    with pytest.raises(ValueError, match="reserved"):
+        evaluate_run(val, rows([(1, 0)], "t"), 0.25, {"t0": name})

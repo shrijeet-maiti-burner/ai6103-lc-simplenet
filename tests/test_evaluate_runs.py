@@ -1,5 +1,9 @@
 import csv
 import json
+import os
+import subprocess
+import sys
+from pathlib import Path
 
 import pytest
 
@@ -85,3 +89,39 @@ def test_duplicate_runs_rejected(tmp_path):
     make_run(tmp_path / "b", "can", "B0", 0, test=False)
     with pytest.raises(ValueError):
         discover_runs(tmp_path)
+
+
+def test_cli_filters_predictions_thresholds_and_matrix_to_the_declared_scope(tmp_path):
+    root, out = tmp_path / "runs", tmp_path / "out"
+    for category, method, seed in [("can", "B0", 0), ("can", "B1", 1), ("vial", "B1", 1)]:
+        make_run(root, category, method, seed)
+    repo = Path(__file__).resolve().parents[1]
+    environment = {**os.environ, "PYTHONPATH": str(repo / "src")}
+    subprocess.run(
+        [
+            sys.executable,
+            str(repo / "scripts/evaluate.py"),
+            "--runs",
+            str(root),
+            "--out",
+            str(out),
+            "--target-fpr",
+            "0.25",
+            "--categories",
+            "vial",
+            "--seeds",
+            "1",
+            "--methods",
+            "B1",
+        ],
+        check=True,
+        env=environment,
+        capture_output=True,
+        text=True,
+    )
+    assert set(json.loads((out / "thresholds.json").read_text())) == {"vial/B1/seed-1"}
+    assert read(out / "run_matrix.csv") == [
+        {"category": "vial", "method": "B1", "seed": "1", "status": "ready"}
+    ]
+    assert len(read(out / "predictions.csv")) == 4
+    assert {r["category"] for r in read(out / "metrics.csv")} == {"vial"}

@@ -89,6 +89,7 @@ def evaluate_run(
     test_rows: Sequence[Mapping],
     target_fpr: float,
     conditions: Mapping[str, str] | None = None,
+    lighting_aggregates: bool = False,
 ) -> dict:
     """One model/category/seed: calibrate once, then score every condition at that threshold.
 
@@ -103,7 +104,24 @@ def evaluate_run(
         if missing:
             raise ValueError(f"{len(missing)} test images lack a documented condition")
         for row in test_rows:
+            if conditions[row["image_id"]] in {
+                "all",
+                "nonregular",
+                "exposure_changed",
+                "additional_light",
+            }:
+                raise ValueError("condition map uses a reserved aggregate group name")
             groups.setdefault(conditions[row["image_id"]], []).append(row)
+        if lighting_aggregates:
+            rules = {
+                "nonregular": lambda name: name != "regular",
+                "exposure_changed": lambda name: name in {"underexposed", "overexposed"},
+                "additional_light": lambda name: name.startswith("shift_"),
+            }
+            for name, include in rules.items():
+                selected = [row for row in test_rows if include(conditions[row["image_id"]])]
+                if selected:
+                    groups[name] = selected
     return {
         "metric_version": METRIC_VERSION,
         "calibration": calibration,
