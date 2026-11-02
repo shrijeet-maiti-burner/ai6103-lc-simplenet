@@ -1,6 +1,6 @@
 # Team research
 
-Roles are unassigned. Each member can use their document for any relevant line of research. These starter files were created during repository setup and do not represent work completed by their named members.
+Current allocation: Shrijeet A + E and overall review; Athul + Umesh B; Harsh C; Aryaman D. These starter files do not establish completed research. Personal plans and private notes remain local unless publication is authorized.
 
 | Member | GitHub | Notes |
 |---|---|---|
@@ -10,7 +10,7 @@ Roles are unassigned. Each member can use their document for any relevant line o
 | Athul | [athul1810](https://github.com/athul1810) | [athul.md](athul.md) |
 | Aryaman | [AryamanAnand19](https://github.com/AryamanAnand19) | [aryaman.md](aryaman.md) |
 
-Read [the project](../project.md) and [protocol](../protocol.md) first. Any member may investigate baseline fidelity, related work, data/lighting, loss behavior, evaluation or feasibility. Coordinate overlap in the notes; no workstream is reserved.
+Read [the project](../project.md), [protocol](../protocol.md) and [data/map contract](../data-contract.md) first. B needs an internal division and one integration contact. Each member records their own evidence and technical report contribution.
 
 For each claim, record a direct source and page/section, what was actually observed, its limitation, and the implication for this proposal. Distinguish paper-reported evidence from our measurements. Link code, configs and artifacts for experiments. Negative results count when the experiment and conclusion are sound.
 

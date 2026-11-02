@@ -2,7 +2,7 @@
 
 Clone with `--recurse-submodules`, run `uv sync --frozen`, and work on a short branch such as `research/lighting-review` or `feat/ad2-loader`. Open a PR with the problem, change, evidence and limitations. Obtain a teammate review before merging substantive experiment changes.
 
-Research can begin in any member's notes; roles are unassigned. Record work when it happens. Do not backfill another person's contribution or describe a source-reported result as our own.
+Use the [current team allocation](docs/research/README.md) and [data/map contract](docs/data-contract.md). Record work when it happens. Do not backfill another person's contribution or describe a source-reported result as our own. Personal plans and private research stay local unless publication is authorized.
 
 Before a PR:
 

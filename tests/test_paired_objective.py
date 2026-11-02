@@ -1,7 +1,7 @@
 import pytest
 
 torch = pytest.importorskip("torch")
-from lc_simplenet.losses import paired_objective, patch_score_consistency  # noqa: E402
+from lc_simplenet.paired_losses import paired_objective, patch_score_consistency  # noqa: E402
 
 
 def test_identical_views_have_zero_consistency():

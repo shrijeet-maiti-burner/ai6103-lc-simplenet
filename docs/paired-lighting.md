@@ -1,148 +1,74 @@
-# Paired lighting: integration handoff
+# Role C: paired lighting and consistency
 
-Role C supplies the image-pair preparation and paired loss. These components are implemented locally; full SimpleNet training and dataset evaluation have not run.
+## Current status
 
-## Input size
+The completed AD and AD 2 training runner already implements the same relighting and objective as the Role C helpers. Athul reported numerical agreement on [PR #10](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/10#issuecomment-6552964794). `tests/test_role_c_runner_equivalence.py` now checks this directly against `PilotTrainer.train_step`, including loss components, discriminator gradients and BatchNorm buffers, plus relighting with identical sampled parameters at 256x256.
 
-Use **256x256** for the team's AD 2 runs, with identical spatial preprocessing across B0, B1 and B2. This preserves compatibility with the team's existing training. `configs/paired-lighting.json` records `input_size: [256, 256]`. The pair helper does not resize: the data loader must supply 256x256 RGB images after the agreed resize/crop pipeline, then create both lighting views before normalization. Do not independently resize or crop the paired views.
+No replacement of the runner or retraining is needed for this PR. Preserve the code, environment and checkpoints recorded for the released runs. The helpers are a separately tested reference interface for the method. The runner's original `losses.py` remains unchanged; the additional helper reductions live in `paired_losses.py` so this PR does not alter that source hash.
 
-The paired smoke check now reads this size from the config by default. `--image-size 64` is available only for a smaller diagnostic run; it does not change the experiment setting. The exact upstream resize/crop parameters should match the existing team loader, rather than introducing a new crop policy here.
+## Confirmed settings
 
-## Image path
+- AD 2: full-frame bilinear resize to **256x256**, no crop, identical for B0/B1/B2. Non-square inputs change aspect ratio under this existing policy.
+- Brightness and gamma: independent uniform draws in **[0.8, 1.2]**, confirmed by C on 30 October.
+- Form the pair after shared spatial preprocessing and before ImageNet normalization. Apply `clip(brightness * image**gamma, 0, 1)`, preserving pixel coordinates.
+- B0 uses original + identical original; B1 uses original + relit without consistency; B2 uses the same pairing with consistency.
+- Match data, initialization, noise policy, batch handling and update budget between B1 and B2.
+
+The NumPy helper and the runner use different RNG implementations. Equal integer seeds alone do not generate identical pairs across these implementations. The equivalence test passes the same sampled parameters explicitly; do not swap generators mid-study.
+
+See [study policy](../configs/ad2-study-policy.json) for the authoritative experiment setup and [helper config](../configs/paired-lighting.json) for the Role C interface settings.
+
+## Objective and code
 
 ```text
-Normal training image
-        |
-Shared crop / resize / spatial augmentation (once)
-        |
-HWC floating RGB in [0, 1]
-        |
-        +-- original copy ---------+
-        |                          |
-        +-- brightness and gamma --+
-                                   |
-                 Normalize both views identically
-                                   |
-                  Frozen extractor, trainable adapter
-                                   |
-              Add synthetic feature noise to each view
-                                   |
-                One joint discriminator forward
-                                   |
-        Mean two-view hinge loss + weighted normal-score MSE
+Normal image -> shared 256x256 preprocessing -> original + relit
+    -> identical normalization -> frozen extractor -> trainable adapter
+    -> normal features and Gaussian-noise synthetic features
+    -> one joint discriminator forward
+    -> mean two-view hinge loss + lambda * normal patch-score MSE
 ```
 
-`make_pair(image, brightness=..., gamma=...)` in `src/lc_simplenet/pairs.py` returns the original copy, relit image, parameters and fraction of channel values clipped above 1. `sample_pair` additionally takes an explicit NumPy generator and parameter ranges. Neither function crops, normalizes or selects final study settings.
+The discriminator receives original normal, relit normal, original synthetic, and relit synthetic features, in that order. Larger raw scores mean normal. Consistency uses aligned normal patch scores before heatmap processing or score normalization, with gradients through both branches. Synthetic anomalies participate in discrimination only.
 
-The existing relighting rule is `clip(brightness * image**gamma, 0, 1)`. The helper preserves pixel coordinates, but this does not prove that small defects remain visible. Inspect real training examples with the data owner before freezing ranges. Brightness/gamma alone do not simulate every real lighting effect.
+| File | Responsibility |
+|---|---|
+| `src/lc_simplenet/pairs.py` | Aligned copies, sampled lighting parameters and clipping fraction |
+| `src/lc_simplenet/paired_training.py` | CHW normalization, joint discriminator forward and score diagnostics |
+| `src/lc_simplenet/paired_losses.py` | Two-view hinge + normal-score consistency; FP32 reductions for half/bfloat inputs |
+| `src/lc_simplenet/pilot.py` | Existing study runner, retained unchanged |
 
-## Trainer interface
+`normalized_pair` returns two CHW tensors. `paired_discriminator_loss` takes the discriminator, two adapted feature tensors, two corresponding noise tensors, margin and consistency weight. It returns differentiable loss terms and detached diagnostics. The caller owns noise generation and optimizer updates. Settings are validated before the stateful discriminator forward.
 
-The data loader should return two views from the same spatially processed image, its sample identifier, brightness, gamma and clipping fraction. Convert HWC to CHW and apply the same ImageNet normalization to both views after pairing. Do not apply independent crops or flips afterward. Give workers distinct, recorded RNG streams; match their sampling order and seeds across B1/B2.
+`clipped_fraction` counts channel values above one before clipping. The runner's `newly_clipped_fraction` additionally excludes pixels originally equal to one. These are different diagnostics and must not be conflated. Neither proves defect preservation.
 
-After feature extraction and adaptation, concatenate equal-size patch groups in this order:
+## Weight outcome and interpretation
 
-1. Original normal features.
-2. Relit normal features.
-3. Synthetic anomalies from the original features.
-4. Synthetic anomalies from the relit features.
+No AD 2 candidate passed all safeguards, including the full-length seed-mean check. Therefore there is **no selected B2 weight**. The test matrix reports 0.01, 0.1 and 1.0 as ablations against both B0 and B1. B0 versus B1 is the main comparison. The lambda=1.0 runs following the unsuccessful initial search remain a recorded deviation, not a successful selection.
 
-Run the discriminator once and split its raw scores into those four groups. The trainer owns feature-noise generation and must use the same noise policy and batch handling across comparisons.
+The team's [normal-validation results](ad2-study-results.md) show that B1 lowers pair MSE relative to B0 in every category; B2 generally lowers it further but can narrow score spread or increase synthetic hinge. This is evidence about prediction consistency on normal images, not proof of preserved real-defect recall. Do not choose a weight or change safeguards after seeing test results.
 
-```python
-from lc_simplenet.losses import paired_objective
+## Scoring agreement
 
-# Each group contains the same number of corresponding patches.
-normal_original, normal_relit, synthetic_original, synthetic_relit = scores.chunk(4)
-terms = paired_objective(
-    normal_original, normal_relit, synthetic_original, synthetic_relit,
-    margin=margin, lambda_score=lambda_score,
-)
-terms["total"].backward()
-```
+C agreed on [PR #8](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/8#issuecomment-6578117103) to D's clarified protocol:
 
-The returned `total`, `discrimination` and `consistency` tensors retain their gradients. Detach only for logging. Larger raw scores mean normal. Consistency compares only corresponding normal patches, before heatmap processing or score normalization; both branches receive gradients. Freeze the extractor, not the adapter or discriminator.
+- Fixed-final checkpoints; one threshold per model/category/seed calibrated on regular-light normal validation at a 5% target FPR, then frozen across lighting conditions. Report achieved validation FPR and sample size.
+- Seeds 0–2: mean and sample SD per category; macro averages over all eight categories and seven without sheet_metal.
+- Assess the 5-percentage-point recall tolerance on seed-mean macro recall separately for every lighting condition and both aggregates. Name each category exceeding the drop regardless of the macro result.
+- B1 versus B0 is primary; each B2 weight is compared with both B0 and B1. No checkpoint, threshold or weight selection from test scores.
+- Retain the 19-image sheet_metal caveat and prior exploratory fabric test exposure. Verify lighting-label mapping before per-condition reporting.
 
-| Variant | Pair | Consistency weight |
-|---|---|---|
-| B0 | Original and identical copy | 0 |
-| B1 | Original and relit | 0 |
-| B2 | Same pairing and randomness as B1 | Positive, selected on normal validation |
+C's helper review does not block D's first end-to-end scoring check. Dataset transfer/availability is a separate A/D dependency.
 
-The implementation settings in `configs/paired-lighting.json` use independent uniform brightness and gamma in [0.8, 1.2], matching the team's reported bottle/grid settings. Check real training pairs before freezing these ranges across categories. The B2 weight remains undecided. Do not select it from test lighting or test labels.
+## Verification
 
-## Checks completed on 26 October 2026
-
-All 21 repository tests passed in the CPU environment, including the new checks for aligned pairs, unchanged inputs, clipping counts, repeatable sampling, zero identity consistency, lambda-zero hinge equivalence, invalid inputs, and gradient paths. A small toy network verifies a joint forward with BatchNorm and a frozen extractor. It is not a SimpleNet training run or a measured robustness result.
-
-The brightness/gamma transform and basic raw-score MSE already existed in the shared repository. This contribution adds paired sampling with metadata, the combined two-view objective, integration guidance and additional tests.
-
-## Remaining joint work
-
-- With A: inspect licensed training images, confirm spatial preprocessing and agree the paired loader fields.
-- With B: connect these functions to SimpleNet, preserve matching patch order, and run B0/B1/B2 smoke training and checkpoint reload checks.
-- With D: inspect loss curves, raw-score spread, normal/synthetic separation and validation behavior before freezing settings. Measure real-defect recall only under the agreed evaluation protocol.
-- Record GPU runtime and memory before committing to the full run budget. No improvement in false alarms or recall is established yet.
-
-## Ready-to-connect interface (30 October)
-
-`normalized_pair` in `src/lc_simplenet/paired_training.py` converts each pair to two ImageNet-normalized CHW tensors. Stack original tensors into one batch and relit tensors into another. The extractor and adapter must preserve image and patch order.
-
-`paired_discriminator_loss` takes the discriminator, two adapted feature tensors and two corresponding noise tensors. It assembles the four groups, runs one forward, and returns loss terms plus detached score diagnostics. The caller retains control of noise generation, optimizer updates and the study configuration.
-
-```python
-from lc_simplenet.paired_training import paired_discriminator_loss
-
-# original_batch and relit_batch: equally shaped normalized BCHW tensors.
-# Freeze the backbone before this step; keep adapter/discriminator trainable.
-features, _ = model._embed(torch.cat([original_batch, relit_batch]))
-original_features, relit_features = model.pre_projection(features).chunk(2)
-# Generate original_noise and relit_noise using the shared trainer's noise policy.
-model.proj_opt.zero_grad()
-model.dsc_opt.zero_grad()
-terms, diagnostics = paired_discriminator_loss(
-    model.discriminator, original_features, relit_features,
-    original_noise, relit_noise,
-    margin=model.dsc_margin, lambda_score=lambda_score,
-)
-terms["total"].backward()
-model.proj_opt.step()
-model.dsc_opt.step()
-```
-
-This example assumes `pre_proj > 0`, as in the checked architecture. The loop owner must set training mode, log detached losses and diagnostics, and preserve matched B1/B2 batches and random streams. Do not use the upstream test-based checkpoint selection for the study.
-
-The diagnostics include normal and synthetic score means/spreads, their mean separation, and paired-score absolute difference. A falling consistency loss alone is insufficient: constant predictions could also produce it.
-
-## Commands for review
-
-From the repository root, with the CPU environment installed:
+Verified on 2 November against current main: **168 tests passed**, including 13 runner-equivalence cases. Ruff, formatting, repository link/source checks and the environment doctor passed. The 256x256 architecture smoke check passed. These replace the earlier standalone-branch test counts.
 
 ```bash
 .venv/bin/python -m pytest -q
-.venv/bin/python scripts/smoke_paired.py --output results/role-c/smoke.json
-.venv/bin/python scripts/preview_lighting.py
+.venv/bin/python scripts/smoke_paired.py --output results/role-c/smoke-256.json
 .venv/bin/python scripts/preview_lighting.py --image data/TRAINING_IMAGE.png
 ```
 
-The preview without an image uses a synthetic texture with a narrow mark. It displays the original and four range corners, with clipping fractions. It demonstrates transforms only. Supply an actual training image to assess detail preservation; the default synthetic preview cannot establish this for MVTec.
+The architecture smoke check uses the pinned SimpleNet architecture, random weights and synthetic images at the configured 256x256 size. It verifies frozen-backbone gradients, trainable gradients, an optimizer update and exact saved-weight score restoration. `--image-size 64` is an optional smaller check, not the experiment setting. The preview without an image uses a clearly labeled synthetic texture. Generated outputs remain under ignored `results/`.
 
-The smoke script uses the pinned upstream SimpleNet architecture with a random-weight WideResNet50-2, synthetic inputs at the configured 256x256 size and CPU execution. It checks gradients, an optimizer step and exact restored scores after an in-memory checkpoint round trip. Its lambda=0.1 is a smoke setting, not the selected B2 weight. Generated files stay under ignored `results/`.
-
-Unit verification on 30 October: all 25 tests passed, including matching B1/B2 BatchNorm statistics and raw-score diagnostics before an update. Full dataset training, pretrained behavior, GPU behavior and real-lighting robustness remain unverified here. A and B still need to connect the licensed data and shared training loop; C's components and executable checks are ready for that integration.
-
-Architecture check on 30 October: passed on CPU. Adapter and discriminator gradients were nonzero, the backbone had no gradients, the adapter changed after its optimizer step, and reloaded adapter/discriminator weights reproduced evaluation scores exactly. This is implementation evidence only. Local output: `results/role-c/smoke.json`.
-
-Before connecting existing bottle/grid runs, confirm they use `clip(b * x**gamma, 0, 1)` before normalization. Matching parameter ranges alone does not match implementations if brightness/gamma order or clipping order differs. The existing run code is not present on the fetched main branch, so that compatibility is not yet verified.
-
-## Pre-publication review
-
-Two independent code/method reviews checked the implementation. Fixed invalid objective settings mutating BatchNorm before rejection, and half-precision reduction overflow (including zero consistency weight). Added validation of public pair inputs. The final CPU suite passes all 34 tests. The CI CPU job also runs the paired SimpleNet smoke script.
-
-Half/bfloat score reductions use FP32, while gradients remain connected to both branches. This protects the loss calculation; full mixed-precision training is not validated by the current CPU check.
-
-## Agreed resolution and verification, 30 October
-
-The team chose 256x256 to retain compatibility with training already underway. The Role C config now records this size; the pair/normalization helpers preserve the loader's dimensions. All variants must share the same loader resize/crop policy. Brightness and gamma remain in [0.8, 1.2].
-
-All 35 unit tests passed, including an explicit configured-size alignment/normalization test. The actual SimpleNet architecture check also passed at 256x256: finite losses, frozen backbone, nonzero adapter/discriminator gradients, a successful optimizer update and exact score restoration after loading saved weights. The default paired CI smoke command now exercises this configured size.
+The equivalence tests use a small backend with BatchNorm to exercise the actual runner training step cheaply; they are not new dataset experiments. Completed study results belong to the team training runs referenced above.
