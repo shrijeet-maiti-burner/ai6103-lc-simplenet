@@ -14,6 +14,7 @@ import torch
 from torch.nn import functional as F
 
 from lc_simplenet.losses import patch_score_consistency
+from lc_simplenet.provenance import capture_rng_state, restore_rng_state, runtime_record
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -230,10 +231,14 @@ class PilotTrainer:
             ROOT / "src/lc_simplenet/losses.py",
             ROOT / "src/lc_simplenet/data.py",
             ROOT / "src/lc_simplenet/data_manifest.py",
+            ROOT / "src/lc_simplenet/provenance.py",
+            ROOT / "src/lc_simplenet/normal_validation.py",
+            ROOT / "scripts/train_pilot.py",
             ROOT / "third_party/SimpleNet/simplenet.py",
             ROOT / "third_party/SimpleNet/common.py",
         ]
         return {
+            "runtime": runtime_record(self.device),
             "sources": {
                 str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths
             },
@@ -344,7 +349,6 @@ class PilotTrainer:
         return maps.cpu().numpy()
 
     def checkpoint(self):
-        numpy_state = np.random.get_state()
         return {
             "schema": 1,
             "config": asdict(self.config),
@@ -359,10 +363,7 @@ class PilotTrainer:
             "order": self.order.state_dict(),
             "transform_rng": self.transform_rng.get_state(),
             "noise_rng": self.noise_rng.get_state(),
-            "python_rng": random.getstate(),
-            "numpy_rng": [numpy_state[0], numpy_state[1].tolist(), *numpy_state[2:]],
-            "torch_rng": torch.get_rng_state(),
-            "cuda_rng": torch.cuda.get_rng_state_all() if self.device.type == "cuda" else [],
+            **capture_rng_state(cuda=self.device.type == "cuda"),
         }
 
     def save(self, path: Path):
@@ -389,14 +390,7 @@ class PilotTrainer:
         self.order.load_state_dict(state["order"])
         self.transform_rng.set_state(state["transform_rng"].cpu())
         self.noise_rng.set_state(state["noise_rng"].cpu())
-        random.setstate(state["python_rng"])
-        numpy_state = state["numpy_rng"]
-        np.random.set_state(
-            (numpy_state[0], np.array(numpy_state[1], dtype=np.uint32), *numpy_state[2:])
-        )
-        torch.set_rng_state(state["torch_rng"].cpu())
-        if self.device.type == "cuda":
-            torch.cuda.set_rng_state_all([value.cpu() for value in state["cuda_rng"]])
+        restore_rng_state(state)
         self.step = state["step"]
 
     def trainable_hash(self):
