@@ -1,0 +1,125 @@
+{
+  "status": "provisional B decision, 30 October. Scope widened the same morning to all eight categories at Athul's request, before any AD 2 output (validation or test) was read; fabric and vial were the first choice. The team may revise passes, and C may revise the lighting ranges (which requires rerunning B1/B2).",
+  "scope": "AD 2 B0/B1/B2 training for the proposal's main claim. Thresholds and regular/changed-lighting evaluation are D's.",
+  "dataset": "mvtec_ad2",
+  "input": "full-frame bilinear resize to 256 x 256 with no crop, the AD 2 paper's default for its baselines; non-square images change aspect ratio",
+  "image_size": [
+    256,
+    256
+  ],
+  "ad_resize": null,
+  "batch_size": 8,
+  "main_seeds": [
+    0,
+    1,
+    2
+  ],
+  "variants": [
+    "B0",
+    "B1",
+    "B2"
+  ],
+  "validation": "official validation/good folder, regular lighting only",
+  "minimum_normal_validation_images": 20,
+  "selected_categories": [
+    "can",
+    "fabric",
+    "fruit_jelly",
+    "rice",
+    "sheet_metal",
+    "vial",
+    "wallplugs",
+    "walnuts"
+  ],
+  "category_policy": "fabric (prepared) plus further categories chosen from normal image counts, native size and measured cost only, never from test images, test lighting or server feedback",
+  "category_counts_train_validation": {
+    "can": [
+      412,
+      46
+    ],
+    "fabric": [
+      387,
+      43
+    ],
+    "fruit_jelly": [
+      263,
+      37
+    ],
+    "rice": [
+      313,
+      35
+    ],
+    "sheet_metal": [
+      137,
+      19
+    ],
+    "vial": [
+      291,
+      41
+    ],
+    "wallplugs": [
+      293,
+      33
+    ],
+    "walnuts": [
+      432,
+      48
+    ]
+  },
+  "category_counts_source": "paper Table IV (arXiv:2503.21622v1) via docs/ad2-data-audit.md; fabric confirmed on disk (manifest 6f9c589c...). sheet_metal is below the validation minimum.",
+  "source_pass_candidates": [
+    80,
+    160
+  ],
+  "source_passes": 80,
+  "horizon_note": "80 source passes with two views is 160 input-view passes, the rule used for the MVTec AD study and the same count as the upstream single-view recipe (40 meta-epochs x 4). 160 source passes matches the paper's 160 epochs per view and doubles cost. Fabric at batch 8 is 49 updates per pass: 3,920 or 7,840 updates.",
+  "cost_note": "measure the paired step cost at 256 on fabric before choosing; decoding 2448 x 2048 PNGs may dominate",
+  "brightness": [
+    0.8,
+    1.2
+  ],
+  "gamma": [
+    0.8,
+    1.2
+  ],
+  "lighting_status": "confirmed by C on 30 October: 0.8 to 1.2 for both B1 and B2, the same ranges as the MVTec AD study",
+  "weight_search": {
+    "seed": 3,
+    "fixed_updates_per_trial": 256,
+    "candidates": [
+      0.01,
+      0.1,
+      1.0
+    ],
+    "data": "AD 2 official normal validation; the MVTec AD selection (1.0) is not carried over",
+    "controls": "one B1 run per category at the tuning seed, shared by all candidates",
+    "proxy": "category-macro mean of B2/B1 normal-validation patch-score MSE ratios at the four fixed brightness/gamma corners",
+    "minimum_patch_std_ratio": 0.5,
+    "maximum_synthetic_hinge_ratio": 1.25,
+    "tie_rule": "smallest positive weight within 1 percent of the best eligible proxy",
+    "no_eligible_candidate": "stop; do not silently change the safeguards or launch B2",
+    "categories": "all eight; one shared weight from the category-macro proxy",
+    "outcome": "30 October: no candidate met the safeguards in all eight categories; the synthetic-hinge ratio exceeded 1.25 in three or four categories at every weight, including 0.01.",
+    "deviation": "Recorded the same day, before any AD 2 B2 main run finished: B2 is trained anyway at the fixed weight 1.0 that the MVTec AD study selected on 27 October, before any AD 2 data, and is reported as a deviation from the stop rule. 1.0 was not picked from the AD 2 search, where it failed in can, fruit_jelly, rice and vial.",
+    "full_run_rule": "Written 31 October 13:43 +08, before any full-length B2 run at 0.01 or 0.1 existed; the 1.0 runs were known. The same safeguards and objective, applied to seed 0-2 means of full-length runs at each candidate. If no weight passes, B2 is exploratory and every weight is reported as an ablation.",
+    "full_run_outcome": "31 October: no candidate passed (0.01 fails fabric and rice, 0.1 fails vial, 1.0 fails five categories). B0 against B1 is the main comparison. B2 at 0.01, 0.1 and 1.0 goes to test scoring as an ablation; no weight is chosen from test results. See docs/ad2-study-results.md."
+  },
+  "single_view_reference": "scripts/train_baseline.py --dataset mvtec_ad2 --resize 256 --imagesize 256, 40 meta-epochs, fixed final",
+  "normal_validation_target_fpr": 0.05,
+  "checkpoint_policy": "fixed_final",
+  "test_data_used_for_selection": false,
+  "hardware": "one NVIDIA A40 per run; up to three runs may share one GPU (byte-identical checkpoints verified on MVTec AD)",
+  "selection_note": "all eight categories. sheet_metal has 19 normal-validation images, below the 20 the MVTec AD study required; it is included at Athul's request and its validation-based threshold and diagnostics rest on 19 images. No image, score or test data was read.",
+  "reporting": "per-category results for all eight, plus two category-macro averages: all eight, and the seven without sheet_metal because of its 19-image validation set. Fixed on 30 October before this study scored any test image; by then only vial's normal-validation diagnostics had been read.",
+  "fixed_updates": {
+    "can": 4160,
+    "fabric": 3920,
+    "fruit_jelly": 2640,
+    "rice": 3200,
+    "sheet_metal": 1440,
+    "vial": 2960,
+    "wallplugs": 2960,
+    "walnuts": 4320
+  },
+  "horizon_decision": "80, the MVTec AD rule (160 input-view passes). A synthetic 2448 x 2048 PNG probe measured 1.68 s per paired step at 256, so 160 passes would double an already long matrix."
+}

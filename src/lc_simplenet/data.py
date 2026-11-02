@@ -142,3 +142,26 @@ class NormalManifestDataset:
             "original_size": np.array([record.height, record.width], dtype=np.int64),
             "image_size": np.array(pixels.shape[:2], dtype=np.int64),
         }
+
+
+class CachedSource:
+    """Keep each decoded, resized sample after its first hash-checked read.
+
+    Decoding and resizing are deterministic, so later reads return the same values; each read
+    gets its own copy of the image. Other attributes come from the wrapped source.
+    """
+
+    def __init__(self, source):
+        self.source, self.samples = source, {}
+
+    def __len__(self):
+        return len(self.source)
+
+    def __getattr__(self, name):
+        return getattr(self.source, name)
+
+    def __getitem__(self, index):
+        if index not in self.samples:
+            self.samples[index] = self.source[index]
+        sample = self.samples[index]
+        return {**sample, "image": sample["image"].copy()}
