@@ -19,7 +19,7 @@ Tuning seed 3, 256 updates, normal validation only. Ratios are B2 over B1; the s
 | 0.1 | 0.96 | 1.13 | 1.05 | 0.88 | 1.14 | yes |
 | 1.0 | 0.56 | 1.16 | 0.86 | 0.91 | 0.71 | yes |
 
-The rule chose 1.0. Bottle drove the choice; grid showed no gain in this short search. `scripts/select_consistency_weight.py` reads the eight search runs and writes `selection.json`, which holds every trial's metrics and is in the study release.
+The rule chose 1.0. Bottle drove the choice; grid showed no gain in this short search. `scripts/select_consistency_weight.py` reads the eight search runs and writes `selection.json`, which holds every trial's metrics and is in the study release (SHA-256 `47af2820860d07aaff8564ee4755cc327c6b94ae310dc449c6abbdd640776fa8`).
 
 ## Normal validation
 
@@ -34,7 +34,7 @@ Mean over the three seeds. Pair MSE is the patch-score change across the four br
 | grid | B1 | 0.0221 | 0.279 | 0.016 |
 | grid | B2 | 0.0114 | 0.248 | 0.008 |
 
-Against B1, B2 lowers pair MSE by 71% on bottle and 48% on grid, and the score spread by 21% and 11%. On bottle, B2's synthetic hinge is above B1's on two of three seeds, and the ratio of the seed means is 1.27, above the 1.25 limit (grid 0.49). The rule applied that limit only to the seed-3 search, so the choice stands, but the full-run check later written for AD 2 would rule out 1.0 on bottle.
+Against B1, B2 lowers pair MSE by 71% on bottle and 48% on grid, and the score spread by 21% and 11%. On bottle, B2's synthetic hinge is above B1's on two of three seeds (B1 / B2: 0.02356 / 0.03775, 0.03127 / 0.01969 and 0.01404 / 0.02969 for seeds 0, 1 and 2), and the ratio of the seed means is 1.27, above the 1.25 limit (grid 0.49). The rule applied that limit only to the seed-3 search, so the choice stands, but the full-run check later written for AD 2 would rule out 1.0 on bottle.
 
 ## Test AUROC (%)
 
