@@ -1,8 +1,8 @@
 # Aryaman - research notes
 
-GitHub: [AryamanAnand19](https://github.com/AryamanAnand19). Role: unassigned. Status: open.
+GitHub: [AryamanAnand19](https://github.com/AryamanAnand19). Workstream: D evaluation. Status: open.
 
-This starter document was created during setup. It contains no research or experiment attributed to Aryaman. Choose any direction within [the project](../project.md).
+This starter document was created during setup. It contains no research or experiment attributed to Aryaman. Use the assigned workstream and [shared data contract](../data-contract.md).
 
 ## Question
 

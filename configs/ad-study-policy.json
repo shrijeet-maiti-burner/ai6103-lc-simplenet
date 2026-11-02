@@ -1,0 +1,81 @@
+{
+  "status": "provisional B decision, 27 October, recorded before the weight search; C may revise the lighting ranges or weight candidates, which requires rerunning B1/B2",
+  "scope": "AD component only; AD 2 feasibility and evaluation remain separate",
+  "gpu_budget_hours": 6,
+  "maximum_categories": 2,
+  "category_policy": "bottle plus the cheapest eligible texture if the complete matrix fits; otherwise bottle only",
+  "minimum_normal_validation_images": 20,
+  "texture_candidates": [
+    "carpet",
+    "grid",
+    "leather",
+    "tile",
+    "wood"
+  ],
+  "selection_inputs": [
+    "normal counts",
+    "measured cost",
+    "dataset category type"
+  ],
+  "main_seeds": [
+    0,
+    1,
+    2
+  ],
+  "variants": [
+    "B0",
+    "B1",
+    "B2"
+  ],
+  "batch_size": 8,
+  "source_pass_candidates": [
+    80,
+    40
+  ],
+  "horizon_rule": "Prefer the object-plus-texture matrix at 80 source passes; use 40 if needed to fit measured cost. If neither fits, use the longest feasible bottle-only matrix. Choose before the weight search.",
+  "horizon_rationale": "Two views at 80 source passes gives 160 input-view passes, matching the single-view reference's input-view count. The 40-pass fallback has half that exposure. All paired controls share the chosen horizon; no equal-compute or equal-optimizer-update claim is made.",
+  "ad_resize": 329,
+  "image_size": [
+    288,
+    288
+  ],
+  "brightness": [
+    0.8,
+    1.2
+  ],
+  "gamma": [
+    0.8,
+    1.2
+  ],
+  "weight_search": {
+    "seed": 3,
+    "fixed_updates_per_trial": 256,
+    "candidates": [
+      0.01,
+      0.1,
+      1.0
+    ],
+    "trials_per_variant_per_category": 1,
+    "controls": "one B1 run per category at the tuning seed, shared by all candidates; repeats at the same seed are deterministic and would be identical",
+    "proxy": "category-macro mean of B2/B1 normal-validation patch-score MSE ratios at the four fixed brightness/gamma corners",
+    "minimum_patch_std_ratio": 0.5,
+    "maximum_synthetic_hinge_ratio": 1.25,
+    "tie_rule": "smallest positive weight within 1 percent of the best eligible proxy",
+    "no_eligible_candidate": "stop; do not silently change the safeguards or launch B2"
+  },
+  "normal_validation_target_fpr": 0.05,
+  "checkpoint_policy": "fixed_final",
+  "cost_safety_multiplier": 1.25,
+  "test_data_used_for_selection": false,
+  "selected_categories": [
+    "bottle",
+    "grid"
+  ],
+  "selection_note": "grid is the cheapest eligible texture by the measured paired step cost; no anomaly scores or test data were read",
+  "source_passes": 80,
+  "fixed_updates": {
+    "bottle": 1680,
+    "grid": 2160
+  },
+  "hardware": "one NVIDIA A40 per run"
+}

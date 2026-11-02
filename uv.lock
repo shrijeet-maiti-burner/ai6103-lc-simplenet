@@ -30,6 +30,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "numpy" },
+    { name = "pillow" },
 ]
 
 [package.optional-dependencies]
@@ -38,7 +39,6 @@ cpu = [
     { name = "matplotlib" },
     { name = "opencv-python" },
     { name = "pandas" },
-    { name = "pillow" },
     { name = "scikit-image" },
     { name = "scikit-learn" },
     { name = "scipy" },
@@ -55,7 +55,6 @@ cuda = [
     { name = "matplotlib" },
     { name = "opencv-python" },
     { name = "pandas" },
-    { name = "pillow" },
     { name = "scikit-image" },
     { name = "scikit-learn" },
     { name = "scipy" },
@@ -83,8 +82,7 @@ requires-dist = [
     { name = "opencv-python", marker = "extra == 'cuda'", specifier = "==4.11.0.86" },
     { name = "pandas", marker = "extra == 'cpu'", specifier = "==2.2.3" },
     { name = "pandas", marker = "extra == 'cuda'", specifier = "==2.2.3" },
-    { name = "pillow", marker = "extra == 'cpu'", specifier = "==11.3.0" },
-    { name = "pillow", marker = "extra == 'cuda'", specifier = "==11.3.0" },
+    { name = "pillow", specifier = "==11.3.0" },
     { name = "scikit-image", marker = "extra == 'cpu'", specifier = "==0.25.2" },
     { name = "scikit-image", marker = "extra == 'cuda'", specifier = "==0.25.2" },
     { name = "scikit-learn", marker = "extra == 'cpu'", specifier = "==1.6.1" },
