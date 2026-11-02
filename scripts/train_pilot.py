@@ -19,6 +19,7 @@ from torch.nn import functional as F
 from lc_simplenet.data import NormalManifestDataset
 from lc_simplenet.geometry import restore_score_map
 from lc_simplenet.metrics import image_counts, normal_validation_threshold
+from lc_simplenet.normal_validation import paired_normal_metrics
 from lc_simplenet.pilot import (
     ROOT,
     PilotConfig,
@@ -85,6 +86,7 @@ def main():
     parser.add_argument("--target-fpr", type=float, default=0.05)
     parser.add_argument("--resume", type=Path)
     parser.add_argument("--verify-replay", action="store_true")
+    parser.add_argument("--normal-diagnostics", action="store_true")
     args = parser.parse_args()
     if args.steps < 1 or args.threads < 1 or not 0 < args.gpu_memory_fraction <= 1:
         parser.error("steps/threads must be positive; GPU memory fraction must be in (0,1]")
@@ -201,6 +203,11 @@ def main():
             }
             trainer.load(checkpoint)
         # Predict normal validation only after the fixed training horizon.
+        if args.normal_diagnostics:
+            write_json(
+                output / "normal-diagnostics.json",
+                paired_normal_metrics(trainer, datasets["validation"]),
+            )
         maps, rows = [], []
         native_shape = None
         crop_shape = None

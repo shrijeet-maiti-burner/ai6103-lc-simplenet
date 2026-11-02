@@ -14,6 +14,8 @@ import numpy as np
 import torch
 import torchvision.transforms.functional as TF
 
+from lc_simplenet.provenance import capture_rng_state
+
 ROOT = Path(__file__).resolve().parents[2]
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
@@ -108,6 +110,22 @@ def load_trained_state(model, state: dict) -> None:
     model.discriminator.load_state_dict(state["discriminator"])
     if model.pre_proj > 0:
         model.pre_projection.load_state_dict(state["pre_projection"])
+
+
+def training_checkpoint(model, settings: dict, seed: int) -> dict:
+    """Save final heads, optimizer/scheduler state and RNGs before validation."""
+    optimizers = {"discriminator": model.dsc_opt.state_dict()}
+    if model.pre_proj > 0:
+        optimizers["adapter"] = model.proj_opt.state_dict()
+    return {
+        "schema": 2,
+        "state": trained_state(model),
+        "settings": settings,
+        "seed": seed,
+        "optimizers": optimizers,
+        "discriminator_scheduler": model.dsc_schl.state_dict(),
+        "rng_state": capture_rng_state(cuda=model.device.type == "cuda"),
+    }
 
 
 def predict(model, loader) -> dict:
