@@ -88,6 +88,20 @@ def center_crop_box(resize: int, imagesize: int) -> list[int]:
     return [top, top, top + imagesize, top + imagesize]
 
 
+def input_record(dataset: str, resize: int, imagesize: int) -> dict:
+    """Dataset, loader input and map geometry of one run, for run.json and summary.json."""
+    return {
+        "dataset": dataset,
+        "input": {**UPSTREAM_AD_INPUT, "resize": resize, "imagesize": imagesize},
+        "geometry": {
+            "resize_hw": [resize, resize],
+            "crop_box_tlbr": center_crop_box(resize, imagesize),
+            "map_hw": [imagesize, imagesize],
+            "full_frame_stretch": dataset == "mvtec_ad2",
+        },
+    }
+
+
 def build_model(backbone, device, imagesize: int, settings: dict = UPSTREAM_AD):
     model = upstream_module("simplenet").SimpleNet(device)
     model.load(backbone=backbone, device=device, input_shape=(3, imagesize, imagesize), **settings)

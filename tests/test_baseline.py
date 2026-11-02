@@ -80,6 +80,32 @@ def test_center_crop_box_matches_torchvision():
         assert torch.equal(TF.center_crop(canvas, [size, size]), canvas[:, top:bottom, left:right])
 
 
+def test_input_record_follows_the_cli_geometry():
+    pytest.importorskip("torch")
+    from lc_simplenet.baseline import input_record
+
+    assert input_record("mvtec_ad", 329, 288) == {
+        "dataset": "mvtec_ad",
+        "input": {"batch_size": 8, "resize": 329, "imagesize": 288},
+        "geometry": {
+            "resize_hw": [329, 329],
+            "crop_box_tlbr": [20, 20, 308, 308],
+            "map_hw": [288, 288],
+            "full_frame_stretch": False,
+        },
+    }
+    assert input_record("mvtec_ad2", 256, 256) == {
+        "dataset": "mvtec_ad2",
+        "input": {"batch_size": 8, "resize": 256, "imagesize": 256},
+        "geometry": {
+            "resize_hw": [256, 256],
+            "crop_box_tlbr": [0, 0, 256, 256],
+            "map_hw": [256, 256],
+            "full_frame_stretch": True,
+        },
+    }
+
+
 def test_input_rejects_non_square_sources(tmp_path):
     pytest.importorskip("torch")
     from lc_simplenet.baseline import UpstreamInput

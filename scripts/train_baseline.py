@@ -23,7 +23,7 @@ from lc_simplenet.baseline import (
     UPSTREAM_AD_INPUT,
     UpstreamInput,
     build_model,
-    center_crop_box,
+    input_record,
     load_trained_state,
     predict,
     train_fixed,
@@ -68,12 +68,8 @@ def main() -> None:
     initial_rng = capture_rng_state(cuda=cuda)
     settings = {**UPSTREAM_AD, "meta_epochs": args.meta_epochs}
     resize, imagesize = args.resize, args.imagesize
-    geometry = {
-        "resize_hw": [resize, resize],
-        "crop_box_tlbr": center_crop_box(resize, imagesize),
-        "map_hw": [imagesize, imagesize],
-        "full_frame_stretch": stretch,
-    }
+    record = input_record(args.dataset, resize, imagesize)
+    geometry = record["geometry"]
 
     def loader(split: str, shuffle: bool):
         source = NormalManifestDataset(
@@ -114,7 +110,7 @@ def main() -> None:
         "seed": args.seed,
         "category": args.category,
         "settings": settings,
-        "input": UPSTREAM_AD_INPUT,
+        **record,
         "checkpoint_policy": "fixed_final",
         "manifest_sha256": args.manifest_sha256,
         "uv_lock_sha256": _sha256(ROOT / "uv.lock"),
@@ -156,9 +152,7 @@ def main() -> None:
         "category": args.category,
         "seed": args.seed,
         "settings": settings,
-        "dataset": args.dataset,
-        "input": {**UPSTREAM_AD_INPUT, "resize": resize, "imagesize": imagesize},
-        "geometry": geometry,
+        **record,
         "train_images": len(train.dataset),
         "validation_images": len(validation.dataset),
         "manifest_sha256": args.manifest_sha256,
