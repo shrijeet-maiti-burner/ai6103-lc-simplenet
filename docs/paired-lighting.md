@@ -61,7 +61,7 @@ C's helper review does not block D's first end-to-end scoring check. Dataset tra
 
 ## Verification
 
-Verified on 2 November against current main: **168 tests passed**, including 13 runner-equivalence cases. Ruff, formatting, repository link/source checks and the environment doctor passed. The 256x256 architecture smoke check passed. These replace the earlier standalone-branch test counts.
+Verified on 2 November against current main: **170 tests passed**, including 13 runner-equivalence cases and two preview-resize checks. Ruff, formatting, repository link/source checks and the environment doctor passed. The 256x256 architecture smoke check passed. These replace the earlier standalone-branch test counts.
 
 ```bash
 .venv/bin/python -m pytest -q
@@ -69,6 +69,6 @@ Verified on 2 November against current main: **168 tests passed**, including 13 
 .venv/bin/python scripts/preview_lighting.py --image data/TRAINING_IMAGE.png
 ```
 
-The architecture smoke check uses the pinned SimpleNet architecture, random weights and synthetic images at the configured 256x256 size. It verifies frozen-backbone gradients, trainable gradients, an optimizer update and exact saved-weight score restoration. `--image-size 64` is an optional smaller check, not the experiment setting. The preview without an image uses a clearly labeled synthetic texture. Generated outputs remain under ignored `results/`.
+The architecture smoke check uses the pinned SimpleNet architecture, random weights and synthetic images at the configured 256x256 size. It verifies frozen-backbone gradients, trainable gradients, an optimizer update and exact saved-weight score restoration. `--image-size 64` is an optional smaller check, not the experiment setting. For a supplied training image, the preview applies the same RGB conversion and **256x256 full-frame bilinear resize without cropping** as the AD 2 training loader, before relighting and clipping measurement. Thus the displayed detail and clipping refer to the training resolution rather than the native image. The preview without an image uses a clearly labeled synthetic texture generated at 256x256. Generated outputs remain under ignored `results/`.
 
 The equivalence tests use a small backend with BatchNorm to exercise the actual runner training step cheaply; they are not new dataset experiments. Completed study results belong to the team training runs referenced above.

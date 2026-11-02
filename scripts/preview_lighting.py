@@ -14,6 +14,15 @@ from PIL import Image  # noqa: E402
 from lc_simplenet.pairs import make_pair  # noqa: E402
 
 
+def load_training_preview(path: Path) -> np.ndarray:
+    """Match AD 2 training: RGB, full-frame bilinear 256x256, then [0,1]."""
+    with Image.open(path) as source:
+        if source.getexif().get(274, 1) != 1:
+            raise ValueError("Non-default EXIF orientation needs an explicit geometry rule")
+        resized = source.convert("RGB").resize((256, 256), Image.Resampling.BILINEAR)
+        return np.asarray(resized, dtype=np.float32) / np.float32(255)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -22,12 +31,13 @@ def main():
     parser.add_argument("--output-dir", type=Path, default=Path("results/role-c/preview"))
     args = parser.parse_args()
     if args.image:
-        with Image.open(args.image) as source:
-            image = np.asarray(source.convert("RGB"), dtype=np.float32) / 255
-        label = "Training image: inspect clipping and detail visibility"
+        image = load_training_preview(args.image)
+        label = (
+            "Training resize: 256x256 full-frame bilinear; inspect clipping and detail visibility"
+        )
     else:
-        y, x = np.mgrid[:192, :192]
-        texture = 0.15 + 0.6 * x / 191 + 0.08 * np.sin(y / 3)
+        y, x = np.mgrid[:256, :256]
+        texture = 0.15 + 0.6 * x / 255 + 0.08 * np.sin(y / 3)
         texture[70:120, 93:96] *= 0.65
         image = np.repeat(texture[..., None], 3, axis=2).astype(np.float32)
         label = "Synthetic texture illustration only; not a dataset or defect-detection result"
@@ -52,6 +62,10 @@ def main():
         json.dumps(
             {
                 "scope": label,
+                "input_size": list(image.shape[:2]),
+                "preprocessing": "RGB, full-frame bilinear resize, no crop"
+                if args.image
+                else "synthetic texture generated at 256x256",
                 "settings": records,
             },
             indent=2,
