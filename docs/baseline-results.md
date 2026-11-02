@@ -1,6 +1,6 @@
 # Bottle baseline training results
 
-27 October 2026. Development runs of the fixed-final single-view AD reference, not B0/B1/B2 results. Only normal validation was scored; test accuracy has not been measured.
+27 October 2026. Development runs of the fixed-final single-view AD reference, not B0/B1/B2 results. Only normal validation was scored for these runs. Test results for all 15 categories with the same settings are in the [MVTec AD reproduction](ad-reproduction-results.md).
 
 All runs used 167 training / 42 normal-validation images, resize 329 then center crop 288, batch size 8 and 40 meta-epochs with four discriminator-training epochs each. Hardware was an NVIDIA A40, with Python 3.12.15, torch 2.6.0+cu124 and torchvision 0.21.0+cu124. See the [baseline guide](baseline-training.md) for the full recipe and reload limits.
 
