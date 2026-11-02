@@ -55,23 +55,23 @@ On the fabric archive, duplicate file SHA-256 groups were only:
 
 No duplicate file hashes involved `train/good`, `validation/good`, public RGB, or a second category. Those groups are not a reason to alter the normal manifests.
 
-## Geometry (pending team agreement)
+## Geometry
 
 The [AD baseline](baseline-training.md) uses upstream `Resize(329)` then center crop 288. That path **rejects non-square natives**, so fabric 2448×2048 cannot use it unchanged. The [paired pilot](pilot-training.md) `ad_resize` option is **MVTec AD only**. Shared `PilotConfig.image_size` still defaults to 288×288 for bottle/grid; this branch does not change `baseline.py` or `pilot.py`.
 
-Heckler-Kram et al. (arXiv:2503.21622v1) resize images to **256×256** unless a method says otherwise, and train SimpleNet for **160 epochs**. That is the proposed AD 2 protocol if the team agrees to match the paper baseline: full-frame PIL bilinear resize to 256×256, which **stretches** non-square natives such as fabric 2048×2448 (H×W). It is **not frozen** in training code.
+The formal AD 2 study uses a **256×256 full-frame resize**. That setup is the one recorded under [Exploratory fabric pilots versus the formal AD 2 study](#exploratory-fabric-pilots-versus-the-formal-ad-2-study): batch size 8, 80 source passes, seeds 0–2, all eight categories. Heckler-Kram et al. (arXiv:2503.21622v1) resize images to 256×256 unless a method says otherwise, and train SimpleNet for 160 epochs. The study horizon recorded below is 80 source passes (3,920 fabric updates), which is separate from that 160-epoch figure.
 
-**AD 2 smoke** (`scripts/smoke_ad2.py`, a pipeline check, not a scientific result): the default is now a full-frame resize from native fabric 2048×2448 to **256×256**, then ImageNet normalization. This stretches the native aspect ratio; no crop or padding is applied. `geometry_frozen` remains false pending team agreement. The smoke check is not a training recipe.
+**AD 2 smoke** (`scripts/smoke_ad2.py`) is a pipeline check. It is separate from the formal study. Its default resizes native fabric 2048×2448 to **256×256** and then applies ImageNet normalization. That smoke resize stretches the native aspect ratio; no crop or padding is applied. `geometry_frozen` remains false. The smoke check is not a training recipe and does not set the formal study's geometry.
 
-If 256×256 full-frame stretch is used:
+For a 256×256 full-frame resize:
 
 1. Use the same resize for train, validation and inference (`output_size=(256, 256)`, `ad_resize=None`).
-2. Restore continuous score maps with `restore_score_map(..., original_size=native_hw, image_size=(256, 256))` and no `valid_size` (no pad, no crop). That inverts the same full-frame stretch.
+2. Restore continuous score maps with `restore_score_map(..., original_size=native_hw, image_size=(256, 256))` and no `valid_size` (no pad, no crop). For the smoke resize above, that inverts the same full-frame stretch.
 3. Discrete ground-truth masks need a **separate nearest-neighbor** full-frame resize to 256×256, not `restore_score_map` (bilinear would create fractional labels). Evaluate masks and maps in the same coordinate system.
 4. Do not apply the AD 329→288 crop to AD 2; `restore_score_map` cannot undo a crop.
 5. Implement that geometry in an AD 2-only config, not by changing shared bottle/grid defaults.
 
-Until then, keep pad-versus-stretch as an open choice. The smoke aspect-ratio field uses `h * target_w != w * target_h`.
+The smoke aspect-ratio field uses `h * target_w != w * target_h`.
 
 ## Normal manifests
 
