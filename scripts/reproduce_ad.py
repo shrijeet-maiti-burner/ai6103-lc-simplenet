@@ -237,7 +237,7 @@ def main():
     load_trained_state(reloaded, torch.load(checkpoint, map_location="cpu")["state"])
     again = predict(reloaded, validation_batches)
 
-    best = max(rows, key=lambda r: r["image_auroc"])
+    best = max(rows, key=lambda r: (r["image_auroc"], r["pixel_auroc"]))
     summary = {
         "scope": (
             "fixed-final upstream single-view baseline with a per-meta-epoch test trajectory; "

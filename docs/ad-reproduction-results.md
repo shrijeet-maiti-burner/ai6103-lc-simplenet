@@ -13,7 +13,7 @@ Image AUROC uses the max patch score. Pixel AUROC is computed inside the 288 cro
 
 ## Results
 
-Image / pixel AUROC (%). Fixed final is mean ± SD over the three seeds. "Best test epoch" is what upstream's rule would report: per seed, the epoch with the highest test image AUROC (ties broken by pixel AUROC), then averaged.
+Image / pixel AUROC (%). Fixed final is mean ± SD over the three seeds. "Best test epoch" is what upstream's rule would report: per seed, the epoch with the highest test image AUROC (ties broken by pixel AUROC), then averaged. The released run summaries record the first epoch at the highest image AUROC instead; that is a different epoch in 11 of the 42 runs, with the same image AUROC. `scripts/reproduce_ad.py` now applies the tie-break.
 
 | Category | Paper | Best test epoch | Fixed final | Final image per seed |
 |---|---|---|---|---|
