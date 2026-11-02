@@ -59,13 +59,15 @@ class UpstreamInput(torch.utils.data.Dataset):
 
     With ``output_size=(resize, resize)``, the source applies the same PIL bilinear
     resize as upstream ``transforms.Resize(resize)``, but only for square images.
+    ``stretch=True`` also accepts non-square images: the source's full-frame resize
+    then changes their aspect ratio, which upstream never does (AD 2 only).
     """
 
-    def __init__(self, source, imagesize: int):
+    def __init__(self, source, imagesize: int, stretch: bool = False):
         size = source.output_size
         if size is None or size[0] != size[1] or size[0] < imagesize:
             raise ValueError("Source needs a square output_size of at least imagesize")
-        if any(record.width != record.height for record in source.records):
+        if not stretch and any(record.width != record.height for record in source.records):
             raise ValueError("Upstream Resize(resize) is a square resize only for square images")
         self.source, self.imagesize = source, imagesize
 
@@ -84,6 +86,20 @@ def center_crop_box(resize: int, imagesize: int) -> list[int]:
     """[top, left, bottom, right] of the torchvision center crop in the resized square."""
     top = int(round((resize - imagesize) / 2.0))
     return [top, top, top + imagesize, top + imagesize]
+
+
+def input_record(dataset: str, resize: int, imagesize: int) -> dict:
+    """Dataset, loader input and map geometry of one run, for run.json and summary.json."""
+    return {
+        "dataset": dataset,
+        "input": {**UPSTREAM_AD_INPUT, "resize": resize, "imagesize": imagesize},
+        "geometry": {
+            "resize_hw": [resize, resize],
+            "crop_box_tlbr": center_crop_box(resize, imagesize),
+            "map_hw": [imagesize, imagesize],
+            "full_frame_stretch": dataset == "mvtec_ad2",
+        },
+    }
 
 
 def build_model(backbone, device, imagesize: int, settings: dict = UPSTREAM_AD):

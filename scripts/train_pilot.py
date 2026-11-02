@@ -16,7 +16,7 @@ import torch
 from scipy.ndimage import gaussian_filter
 from torch.nn import functional as F
 
-from lc_simplenet.data import NormalManifestDataset
+from lc_simplenet.data import CachedSource, NormalManifestDataset
 from lc_simplenet.geometry import restore_score_map
 from lc_simplenet.metrics import image_counts, normal_validation_threshold
 from lc_simplenet.normal_validation import paired_normal_metrics
@@ -150,6 +150,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--verify-replay", action="store_true")
     parser.add_argument("--normal-diagnostics", action="store_true")
+    parser.add_argument(
+        "--cache-images",
+        action="store_true",
+        help="Keep decoded, resized images after the first hash-checked read (same results)",
+    )
     return parser
 
 
@@ -242,6 +247,8 @@ def main():
     }
     for source in datasets.values():
         validate_input_geometry(config, source)
+    if args.cache_images:
+        datasets = {split: CachedSource(source) for split, source in datasets.items()}
     try:
         prepare_output_directory(output, resume=args.resume, results_root=results_root)
     except FileExistsError:

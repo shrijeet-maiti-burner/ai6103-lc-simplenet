@@ -19,7 +19,8 @@ Use seeds 0, 1 and 2 with the same manifest, settings, source and environment. G
 ## Recipe and scope
 
 - Upstream commit `351a2b8`, WRN50-2 pretrained weights, layers 2/3, embedding dimension 1,536, patch size 3.
-- Batch size 8, bilinear resize 329, center crop 288, then ImageNet normalization. This adapter supports square AD sources; the normal reader accepts RGB and grayscale images. AD 2 preprocessing remains a separate decision.
+- Batch size 8, bilinear resize 329, center crop 288, then ImageNet normalization. This adapter supports square AD sources; the normal reader accepts RGB and grayscale images.
+- AD 2 (`--dataset mvtec_ad2`): images are resized full-frame to `--resize` and not cropped, so `--resize` must equal `--imagesize`. Non-square images change aspect ratio, which upstream never does; the summary records `full_frame_stretch` and the crop box `[0, 0, size, size]`. The size and `--meta-epochs` are run arguments, not a frozen AD 2 decision.
 - 40 meta-epochs, four discriminator-training epochs per meta-epoch, Gaussian feature-noise standard deviation 0.015, discriminator hidden dimension 1,024, two layers and margin 0.5.
 - The unchanged upstream optimizers train the adapter and discriminator. The backbone stays frozen during training. Its upstream shape probe runs once in training mode before freezing and updates BatchNorm buffers; retain that behavior when reconstructing this reference.
 
