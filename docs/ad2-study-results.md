@@ -101,6 +101,35 @@ The official SimpleNet script trains at 288 × 288. We reran the study at 288 as
 - 288 is less stable. Seven of the 96 runs had not settled by their final step, against three at 256: can B1 seed 1, fruit_jelly B2 seed 1, vial B2 seeds 0 and 1, and the single-view can seed 1, fruit_jelly seed 1 and vial seed 0. can B1 seed 1 spiked late and drives the can B1 row. All are kept under the fixed-final rule.
 - A paired run took a median of 1.25 times as long at 288.
 
+Normal validation at 288, mean over the three seeds:
+
+| Category | Variant | Pair MSE | Score spread | Synthetic hinge |
+|---|---|---:|---:|---:|
+| can | B0 | 3.36 | 0.344 | 0.00744 |
+| can | B1 | 0.109 | 0.964 | 1.37 |
+| can | B2 1.0 | 0.0107 | 0.185 | 0.00249 |
+| fabric | B0 | 0.217 | 0.259 | 0.00271 |
+| fabric | B1 | 0.0181 | 0.292 | 0.0981 |
+| fabric | B2 1.0 | 0.00958 | 0.202 | 0.026 |
+| fruit_jelly | B0 | 8.85 | 0.424 | 0.0377 |
+| fruit_jelly | B1 | 0.079 | 0.467 | 0.0199 |
+| fruit_jelly | B2 1.0 | 0.0241 | 0.289 | 0.0475 |
+| rice | B0 | 0.27 | 0.257 | 0.00222 |
+| rice | B1 | 0.0216 | 0.267 | 0.000973 |
+| rice | B2 1.0 | 0.00568 | 0.179 | 0.00836 |
+| sheet_metal | B0 | 0.124 | 0.352 | 0.0247 |
+| sheet_metal | B1 | 0.0225 | 0.338 | 0.0249 |
+| sheet_metal | B2 1.0 | 0.0129 | 0.291 | 0.0282 |
+| vial | B0 | 8.12 | 0.49 | 0.021 |
+| vial | B1 | 0.102 | 0.503 | 0.0178 |
+| vial | B2 1.0 | 0.018 | 0.349 | 0.295 |
+| wallplugs | B0 | 0.15 | 0.334 | 0.0123 |
+| wallplugs | B1 | 0.0179 | 0.325 | 0.00637 |
+| wallplugs | B2 1.0 | 0.00841 | 0.251 | 0.00931 |
+| walnuts | B0 | 0.119 | 0.286 | 0.005 |
+| walnuts | B1 | 0.0152 | 0.278 | 0.0044 |
+| walnuts | B2 1.0 | 0.0055 | 0.213 | 0.00415 |
+
 ## Limits
 
 - No test image has been scored for this study.
