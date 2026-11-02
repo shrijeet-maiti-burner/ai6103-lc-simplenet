@@ -1,7 +1,8 @@
 {
   "study_name": "mvtec_ad2_full_study",
   "dataset": "mvtec_ad2",
-  "status": "implementation",
+  "status": "completed_normal_only_second_stack_replicate",
+  "b2_recorded_lambda_score": 0.01,
   "categories": [
     "can",
     "fabric",

@@ -18,6 +18,10 @@ data/*
 !data/README.md
 results/*
 !results/README.md
+documentation/experiment_results/*
+!documentation/experiment_results/README.md
+!documentation/experiment_results/summary.csv
+references/ad2-normal-manifests/
 report/build/
 .DS_Store
 Thumbs.db
