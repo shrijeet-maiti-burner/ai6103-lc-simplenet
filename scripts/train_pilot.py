@@ -19,6 +19,7 @@ from torch.nn import functional as F
 from lc_simplenet.data import NormalManifestDataset
 from lc_simplenet.geometry import restore_score_map
 from lc_simplenet.metrics import image_counts, normal_validation_threshold
+from lc_simplenet.normal_validation import paired_normal_metrics
 from lc_simplenet.pilot import (
     ROOT,
     PilotConfig,
@@ -47,6 +48,134 @@ def write_json(path, value):
     path.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n", encoding="utf-8")
 
 
+def truncate_train_log(path: Path, max_step: int) -> list[dict]:
+    """Keep records with ``step <= max_step``. Create the file if missing.
+
+    Blank lines are ignored. The only tolerated parse failure is an incomplete
+    final line with no trailing newline, as left by an interrupted write.
+    """
+    if type(max_step) is not int or max_step < 0:
+        raise ValueError("max_step must be a nonnegative integer")
+    kept = []
+    if path.exists():
+        text = path.read_text(encoding="utf-8")
+        unterminated_last = bool(text) and not text.endswith("\n")
+        previous_step = 0
+        lines = text.splitlines()
+        for index, line in enumerate(lines, start=1):
+            if not line.strip():
+                continue
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError as error:
+                if unterminated_last and index == len(lines):
+                    break
+                raise ValueError(f"{path}:{index}: malformed JSON") from error
+            if type(record) is not dict:
+                raise ValueError(f"{path}:{index}: log record must be a JSON object")
+            step = record.get("step")
+            if type(step) is not int or step < 1:
+                raise ValueError(f"{path}:{index}: step must be a positive integer")
+            if step <= previous_step:
+                raise ValueError(f"{path}:{index}: steps must be strictly increasing")
+            previous_step = step
+            if step <= max_step:
+                kept.append(record)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    encoded = "".join(json.dumps(record, allow_nan=False) + "\n" for record in kept)
+    temporary = path.with_suffix(path.suffix + ".part")
+    temporary.write_text(encoded, encoding="utf-8")
+    temporary.replace(path)
+    return kept
+
+
+def should_write_periodic_checkpoint(step: int, interval: int) -> bool:
+    return interval > 0 and step > 0 and step % interval == 0
+
+
+def periodic_checkpoint_path(output: Path, step: int) -> Path:
+    return output / f"checkpoint-{step:06d}.pt"
+
+
+def final_checkpoint_path(output: Path) -> Path:
+    return output / "final.pt"
+
+
+def maybe_save_periodic_checkpoint(trainer, output: Path, interval: int) -> Path | None:
+    if not should_write_periodic_checkpoint(trainer.step, interval):
+        return None
+    path = periodic_checkpoint_path(output, trainer.step)
+    trainer.save(path)
+    return path
+
+
+def save_final_checkpoint(trainer, output: Path) -> Path:
+    path = final_checkpoint_path(output)
+    trainer.save(path)
+    return path
+
+
+def nonnegative_int(value: str) -> int:
+    try:
+        parsed = int(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(f"invalid integer: {value}") from error
+    if parsed < 0:
+        raise argparse.ArgumentTypeError("must be nonnegative; 0 disables periodic checkpoints")
+    return parsed
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--config", type=Path, required=True, help="Local PilotConfig JSON")
+    parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--root", type=Path, required=True)
+    parser.add_argument(
+        "--output",
+        type=Path,
+        required=True,
+        help="Directory below results/; must be new unless --resume",
+    )
+    parser.add_argument("--steps", type=int, required=True, help="Total fixed optimizer steps")
+    parser.add_argument("--device", choices=["cpu", "cuda"], default="cpu")
+    parser.add_argument("--threads", type=int, default=4)
+    parser.add_argument("--gpu-memory-fraction", type=float, default=1.0)
+    parser.add_argument("--target-fpr", type=float, default=0.05)
+    parser.add_argument("--resume", type=Path)
+    parser.add_argument(
+        "--checkpoint-every",
+        type=nonnegative_int,
+        default=0,
+        help="Save a checkpoint every N optimizer steps; 0 disables periodic checkpoints",
+    )
+    parser.add_argument("--verify-replay", action="store_true")
+    parser.add_argument("--normal-diagnostics", action="store_true")
+    return parser
+
+
+def validate_resume_checkpoint(resume: Path, output: Path) -> Path:
+    resume = resume.resolve()
+    output = output.resolve()
+    if not resume.is_file():
+        raise FileNotFoundError(f"resume checkpoint is not a file: {resume}")
+    if not resume.is_relative_to(output):
+        raise ValueError("resume checkpoint must belong to the --output directory")
+    return resume
+
+
+def prepare_output_directory(output: Path, *, resume: Path | None, results_root: Path) -> Path:
+    output = output.resolve()
+    results_root = results_root.resolve()
+    if not output.is_relative_to(results_root) or output == results_root:
+        raise ValueError("output must be a directory below this checkout's ignored results/")
+    if resume is None:
+        output.mkdir(parents=True, exist_ok=False)
+        return output
+    if not output.is_dir():
+        raise FileNotFoundError("resume requires an existing --output directory")
+    return output
+
+
 def peak_rss_bytes():
     if sys.platform != "win32":
         import resource
@@ -73,18 +202,7 @@ def peak_rss_bytes():
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", type=Path, required=True, help="Local PilotConfig JSON")
-    parser.add_argument("--manifest", type=Path, required=True)
-    parser.add_argument("--root", type=Path, required=True)
-    parser.add_argument("--output", type=Path, required=True, help="New directory below results/")
-    parser.add_argument("--steps", type=int, required=True, help="Total fixed optimizer steps")
-    parser.add_argument("--device", choices=["cpu", "cuda"], default="cpu")
-    parser.add_argument("--threads", type=int, default=4)
-    parser.add_argument("--gpu-memory-fraction", type=float, default=1.0)
-    parser.add_argument("--target-fpr", type=float, default=0.05)
-    parser.add_argument("--resume", type=Path)
-    parser.add_argument("--verify-replay", action="store_true")
+    parser = build_parser()
     args = parser.parse_args()
     if args.steps < 1 or args.threads < 1 or not 0 < args.gpu_memory_fraction <= 1:
         parser.error("steps/threads must be positive; GPU memory fraction must be in (0,1]")
@@ -95,9 +213,15 @@ def main():
         if key in raw:
             raw[key] = tuple(raw[key])
     config = PilotConfig(**raw)
+    results_root = (ROOT / "results").resolve()
     output = args.output.resolve()
-    if not output.is_relative_to((ROOT / "results").resolve()) or output == ROOT / "results":
-        parser.error("output must be a new directory below this checkout's ignored results/")
+    if not output.is_relative_to(results_root) or output == results_root:
+        parser.error("output must be a directory below this checkout's ignored results/")
+    if args.resume is not None:
+        try:
+            args.resume = validate_resume_checkpoint(args.resume, output)
+        except (FileNotFoundError, ValueError) as error:
+            parser.error(str(error))
     torch.set_num_threads(args.threads)
     if args.device == "cuda":
         if not torch.cuda.is_available():
@@ -118,7 +242,14 @@ def main():
     }
     for source in datasets.values():
         validate_input_geometry(config, source)
-    output.mkdir(parents=True, exist_ok=False)
+    try:
+        prepare_output_directory(output, resume=args.resume, results_root=results_root)
+    except FileExistsError:
+        parser.error("output directory already exists; pass --resume to continue a run")
+    except FileNotFoundError as error:
+        parser.error(str(error))
+    except ValueError as error:
+        parser.error(str(error))
     metadata = {
         "scope": "development pilot; no defect or benchmark results",
         "config": asdict(config),
@@ -139,7 +270,12 @@ def main():
         "gpu": torch.cuda.get_device_name() if args.device == "cuda" else None,
         "split_counts": {key: len(value) for key, value in datasets.items()},
         "target_fpr": args.target_fpr,
-        "checkpoint_policy": "fixed final step",
+        "checkpoint_policy": (
+            "periodic optimizer-step checkpoints and fixed final step"
+            if args.checkpoint_every > 0
+            else "fixed final step"
+        ),
+        "checkpoint_every": args.checkpoint_every,
         "runner_sha256": sha256(__file__),
         "postprocessing": "raw -D patch maps; image=max patch; bilinear align_corners=False "
         "to input, Gaussian sigma=4 input pixels; "
@@ -161,6 +297,7 @@ def main():
         if args.resume:
             trainer.load(args.resume)
             metadata["resume_checkpoint_sha256"] = sha256(args.resume)
+            truncate_train_log(output / "train.jsonl", trainer.step)
         if trainer.step >= args.steps:
             raise ValueError("Total steps must exceed the resumed step")
         metadata["start_step"] = trainer.step
@@ -168,7 +305,9 @@ def main():
         metadata["initialization_seconds"] = time.perf_counter() - started
         write_json(output / "run.json", metadata)
         timings = []
-        with (output / "train.jsonl").open("x", encoding="utf-8") as log:
+        log_path = output / "train.jsonl"
+        log_mode = "a" if args.resume else "x"
+        with log_path.open(log_mode, encoding="utf-8") as log:
             while trainer.step < args.steps:
                 if args.device == "cuda":
                     torch.cuda.synchronize()
@@ -181,8 +320,21 @@ def main():
                 log.write(json.dumps(record, allow_nan=False) + "\n")
                 log.flush()
                 print(json.dumps(record), flush=True)
-        checkpoint = output / "final.pt"
-        trainer.save(checkpoint)
+                periodic_checkpoint = maybe_save_periodic_checkpoint(
+                    trainer, output, args.checkpoint_every
+                )
+                if periodic_checkpoint is not None:
+                    print(
+                        json.dumps(
+                            {
+                                "event": "checkpoint_saved",
+                                "step": trainer.step,
+                                "path": str(periodic_checkpoint),
+                            }
+                        ),
+                        flush=True,
+                    )
+        checkpoint = save_final_checkpoint(trainer, output)
         replay = None
         if args.verify_replay:
             first = trainer.train_step()
@@ -201,6 +353,11 @@ def main():
             }
             trainer.load(checkpoint)
         # Predict normal validation only after the fixed training horizon.
+        if args.normal_diagnostics:
+            write_json(
+                output / "normal-diagnostics.json",
+                paired_normal_metrics(trainer, datasets["validation"]),
+            )
         maps, rows = [], []
         native_shape = None
         crop_shape = None

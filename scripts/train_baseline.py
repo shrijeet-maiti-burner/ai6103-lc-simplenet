@@ -27,10 +27,11 @@ from lc_simplenet.baseline import (
     load_trained_state,
     predict,
     train_fixed,
-    trained_state,
+    training_checkpoint,
     upstream_module,
 )
 from lc_simplenet.data import NormalManifestDataset
+from lc_simplenet.provenance import capture_rng_state, file_sha256, runtime_record, state_sha256
 
 
 def _git(path: Path, *args: str) -> str:
@@ -64,6 +65,7 @@ def main() -> None:
     device = torch.device(args.device)
     cuda = device.type == "cuda"
     upstream_module("utils").fix_seeds(args.seed, with_cuda=cuda)
+    initial_rng = capture_rng_state(cuda=cuda)
     settings = {**UPSTREAM_AD, "meta_epochs": args.meta_epochs}
     resize, imagesize = args.resize, args.imagesize
     geometry = {
@@ -96,6 +98,36 @@ def main() -> None:
 
     train, validation = loader("train", True), loader("validation", False)
     model = new_model()
+    encoder_hash = state_sha256(model.backbone.state_dict())
+    weight_path = Path(torch.hub.get_dir()) / "checkpoints/wide_resnet50_2-95faca4d.pth"
+    sources = [
+        Path(__file__),
+        ROOT / "src/lc_simplenet/baseline.py",
+        ROOT / "src/lc_simplenet/provenance.py",
+        ROOT / "src/lc_simplenet/data.py",
+        ROOT / "src/lc_simplenet/data_manifest.py",
+        ROOT / "third_party/SimpleNet/simplenet.py",
+        ROOT / "third_party/SimpleNet/common.py",
+    ]
+    run = {
+        "schema": 2,
+        "seed": args.seed,
+        "category": args.category,
+        "settings": settings,
+        "input": UPSTREAM_AD_INPUT,
+        "checkpoint_policy": "fixed_final",
+        "manifest_sha256": args.manifest_sha256,
+        "uv_lock_sha256": _sha256(ROOT / "uv.lock"),
+        "git_commit": _git(ROOT, "rev-parse", "HEAD"),
+        "git_dirty": bool(_git(ROOT, "status", "--porcelain")),
+        "upstream_commit": _git(ROOT / "third_party/SimpleNet", "rev-parse", "HEAD"),
+        "runtime": runtime_record(device),
+        "backbone_after_probe_sha256": encoder_hash,
+        "pretrained_weight_sha256": file_sha256(weight_path),
+        "source_sha256": {p.relative_to(ROOT).as_posix(): file_sha256(p) for p in sources},
+    }
+    torch.save(initial_rng, args.out / "initial-rng.pt")
+    (args.out / "run.json").write_text(json.dumps(run, indent=2) + "\n", encoding="utf-8")
     if cuda:
         torch.cuda.reset_peak_memory_stats(device)
     start = time.perf_counter()
@@ -105,13 +137,19 @@ def main() -> None:
     train_seconds = time.perf_counter() - start
     peak = torch.cuda.max_memory_allocated(device) / 2**30 if cuda else None
     checkpoint = args.out / "checkpoint.pt"
-    torch.save({"state": trained_state(model), "settings": settings}, checkpoint)
+    state = training_checkpoint(model, settings, args.seed)
+    state["provenance"] = run
+    torch.save(state, checkpoint)
+    if state_sha256(model.backbone.state_dict()) != encoder_hash:
+        raise RuntimeError("Frozen baseline backbone changed during training")
     scores = predict(model, validation)
     arrays = {name: np.asarray(value) for name, value in geometry.items()}
     np.savez_compressed(args.out / "validation_normal.npz", **scores, **arrays)
 
     reloaded = new_model()
-    load_trained_state(reloaded, torch.load(checkpoint, map_location="cpu")["state"])
+    load_trained_state(
+        reloaded, torch.load(checkpoint, map_location="cpu", weights_only=True)["state"]
+    )
     again = predict(reloaded, validation)
     summary = {
         "scope": "fixed-final upstream single-view baseline; normal validation only, no test data",
@@ -138,6 +176,11 @@ def main() -> None:
             np.abs(again["image_score"] - scores["image_score"]).max()
         ),
         "reload_max_abs_map_diff": float(np.abs(again["map"] - scores["map"]).max()),
+        "checkpoint_schema": 2,
+        "run_metadata_sha256": _sha256(args.out / "run.json"),
+        "initial_rng_sha256": _sha256(args.out / "initial-rng.pt"),
+        "pretrained_weight_sha256": run["pretrained_weight_sha256"],
+        "backbone_after_probe_sha256": encoder_hash,
     }
     (args.out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(summary, indent=2))

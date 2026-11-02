@@ -149,8 +149,14 @@ def test_final_state_trains_and_reloads_to_identical_scores(tmp_path):
         not torch.equal(value, initial.discriminator.state_dict()[key].cpu())
         for key, value in state["discriminator"].items()
     )
-    torch.save(state, tmp_path / "state.pt")
-    baseline.load_trained_state(initial, torch.load(tmp_path / "state.pt"))
+    checkpoint = baseline.training_checkpoint(trained, settings, 0)
+    assert checkpoint["schema"] == 2 and checkpoint["seed"] == 0
+    assert checkpoint["optimizers"]["discriminator"]["state"]
+    assert checkpoint["optimizers"]["adapter"]["state"]
+    assert set(checkpoint["rng_state"]) == {"python_rng", "numpy_rng", "torch_rng", "cuda_rng"}
+    torch.save(checkpoint, tmp_path / "state.pt")
+    restored = torch.load(tmp_path / "state.pt", weights_only=True)
+    baseline.load_trained_state(initial, restored["state"])
     first = baseline.predict(trained, loader("validation"))
     second = baseline.predict(initial, loader("validation"))
     np.testing.assert_array_equal(first["image_id"], second["image_id"])
