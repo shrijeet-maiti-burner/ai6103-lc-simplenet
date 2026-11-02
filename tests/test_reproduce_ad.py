@@ -54,6 +54,11 @@ def test_per_epoch_scoring_leaves_training_identical_to_the_baseline(tmp_path, m
         return SimpleNamespace(load=load) if name == "backbones" else real(name)
 
     monkeypatch.setattr(baseline, "upstream_module", upstream)
+    # train_baseline hashes the downloaded ImageNet file for run.json; these weights have none.
+    hub = tmp_path / "hub"
+    (hub / "checkpoints").mkdir(parents=True)
+    (hub / "checkpoints/wide_resnet50_2-95faca4d.pth").write_bytes(b"stand-in")
+    monkeypatch.setattr(torch.hub, "get_dir", lambda: str(hub))
     # In-process loading for both scripts: workers do not change the RNG stream (the loader
     # draws its base seed either way), and spawned workers can hang on macOS.
     loader = torch.utils.data.DataLoader
