@@ -4,6 +4,10 @@ Run layout: `<root>/<category>/<variant>/seed-<n>/` holding `validation-scores.j
 by training) and, once test scoring exists, `test-scores.json` with the same row format. B2
 runs are labelled `B2@<weight>` from `run.json`. Nothing here selects a checkpoint, weight or
 threshold from test data: thresholds come from normal validation only.
+
+In `thresholds.json`, `checkpoint_sha256` is the training checkpoint recorded in `result.json`
+(`final.pt`); `test_checkpoint` is the file that scored the test images, from
+`test-scores.meta.json` (`heads.pt` for released runs), or null before test scoring.
 """
 
 import csv
@@ -112,12 +116,19 @@ def evaluate_all(runs: list[RunRef], target_fpr: float, conditions=None) -> dict
             if result_file.exists()
             else None
         )
+        meta_file = run.path / "test-scores.meta.json"
+        meta = json.loads(meta_file.read_text(encoding="utf-8")) if meta_file.exists() else None
         results[(run.category, run.method, run.seed)] = {
             "calibration": calibration,
             "evaluation": evaluated,
             "validation_scores_sha256": sha256(run.path / VALIDATION_FILE),
             "test_scores_sha256": sha256(test_file) if test else None,
             "checkpoint_sha256": checkpoint,
+            "test_checkpoint": (
+                {"file": meta.get("checkpoint_file"), "sha256": meta.get("checkpoint_sha256")}
+                if meta
+                else None
+            ),
             "test": test,
         }
     return results
@@ -139,6 +150,7 @@ def write_outputs(results: dict, matrix: list[dict], out: Path, conditions=None)
             **r["calibration"],
             "validation_scores_sha256": r["validation_scores_sha256"],
             "checkpoint_sha256": r["checkpoint_sha256"],
+            "test_checkpoint": r["test_checkpoint"],
             "metric_version": METRIC_VERSION,
         }
         for (c, m, s), r in sorted(results.items())

@@ -65,6 +65,21 @@ def test_flat_release_layout_is_read_from_run_json(tmp_path):
     assert (run.category, run.method, run.seed) == ("can", "B2@0.1", 1)
 
 
+def test_thresholds_name_the_checkpoint_that_scored_the_test(tmp_path):
+    root, out = tmp_path / "runs", tmp_path / "out"
+    make_run(root, "can", "B0", 0)
+    make_run(root, "can", "B1", 0, test=False)
+    (root / "can/B0/seed-0/result.json").write_text(json.dumps({"checkpoint_sha256": "final"}))
+    meta = {"checkpoint_file": "heads.pt", "checkpoint_sha256": "heads"}
+    (root / "can/B0/seed-0/test-scores.meta.json").write_text(json.dumps(meta))
+    runs = discover_runs(root)
+    write_outputs(evaluate_all(runs, 0.25), run_matrix(runs, ["can"], [0]), out)
+    thresholds = json.loads((out / "thresholds.json").read_text())
+    assert thresholds["can/B0/seed-0"]["checkpoint_sha256"] == "final"
+    assert thresholds["can/B0/seed-0"]["test_checkpoint"] == {"file": "heads.pt", "sha256": "heads"}
+    assert thresholds["can/B1/seed-0"]["test_checkpoint"] is None
+
+
 def test_duplicate_runs_rejected(tmp_path):
     make_run(tmp_path / "a", "can", "B0", 0, test=False)
     make_run(tmp_path / "b", "can", "B0", 0, test=False)
