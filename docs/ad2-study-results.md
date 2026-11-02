@@ -93,15 +93,21 @@ The tables above use the locked environment. #11 is a replicate.
 
 ## 288 × 288 check
 
-The official SimpleNet script trains at 288 × 288. A rerun of this study at 288, with B2 at 1.0, is in progress as a sensitivity check. 256 stays the study setting, and neither size will be chosen from test scores.
+The official SimpleNet script trains at 288 × 288. We reran the study at 288 as a sensitivity check: the same 72 paired and 24 single-view runs at the same commits, with only the input size changed, B2 fixed at 1.0 and no new weight search. All 96 runs finished and passed the audit. 256 stays the study setting, and neither size will be chosen from test scores.
+
+- B1 lowers pair MSE against B0 in every category at 288 as well, by 5.5 times (sheet_metal) to 112 times (fruit_jelly). B2 lowers it further in every category, with a macro ratio to B1 of 0.35 (0.40 at 256).
+- The score-spread result does not carry over. At 288, B1's spread is higher than B0's in five categories: by 3 to 13% in fabric, fruit_jelly, rice and vial, and by 2.8 times in can.
+- 20 of the 24 category and variant pair MSE means are within 20% of their 256 values. The exceptions are rice B0 (0.66 times), can B1 (2.7 times), fabric B2 (1.56 times) and wallplugs B2 (0.59 times).
+- 288 is less stable. Seven of the 96 runs had not settled by their final step, against three at 256: can B1 seed 1, fruit_jelly B2 seed 1, vial B2 seeds 0 and 1, and the single-view can seed 1, fruit_jelly seed 1 and vial seed 0. can B1 seed 1 spiked late and drives the can B1 row. All are kept under the fixed-final rule.
+- A paired run took a median of 1.25 times as long at 288.
 
 ## Limits
 
 - No test image has been scored for this study.
 - The full-run rule was written after the seed-3 search failed and after the 1.0 runs were known. It keeps the original safeguards, and its outcome selects no weight.
 - sheet_metal has 19 normal-validation images, so its threshold and diagnostics rest on 19 images. Reporting gives macro averages over all eight categories and over the seven without sheet_metal.
-- The 0.01 and 0.1 runs are not in the release yet.
+- The 288 runs are not in the release.
 
 ## Artifacts
 
-The [study release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-study-2026-10-31) has the trained heads for the 72 paired runs (B2 at 1.0), the 24 single-view checkpoints, normal-validation outputs, run metadata, the weight search and the run audit. Dataset images and pretrained backbone weights are not included.
+The [study release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-study-2026-10-31) has the trained heads for the 72 paired runs (B2 at 1.0) and the 48 B2 runs at 0.01 and 0.1, the 24 single-view checkpoints, normal-validation outputs, run metadata, the weight search and the run audit. Dataset images and pretrained backbone weights are not included.
