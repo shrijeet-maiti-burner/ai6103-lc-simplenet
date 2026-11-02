@@ -1,6 +1,6 @@
 # Normal-data manifests
 
-The builder inventories only normal source images. Dataset archives, images, generated manifests and audits stay in ignored `data/`. No dataset is included.
+The builder inventories only normal source images. Dataset archives, images, generated manifests and audits stay in ignored `data/`. No dataset is included. The committed AD 2 normal-data manifests used by both studies are in [`references/ad2-normal-manifests/`](../references/ad2-normal-manifests/).
 
 ```powershell
 uv run python scripts/build_normal_manifest.py --dataset mvtec_ad --root data/mvtec_ad --category bottle --out data/manifests/ad-bottle.jsonl

@@ -1,0 +1,27 @@
+{
+  "status": "confirmed study settings; B2 is an ablation, not a selected configuration",
+  "brightness_range": [
+    0.8,
+    1.2
+  ],
+  "gamma_range": [
+    0.8,
+    1.2
+  ],
+  "sampling": "independent uniform, one brightness/gamma pair per image",
+  "transform": "clip(brightness * image**gamma, 0, 1)",
+  "placement": "after shared spatial preprocessing, before ImageNet normalization",
+  "B1_lambda_score": 0.0,
+  "note": "Existing study runner already implements the equivalent objective. Preserve the released runner and checkpoint provenance. See configs/ad2-study-policy.json and docs/ad2-study-results.md.",
+  "input_size": [
+    256,
+    256
+  ],
+  "spatial_preprocessing": "Full-frame bilinear resize to 256x256, no crop, identical across B0/B1/B2.",
+  "B2_ablation_weights": [
+    0.01,
+    0.1,
+    1.0
+  ],
+  "B2_selection_status": "No candidate passed the AD 2 safeguards. Report all three weights against B0 and B1; do not select on test scores."
+}
