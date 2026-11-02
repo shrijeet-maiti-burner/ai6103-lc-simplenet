@@ -3,7 +3,7 @@
 import numpy as np
 import torch
 
-from lc_simplenet.losses import paired_objective, validate_objective_settings
+from lc_simplenet.paired_losses import paired_objective, validate_objective_settings
 from lc_simplenet.pairs import LightingPair
 
 
