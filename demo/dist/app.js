@@ -1,6 +1,6 @@
 'use strict';
 const $ = (id) => document.getElementById(id);
-const state = {catalog: null, frame: null, busy: false, pending: false, timer: null, revision: 0, upload: null, uploadRevision:0};
+const state = {catalog: null, frame: null, busy: false, pending: false, timer: null, revision: 0, upload: null, uploadRevision:0, scoreScale:1};
 const descriptions = ['identity pair · discrimination only', 'relit pair · discrimination only', 'relit pair · discrimination + score mse'];
 const titles = ['baseline', 'lighting augmentation', 'consistency ablation'];
 function setOptions(id, values, label = (v) => v) {
@@ -44,6 +44,12 @@ async function loadFrame() {
   catch (error) {state.frame=null;$('models').replaceChildren();$('interpretation').textContent='no prediction for this input. check the message and choose a supported image.';showError(error);} finally {busy(false); if (state.pending) {state.pending = false; loadFrame();}}
 }
 function fmt(value, digits=4) {return value === null ? 'unavailable' : Number(value).toFixed(digits);}
+function fmtMse(value) {return value === null ? 'unavailable' : Number(value).toExponential(2);}
+function displayNumbers(model, scale) {
+  const convert = (value, multiplier) => value === null ? null : value * multiplier;
+  return {score:convert(model.score,scale), threshold:convert(model.threshold,scale), score_change:convert(model.score_change,scale), pair_mse:convert(model.pair_mse,scale*scale)};
+}
+function displayConversion() {return {score_multiplier:state.scoreScale, mse_multiplier:state.scoreScale**2, scope:'display units only; source predictions, flags, maps and standardized margins retained'};}
 function render(frame) {
   state.frame = frame; $('original').src = frame.original;
   $('image-label').textContent=frame.label===0?'label: normal':'label: unknown';
@@ -54,15 +60,18 @@ function render(frame) {
   $('models').replaceChildren(...frame.models.map((model, index) => {
     const card = document.createElement('article'); card.className = 'model-card';
     const margin = model.standardized_margin;
-    card.innerHTML = `<span class="model-index">${model.method} / 0${index+1}</span><h2>${titles[index]}</h2><p class="method-description">${descriptions[index]}</p><div class="map-stack"><img class="input" alt="relit input image"><img class="heatmap" alt="raw anomaly map on a validation-fixed display scale"></div><span class="decision ${model.flagged?'flag':''}">${model.flagged?'false alarm':'below threshold'}</span><p class="score-value">${fmt(margin,2)}<small> σ</small></p><p class="score-caption">margin above frozen threshold<br>in normal-validation score std units</p><div class="gauge"><i style="left:${margin===null?50:Math.max(0,Math.min(100,50+margin*12.5))}%"></i></div><div class="gauge-label"><span>−4σ</span><span>threshold</span><span>+4σ</span></div><div class="numbers"><div><span>raw anomaly score</span><b>${fmt(model.score)}</b></div><div><span>frozen threshold</span><b>${fmt(model.threshold)}</b></div><div><span>change from reference</span><b>${model.score_change>=0?'+':''}${fmt(model.score_change)}</b></div><div><span>patch pair mse</span><b>${fmt(model.pair_mse,5)}</b></div><div><span>calibration</span><b>${model.calibration.validation_false_positives}/${model.calibration.validation_images} flagged</b></div></div>`;
+    const numbers = displayNumbers(model,state.scoreScale);
+    const units = state.scoreScale===1?'':' / 16';
+    card.innerHTML = `<span class="model-index">${model.method} / 0${index+1}</span><h2>${titles[index]}</h2><p class="method-description">${descriptions[index]}</p><div class="map-stack"><img class="input" alt="relit input image"><img class="heatmap" alt="raw anomaly map on a validation-fixed display scale"></div><span class="decision ${model.flagged?'flag':''}">${model.flagged?'false alarm':'below threshold'}</span><p class="score-value">${fmt(margin,2)}<small> σ</small></p><p class="score-caption">margin above frozen threshold<br>in normal-validation score std units</p><div class="gauge"><i style="left:${margin===null?50:Math.max(0,Math.min(100,50+margin*12.5))}%"></i></div><div class="gauge-label"><span>−4σ</span><span>threshold</span><span>+4σ</span></div><div class="numbers"><div><span>anomaly score${units}</span><b>${fmt(numbers.score)}</b></div><div><span>frozen threshold${units}</span><b>${fmt(numbers.threshold)}</b></div><div><span>change from reference${units}</span><b>${model.score_change>=0?'+':''}${fmt(numbers.score_change)}</b></div><div><span>patch pair mse${state.scoreScale===1?'':' / 256'}</span><b>${fmtMse(numbers.pair_mse)}</b></div><div><span>calibration</span><b>${model.calibration.validation_false_positives}/${model.calibration.validation_images} flagged</b></div></div>`;
     card.querySelector('.input').src = frame.altered; card.querySelector('.heatmap').src = model.heatmap; return card;
   }));
   document.documentElement.style.setProperty('--overlay', $('opacity').value);
+  $('units-note').textContent = state.scoreScale===1 ? 'original score units. try dividing them by 16: the measured patch mse shrinks 256 times, with exactly the same decisions.' : 'scores and thresholds divided by 16; patch mse divided by 256. decisions, standardized margins and maps are unchanged. this is a change of units, not an improved detector.';
   const flagged = frame.models.filter(m=>m.flagged).map(m=>m.method);
   const flipped = frame.models.filter(m=>m.flagged!==m.reference_flagged).map(m=>m.method);
   $('interpretation').textContent = frame.label===null ? `${flagged.length?flagged.join(', ')+' exceeds its frozen threshold.':'all three models remain below their frozen thresholds.'} the uploaded image has no verified defect label.` : flagged.length ? `${flagged.join(', ')} flags this known normal image.${flipped.length?' '+flipped.join(', ')+' changes its decision from the reference light.':''} inspect the response; one image does not establish a population improvement.` : 'all three models remain below their own frozen thresholds on this normal image. compare the score changes, then inspect the fixed sweep.';
   if(frame.label===null)for(const decision of document.querySelectorAll('.decision.flag'))decision.textContent='flagged';
-  const record = {...frame, original:undefined, altered:undefined, models:frame.models.map(({heatmap,...rest})=>rest)};
+  const record = {...frame, display_conversion:displayConversion(), original:undefined, altered:undefined, models:frame.models.map(({heatmap,...rest})=>rest)};
   $('provenance').textContent = JSON.stringify(record, null, 2);
 }
 async function runSweep() {
@@ -76,7 +85,8 @@ async function runSweep() {
     }));
   }catch(error){showError(error);}finally{busy(false);if(state.pending){state.pending=false;loadFrame();}}
 }
-$('export').addEventListener('click',()=>{if(!state.frame)return;const blob=new Blob([JSON.stringify(state.frame,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`illumination-${state.frame.query.category}-seed${state.frame.query.seed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+$('export').addEventListener('click',()=>{if(!state.frame)return;const blob=new Blob([JSON.stringify({...state.frame,display_conversion:displayConversion()},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`illumination-${state.frame.query.category}-seed${state.frame.query.seed}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+$('score-units').addEventListener('change',()=>{state.scoreScale=Number($('score-units').value);if(state.frame)render(state.frame);});
 $('category').addEventListener('change',categoryChanged);
 $('choose-upload').addEventListener('click',()=>$('local-image').click());
 $('local-image').addEventListener('change',chooseImage);
