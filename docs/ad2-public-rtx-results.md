@@ -10,16 +10,16 @@ rates below are percentages: category macro within seed, then mean/sample sd ove
 
 | scope | method | regular fpr | regular recall | nonregular fpr | nonregular recall |
 |---|---|---:|---:|---:|---:|
-| all 8 | b0 | 6.0 Â± 2.5 | 29.2 Â± 2.9 | 49.5 Â± 4.1 | 68.2 Â± 4.1 |
-| all 8 | b1 | 6.4 Â± 2.4 | 27.8 Â± 1.3 | 43.5 Â± 2.6 | 60.6 Â± 1.6 |
-| all 8 | b2@0.01 | 4.7 Â± 2.1 | 26.4 Â± 1.7 | 41.9 Â± 3.6 | 60.4 Â± 2.4 |
-| all 8 | b2@0.1 | 7.5 Â± 4.2 | 28.3 Â± 0.8 | 41.5 Â± 8.4 | 61.6 Â± 2.6 |
-| all 8 | b2@1 | 5.1 Â± 1.9 | 26.4 Â± 2.1 | 38.3 Â± 5.5 | 57.4 Â± 7.8 |
-| without sheet metal | b0 | 6.9 Â± 2.8 | 30.2 Â± 3.1 | 48.7 Â± 3.9 | 68.1 Â± 4.4 |
-| without sheet metal | b1 | 7.3 Â± 2.8 | 27.9 Â± 2.4 | 42.6 Â± 1.8 | 59.4 Â± 2.6 |
-| without sheet metal | b2@0.01 | 5.4 Â± 2.4 | 26.3 Â± 1.1 | 40.2 Â± 3.3 | 59.3 Â± 1.8 |
-| without sheet metal | b2@0.1 | 8.6 Â± 4.8 | 28.6 Â± 1.0 | 41.2 Â± 6.1 | 60.9 Â± 2.2 |
-| without sheet metal | b2@1 | 5.8 Â± 2.2 | 26.7 Â± 2.5 | 37.3 Â± 6.9 | 57.6 Â± 9.2 |
+| all 8 | b0 | 6.0 ± 2.5 | 29.2 ± 2.9 | 49.5 ± 4.1 | 68.2 ± 4.1 |
+| all 8 | b1 | 6.4 ± 2.4 | 27.8 ± 1.3 | 43.5 ± 2.6 | 60.6 ± 1.6 |
+| all 8 | b2@0.01 | 4.7 ± 2.1 | 26.4 ± 1.7 | 41.9 ± 3.6 | 60.4 ± 2.4 |
+| all 8 | b2@0.1 | 7.5 ± 4.2 | 28.3 ± 0.8 | 41.5 ± 8.4 | 61.6 ± 2.6 |
+| all 8 | b2@1 | 5.1 ± 1.9 | 26.4 ± 2.1 | 38.3 ± 5.5 | 57.4 ± 7.8 |
+| without sheet metal | b0 | 6.9 ± 2.8 | 30.2 ± 3.1 | 48.7 ± 3.9 | 68.1 ± 4.4 |
+| without sheet metal | b1 | 7.3 ± 2.8 | 27.9 ± 2.4 | 42.6 ± 1.8 | 59.4 ± 2.6 |
+| without sheet metal | b2@0.01 | 5.4 ± 2.4 | 26.3 ± 1.1 | 40.2 ± 3.3 | 59.3 ± 1.8 |
+| without sheet metal | b2@0.1 | 8.6 ± 4.8 | 28.6 ± 1.0 | 41.2 ± 6.1 | 60.9 ± 2.2 |
+| without sheet metal | b2@1 | 5.8 ± 2.2 | 26.7 ± 2.5 | 37.3 ± 6.9 | 57.6 ± 9.2 |
 
 b1 lowers the nonregular false-alarm macro by 6.0 percentage points, but loses 7.5 recall points against b0, exceeding the five-point tolerance. deltas use unrounded rates. all b2 weights also fail that recall rule against b0. the small weights preserve the nonregular macro against b1 but do not repair the b0 deficit or their normal-only safeguard failures. this is not a robustness improvement or a sota result.
 
