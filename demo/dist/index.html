@@ -8,14 +8,15 @@
 <body>
   <header><a class="brand" href="/" aria-label="illumination lab home"><span class="mark">◒</span> illumination lab</a><span class="project">ai6103 / lc-simplenet</span><span id="runtime" class="runtime">connecting</span></header>
   <main>
-    <section class="intro"><div><p class="eyebrow">an experiment you can inspect</p><h1>change the light.<br>watch the decision.</h1><p class="lede">one normal image. three trained controls. the threshold stays fixed.</p></div><div class="study-note"><span class="number">01—03</span><p>separate augmentation from consistency.<br>inspect the trade-off before calling it robustness.</p></div></section>
+    <section class="intro"><div><p class="eyebrow">an experiment you can inspect</p><h1>change the light.<br>watch the decision.</h1><p class="lede" id="image-scope">one normal image. three trained controls. the threshold stays fixed.</p></div><div class="study-note"><span class="number">01—03</span><p>separate augmentation from consistency.<br>inspect the trade-off before calling it robustness.</p></div></section>
     <section class="workspace" aria-label="model comparison">
       <aside class="controls">
         <div class="section-label"><span>01 / the input</span><span class="dot"></span></div>
         <label for="category">category</label><select id="category"></select>
         <div class="split"><div><label for="seed">training seed</label><select id="seed"></select></div><div><label for="weight">b2 ablation weight</label><select id="weight"></select></div></div>
         <label for="image">normal validation image</label><select id="image"></select>
-        <figure class="reference"><img id="original" alt="original normal-validation image"><figcaption>reference capture <span>label: normal</span></figcaption></figure>
+        <figure class="reference"><img id="original" alt="reference image at model-input size"><figcaption>reference input <span id="image-label">label: normal</span></figcaption></figure>
+        <div id="local-input" class="buttons" hidden><input id="local-image" type="file" accept="image/png,image/jpeg" hidden><button id="choose-upload" class="secondary">inspect a local image</button><button id="clear-upload" class="secondary" hidden>use dataset image</button><p class="micro" id="upload-note">png or jpeg · up to 16 mib<br>processed locally; uploads are held in memory.</p></div>
         <div class="slider-label"><label for="brightness">brightness</label><output id="brightness-value">1.00</output></div><input id="brightness" type="range" min="0.8" max="1.2" step="0.01" value="1" aria-describedby="transform-note">
         <div class="slider-label"><label for="gamma">gamma</label><output id="gamma-value">1.00</output></div><input id="gamma" type="range" min="0.8" max="1.2" step="0.01" value="1" aria-describedby="transform-note">
         <p id="transform-note" class="micro">clip(b × pixels<sup>γ</sup>, 0, 1), before normalization.<br>gamma &gt; 1 darkens. no spatial change.</p>
@@ -25,9 +26,9 @@
       <div class="comparison">
         <div class="section-label"><span>02 / the response</span><span id="timing">waiting for models</span></div>
         <div class="model-grid" id="models"></div>
-        <div class="map-controls"><label for="opacity">map overlay <input id="opacity" type="range" min="0" max="1" step="0.05" value="0.65"></label><span><i class="gradient"></i> low → high raw anomaly score</span></div>
+        <div class="map-controls"><label for="opacity">map overlay <input id="opacity" type="range" min="0" max="1" step="0.05" value="0.65"></label><span><i class="gradient"></i> low → high · fixed scale per model</span></div>
         <div class="interpretation"><span class="signal-icon">↳</span><p id="interpretation">loading released model heads…</p></div>
-        <div class="scope"><span>reading this correctly</span><p>these are <strong>normal validation images</strong>, including synthetic lighting changes. a flag here is a false alarm on this known normal image. this screen does not measure held-out defect recall.</p></div>
+        <div class="scope"><span>reading this correctly</span><p id="scope-note">these are normal validation images, including synthetic lighting changes. a flag here is a false alarm on this known normal image. this screen does not measure held-out defect recall.</p></div>
       </div>
     </section>
     <section class="sweep-section"><div class="section-label"><span>03 / stability across light</span><span>brightness → · gamma ↓</span></div><div id="sweep-grid" class="sweep-grid"><p class="empty">run the fixed 3 × 3 lighting sweep to see where each model changes its decision.</p></div><p class="micro">each tile is a measured prediction at the same frozen threshold. stability alone cannot establish defect sensitivity.</p></section>

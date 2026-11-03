@@ -1,3 +1,4 @@
+import base64
 import io
 import json
 from dataclasses import replace
@@ -152,3 +153,49 @@ def test_recorded_predictions_are_labelled_and_unrecorded_settings_rejected(tmp_
     assert runtime.inspect(query())["mode"] == "recorded predictions"
     with pytest.raises(ValueError, match="not recorded"):
         runtime.inspect({**query(), "brightness": 0.8})
+
+
+def test_uploaded_normal_bytes_keep_scores_but_never_inherit_the_known_label(tmp_path, monkeypatch):
+    runtime = make_runtime(tmp_path, monkeypatch)
+    reference = runtime.inspect(query())
+    raw = (tmp_path / "data" / query()["image_id"]).read_bytes()
+    request = {
+        "query": query(),
+        "image_data": "data:image/png;base64," + base64.b64encode(raw).decode(),
+    }
+    uploaded = runtime.inspect_upload(request)
+    assert uploaded["label"] is None and uploaded["query"]["image_id"].startswith("upload/")
+    assert uploaded["image_sha256"] == reference["image_sha256"]
+    assert [m["score"] for m in uploaded["models"]] == [m["score"] for m in reference["models"]]
+    assert all(m["validation_replay_max_score_error"] is None for m in uploaded["models"])
+    assert all(error < 1e-6 for error in uploaded["validation_guard"]["score_errors"].values())
+    result = runtime.sweep_upload(request)
+    assert len(result["rows"]) == 9 and result["query"]["image_id"].startswith("upload/")
+    assert {m["threshold"] for row in result["rows"] for m in row["models"]} == {
+        reference["models"][0]["threshold"]
+    }
+
+
+@pytest.mark.parametrize(
+    "bad", [None, "not an image", "data:image/png;base64,%%", "data:image/svg+xml;base64,abc"]
+)
+def test_invalid_uploads_fail_before_loading_heads(tmp_path, monkeypatch, bad):
+    runtime = make_runtime(tmp_path, monkeypatch)
+    with pytest.raises(ValueError):
+        runtime.inspect_upload({"query": query(), "image_data": bad})
+    assert not runtime.loaded
+
+
+def test_transparent_uploads_require_an_explicit_rgb_conversion(tmp_path, monkeypatch):
+    runtime = make_runtime(tmp_path, monkeypatch)
+    stream = io.BytesIO()
+    Image.new("RGBA", (4, 4), (255, 0, 0, 0)).save(stream, format="PNG")
+    with pytest.raises(ValueError, match="RGB"):
+        runtime.inspect_upload(
+            {
+                "query": query(),
+                "image_data": "data:image/png;base64,"
+                + base64.b64encode(stream.getvalue()).decode(),
+            }
+        )
+    assert not runtime.loaded

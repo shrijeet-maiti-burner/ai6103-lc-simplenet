@@ -78,3 +78,24 @@ def test_cross_origin_and_arbitrary_filesystem_routes_rejected(connection):
     for path in ("/../AGENTS.md", "/results/private.json", "/api/unknown"):
         assert request(connection, "GET", path)[0] == 404
     assert request(connection, "POST", "/api/unknown", "{}")[0] == 404
+
+
+def test_host_header_cannot_turn_the_local_api_into_a_rebound_origin(connection):
+    assert (
+        request(connection, "GET", "/api/catalog", headers={"Host": "unrelated.example"})[0] == 403
+    )
+    assert (
+        request(
+            connection,
+            "POST",
+            "/api/frame",
+            "{}",
+            {"Host": "unrelated.example", "Origin": "http://unrelated.example"},
+        )[0]
+        == 403
+    )
+
+
+def test_recorded_runtime_does_not_pretend_to_accept_uploads(connection):
+    code, _, body = request(connection, "POST", "/api/upload", "{}")
+    assert code == 400 and "live model runtime" in json.loads(body)["error"]
