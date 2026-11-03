@@ -105,7 +105,7 @@ B2 & relit & $\lambda>0$\\
 \end{table}
 B1/B2 share data order, initialization, transform and noise RNG streams, batch handling, and optimizer updates. B0 consumes the same transform draws but uses an identity second view. Zero-weight B2 must replay B1 exactly, including heads, batch-normalization buffers, optimizers, sampler, RNGs, and validation scores.
 
-A constant anomaly score gives zero pair MSE. Calibrating its threshold on normal scores and using a strict greater-than decision flags no image: FPR and recall are both zero, and AUROC is $0.5$ when both classes exist. This analytic control explains why stability cannot substitute for defect evaluation. The hinge objective discourages trivial discrimination collapse but does not prove that actual defects remain distinguishable.
+Score units alone can change stability: for any $c>0$, scaling scores and their calibrated threshold by $c$ multiplies pair MSE by $c^2$ while preserving decisions and AUROC. Dividing scores by 16 therefore reduces MSE 256-fold without improving detection. Constant scores give zero MSE, zero FPR/recall under strict greater-than calibration, and AUROC $0.5$ when both classes exist. The hinge discourages trivial collapse but cannot prove real defects remain separable.
 
 \section{Experimental Protocol}
 \subsection{Data, Geometry, and Training Budget}
