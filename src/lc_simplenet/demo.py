@@ -18,6 +18,8 @@ from PIL import Image
 from lc_simplenet.evaluation import calibrate
 from lc_simplenet.pilot import PilotConfig, UpstreamBackend, seed_runtime
 
+MAX_UPLOAD_BYTES = 16 * 2**20
+
 
 def sha256(path):
     digest = hashlib.sha256()
@@ -198,10 +200,15 @@ class InspectionRuntime:
 
         return {
             "categories": self.catalog,
+            "accepts_uploads": True,
+            "max_upload_bytes": MAX_UPLOAD_BYTES,
             "mode": "live inference",
             "device": str(self.device),
             "torch": str(torch.__version__),
-            "scope": "normal-validation inspection, not held-out defect evaluation",
+            "scope": (
+                "frozen-model inspection; dataset views are normal validation "
+                "and uploads have unknown labels"
+            ),
             "transform": "clip(brightness * pixels ** gamma, 0, 1)",
             "threshold_policy": "normal-validation 5% target; strict score > threshold",
             "heatmap_policy": "per-model 2nd/98th percentiles of saved validation patch scores",
@@ -241,18 +248,82 @@ class InspectionRuntime:
         return item
 
     def inspect(self, request):
+        return self._inspect(request)
+
+    def inspect_upload(self, request):
+        """Infer an in-memory, unlabelled image using frozen heads/calibration."""
+        if not isinstance(request, dict) or set(request) != {"query", "image_data"}:
+            raise ValueError("expected query and a local image")
+        query = validate_request(request["query"], self.catalog)
+        data = request["image_data"]
+        if not isinstance(data, str) or len(data) > MAX_UPLOAD_BYTES * 4 // 3 + 1024:
+            raise ValueError("choose a PNG or JPEG no larger than 16 MiB")
+        try:
+            header, encoded = data.split(",", 1)
+            if header not in {"data:image/png;base64", "data:image/jpeg;base64"}:
+                raise ValueError("choose an RGB PNG or JPEG")
+            raw = base64.b64decode(encoded, validate=True)
+            if not raw or len(raw) > MAX_UPLOAD_BYTES:
+                raise ValueError("choose an image no larger than 16 MiB")
+            with Image.open(io.BytesIO(raw)) as image:
+                if (
+                    image.format not in {"PNG", "JPEG"}
+                    or image.mode not in {"RGB", "L"}
+                    or "transparency" in image.info
+                    or image.width * image.height > 16_000_000
+                    or getattr(image, "n_frames", 1) != 1
+                    or image.getexif().get(274, 1) != 1
+                ):
+                    raise ValueError("use an upright, single-frame RGB image up to 16 megapixels")
+                image.load()
+        except (OSError, Image.DecompressionBombError) as error:
+            raise ValueError("the local image could not be decoded") from error
+        # Validate the actual model path against a saved normal image first.
+        # The uploaded reference itself has no saved score or known label.
+        guard = self.inspect({**query, "brightness": 1.0, "gamma": 1.0})
+        frame = self._inspect(query, raw_image=raw)
+        return {
+            **frame,
+            "validation_guard": {
+                "image_id": query["image_id"],
+                "score_errors": {
+                    m["method"]: m["validation_replay_max_score_error"] for m in guard["models"]
+                },
+            },
+        }
+
+    def sweep_upload(self, request):
+        if not isinstance(request, dict) or not isinstance(request.get("query"), dict):
+            raise ValueError("invalid uploaded-image sweep")
+        query = validate_request(request["query"], self.catalog)
+        frame = self.inspect_upload(request)
+        result = self._sweep(query, lambda q: self.inspect_upload({**request, "query": q}))
+        return {
+            **result,
+            "query": frame["query"],
+            "scope": "nine lighting settings on one uploaded image; label unknown",
+        }
+
+    def _inspect(self, request, raw_image=None):
         import torch
         from scipy.ndimage import gaussian_filter
         from torch.nn import functional as F
 
         query = validate_request(request, self.catalog)
         with self.lock:
-            source = (self.data / query["image_id"]).resolve(strict=True)
-            if not source.is_relative_to(self.data):
-                raise ValueError("image escapes the dataset root")
-            raw = source.read_bytes()
+            if raw_image is None:
+                source = (self.data / query["image_id"]).resolve(strict=True)
+                if not source.is_relative_to(self.data):
+                    raise ValueError("image escapes the dataset root")
+                raw = source.read_bytes()
+            else:
+                raw = raw_image
             image_hash = hashlib.sha256(raw).hexdigest()
-            cache_key = (*query.items(), ("image_sha256", image_hash))
+            cache_key = (
+                *query.items(),
+                ("image_sha256", image_hash),
+                ("uploaded", raw_image is not None),
+            )
             if cache_key in self.frames:
                 self.frames.move_to_end(cache_key)
                 return {
@@ -304,9 +375,12 @@ class InspectionRuntime:
                     base_map = -discriminator(adapter(reference)).reshape(*grids[0])
                     patch_map = -discriminator(adapter(changed)).reshape(*grids[0])
                     base, score = float(base_map.max()), float(patch_map.max())
-                    recorded = entry["rows"][query["image_id"]]["score"]
-                    error = abs(base - recorded)
-                    if error > 1e-3:
+                    error = (
+                        None
+                        if raw_image is not None
+                        else abs(base - entry["rows"][query["image_id"]]["score"])
+                    )
+                    if error is not None and error > 1e-3:
                         raise ValueError(f"validation replay differs for {method}: {error:.6g}")
                     threshold = entry["calibration"]["threshold"]
                     resized = (
@@ -347,10 +421,14 @@ class InspectionRuntime:
             response = {
                 "schema": 1,
                 "mode": "live inference",
-                "query": query,
-                "scope": "normal-validation diagnostic; not held-out robustness or defect recall",
+                "query": query
+                if raw_image is None
+                else {**query, "image_id": "upload/" + image_hash},
+                "scope": "normal-validation diagnostic; not held-out robustness or defect recall"
+                if raw_image is None
+                else "uploaded-image inspection; label unknown; not an evaluation sample",
                 "image_sha256": image_hash,
-                "label": 0,
+                "label": 0 if raw_image is None else None,
                 "original_size": original_size,
                 "model_input_size": list(settings.image_size),
                 "original": png_data(original),
@@ -359,8 +437,8 @@ class InspectionRuntime:
                 "models": outputs,
                 "encoder_sha256": self.backend.encoder_hash,
                 "milliseconds": (time.perf_counter() - started) * 1000,
-                "timing_scope": "two shared encoder passes, three heads and map rendering; "
-                "decoding and lazy model loading excluded",
+                "timing_scope": "one or two shared encoder passes, three heads and map rendering; "
+                "decoding, lazy loading and the separate uploaded-image validation guard excluded",
                 "device": str(self.device),
                 "torch": str(torch.__version__),
             }
@@ -373,10 +451,14 @@ class InspectionRuntime:
 
     def sweep(self, request):
         query = validate_request(request, self.catalog)
+        return self._sweep(query, self.inspect)
+
+    @staticmethod
+    def _sweep(query, inspect):
         rows = []
         for gamma in (0.8, 1.0, 1.2):
             for brightness in (0.8, 1.0, 1.2):
-                frame = self.inspect({**query, "gamma": gamma, "brightness": brightness})
+                frame = inspect({**query, "gamma": gamma, "brightness": brightness})
                 rows.append(
                     {
                         "brightness": brightness,
@@ -392,7 +474,7 @@ class InspectionRuntime:
                 )
         return {
             "query": query,
-            "scope": "nine synthetic lighting settings on one normal image",
+            "scope": "nine synthetic lighting settings on the same reference image",
             "selection": "diagnostic only; no hyperparameter selection",
             "rows": rows,
         }
@@ -405,6 +487,7 @@ class RecordedRuntime:
         bundle = json.loads(Path(path).read_text())
         self.description = bundle["catalog"]
         self.description["mode"] = "recorded predictions"
+        self.description["accepts_uploads"] = False
         self.description["recorded_device"] = self.description["device"]
         self.description["device"] = "offline playback"
         self.description["lighting_step"] = 0.2
@@ -432,3 +515,4 @@ class RecordedRuntime:
         }
 
     sweep = InspectionRuntime.sweep
+    _sweep = staticmethod(InspectionRuntime._sweep)

@@ -1,6 +1,6 @@
 # report evidence ledger
 
-checked against the released records on 2 november 2026. this ledger separates measured findings from pending endpoints. generated outputs, raw runs and personal research stay outside git.
+checked against released records and the complete local public matrix on 3 november 2026. this ledger separates measured findings from pending endpoints. generated outputs, raw runs and personal research stay outside git.
 
 | report claim | evidence | boundary |
 |---|---|---|
@@ -11,8 +11,10 @@ checked against the released records on 2 november 2026. this ledger separates m
 | no b2 weight passes normal safeguards | [study policy](../configs/ad2-study-policy.json), released seed-3 trials and [full-run results](ad2-study-results.md) | short tuning budget and partly retrospective full-run rule are both disclosed |
 | second stack reproduces the qualitative result | [72-run artifact release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-replicate-2026-11-02); independently verified score hashes and ratios | torch/python differ; dirty source, no released checkpoints or replay; 72 historical absolute-path fields redacted with original/shared hashes retained |
 | 288px sensitivity changes spread behavior | [study results](ad2-study-results.md) | source-reported by b; raw release still missing; not independently reconstructed |
-| demo predictions belong to released heads | validation re-score guard, image/checkpoint/encoder hashes, exported calibration and transform | normal-validation diagnostic; neither test recall nor a user study |
-| real-lighting fpr/recall and native localization | [evaluation hand-off](evaluation-handoff.md) | pending; do not fill with normal-only or exploratory fabric numbers |
+| demo predictions belong to released heads | validation re-score guard, image/checkpoint/encoder hashes, exported calibration and transform | known normal dataset views or unlabelled local uploads; neither accuracy evaluation nor a user study |
+| complete public fpr/recall matrix: b1 nonregular fpr 49.5 to 43.5%, recall 68.2 to 60.6% | [local rtx result and hashes](ad2-public-rtx-results.md); all 120 heads, independently recounted | 1,084 annotated public images, locked software, rtx3060; distinct from primary a40 and private-server results; recall drops 7.5 points using unrounded rates |
+| deterministic examples | `scripts/build_public_examples.py`; first sorted regular-light defective image per category, seed 0, all methods | whole-image flags and cropped map displays; not localization metrics |
+| native pixel auroc/au-pro | [evaluation hand-off](evaluation-handoff.md), [implementation review](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/17) | full native matrix pending; toy parity and one-head pilot cannot fill it |
 
 the evidence builder emits `report/build/evidence/evidence.json` with diagnostic and archive hashes. retain it alongside the final pdf. source code and a rendered report are separate artifacts; neither establishes that an experiment ran.
 

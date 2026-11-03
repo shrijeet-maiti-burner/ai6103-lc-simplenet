@@ -14,6 +14,16 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def handler_for(runtime):
     class Handler(BaseHTTPRequestHandler):
+        def local_host(self):
+            try:
+                host = urlsplit("http://" + self.headers.get("Host", ""))
+                return (
+                    host.hostname in {"127.0.0.1", "localhost"}
+                    and (host.port or 80) == self.server.server_port
+                )
+            except ValueError:
+                return False
+
         def reply(self, code, body, content_type="application/json"):
             if not isinstance(body, bytes):
                 body = json.dumps(body, allow_nan=False).encode()
@@ -26,6 +36,9 @@ def handler_for(runtime):
             self.wfile.write(body)
 
         def do_GET(self):  # noqa: N802
+            if not self.local_host():
+                self.reply(403, {"error": "use the printed localhost address"})
+                return
             route = urlsplit(self.path).path
             if route == "/api/catalog":
                 self.reply(200, runtime.describe())
@@ -43,6 +56,9 @@ def handler_for(runtime):
             self.reply(200, path.read_bytes(), mimetypes.guess_type(path)[0] or "text/plain")
 
         def do_POST(self):  # noqa: N802
+            if not self.local_host():
+                self.reply(403, {"error": "use the printed localhost address"})
+                return
             # Local UI only; cross-origin browser requests are rejected.
             origin = self.headers.get("Origin")
             if origin and origin != f"http://{self.headers.get('Host')}":
@@ -50,13 +66,19 @@ def handler_for(runtime):
                 return
             try:
                 length = int(self.headers.get("Content-Length", "0"))
-                if not 0 < length <= 8192:
+                upload = self.path in {"/api/upload", "/api/upload-sweep"}
+                if not 0 < length <= (24 * 2**20 if upload else 8192):
                     raise ValueError("invalid request size")
                 request = json.loads(self.rfile.read(length))
                 if self.path == "/api/frame":
                     self.reply(200, runtime.inspect(request))
                 elif self.path == "/api/sweep":
                     self.reply(200, runtime.sweep(request))
+                elif upload:
+                    method = "inspect_upload" if self.path == "/api/upload" else "sweep_upload"
+                    if not hasattr(runtime, method):
+                        raise ValueError("local image upload requires the live model runtime")
+                    self.reply(200, getattr(runtime, method)(request))
                 else:
                     self.reply(404, {"error": "not found"})
             except (ValueError, TypeError, KeyError) as error:
@@ -91,7 +113,7 @@ def main():
 
     server = LocalServer(("127.0.0.1", args.port), handler_for(runtime))
     print(f"illumination lab: http://127.0.0.1:{server.server_port}", flush=True)
-    print("normal-validation diagnostics only; press ctrl+c to stop", flush=True)
+    print(runtime.describe()["scope"] + "; press ctrl+c to stop", flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

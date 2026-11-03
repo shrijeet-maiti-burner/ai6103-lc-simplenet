@@ -26,8 +26,12 @@ some physical groups do not exist in every category (fruit_jelly lacks shift_2/3
 
 the optional `--lighting-aggregates` additionally reports three explicitly defined pooled groups: `nonregular` (anything except regular), `exposure_changed` (under/overexposed), and `additional_light` (`shift_*`). these group definitions use metadata only; they do not select settings from outcomes. per-suffix rows remain available. pooled nonregular captures are not a pure unseen-light group, and shifted lamps differ physically across categories. record this additional analysis choice before scoring.
 
-image operating points, pixel auroc and au-pro are distinct. d's image-score path is implemented; official au-pro-0.05 parity and native-coordinate pixel evaluation remain separate completion gates. the public scorer's smoothed maps are at model-input size; restore continuous maps to native image size before comparing against native masks, or explicitly label a resized-mask analysis as a different geometry.
+image operating points, pixel auroc and au-pro are distinct. d's image-score path is implemented. [native metrics and public-reference parity](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/17) are implemented in a separate review; the full native result matrix remains a completion gate. the public scorer's smoothed maps are at model-input size; restore continuous maps to native image size before comparing against native masks, or explicitly label a resized-mask analysis as a different geometry.
 
 ## provenance and prior exposure
 
 retain thresholds, sample counts, raw scores/maps, model and scoring revisions, checkpoint hashes, runtime and exact image-id lists. disclose #9's earlier public-fabric evaluation on exploratory 100-step checkpoints. no subsequent metric may be used to choose thresholds, weights, checkpoints or categories. official private results require the evaluation server; public-subset tables are not private-benchmark results.
+
+## current evidence
+
+aryaman has completed acquisition and reported the primary a40 image matrix in [#18](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/18); no separate dataset hand-off is needed. all 150 published means/sds agree with the local matrix at their displayed precision. independent inspection of his raw artifacts and scoring-copy hashes remains pending. the [complete local rtx contingency](ad2-public-rtx-results.md) contains all 120 fixed heads and 16,260 predictions. it is independently recounted and separately labelled, with a material nonregular-light recall loss. do not select a weight from it or silently substitute it for a40/private-server evidence.
