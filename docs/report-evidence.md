@@ -14,7 +14,7 @@ checked against released records and the complete local public matrix on 3 novem
 | demo predictions belong to released heads | validation re-score guard, image/checkpoint/encoder hashes, exported calibration and transform | known normal dataset views or unlabelled local uploads; neither accuracy evaluation nor a user study |
 | complete public fpr/recall matrix: b1 nonregular fpr 49.5 to 43.5%, recall 68.2 to 60.6% | [local rtx result and hashes](ad2-public-rtx-results.md); all 120 heads, independently recounted | 1,084 annotated public images, locked software, rtx3060; distinct from primary a40 and private-server results; recall drops 7.5 points using unrounded rates |
 | deterministic examples | `scripts/build_public_examples.py`; first sorted regular-light defective image per category, seed 0, all methods | whole-image flags and cropped map displays; not localization metrics |
-| native pixel auroc/au-pro | [evaluation hand-off](evaluation-handoff.md), [implementation review](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/17) | full native matrix pending; toy parity and one-head pilot cannot fill it |
+| native pixel auroc/au-pro: b1 au-pro-0.05 rises from 11.94 to 13.02% | [complete native result](ad2-native-public-results.md); all 120 hashed outputs and frozen scorer bindings; `scripts/build_native_report.py` | all public lights pooled within category; augmentation gain in all three seeds; image-recall criterion still fails; no weight selected or private-server claim |
 
 the evidence builder emits `report/build/evidence/evidence.json` with diagnostic and archive hashes. retain it alongside the final pdf. source code and a rendered report are separate artifacts; neither establishes that an experiment ran.
 

@@ -18,8 +18,8 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-\textbf{Working draft, 3 November 2026: native localization and primary-artifact audit remain pending.}
-Industrial inspection must tolerate illumination changes without suppressing defects. We compare matched identity-pair, relighting-only, and score-consistency controls in SimpleNet. Across eight MVTec AD 2 categories and three seeds, augmentation reduces synthetic normal-score drift by 5.7--133 times. Yet on the annotated public subset, its nonregular-light false-positive macro falls from 49.5\% to 43.5\% while recall falls from 68.2\% to 60.6\%, exceeding the declared five-point tolerance. None of three consistency weights passes the normal-data safeguards, and none preserves nonregular-light recall against the identity-pair baseline. These local RTX results do not establish a robustness improvement. A separate 45-run MVTec AD reproduction exposes checkpoint-policy sensitivity. Our inspection demo makes frozen decisions, fixed map scales and checkpoint-linked prediction records available for dataset images or one unlabelled local upload.
+\textbf{Working draft, 3 November 2026: primary A40 artifact audit remains pending.}
+Industrial inspection must tolerate illumination changes without suppressing defects. We compare matched identity-pair, relighting-only, and score-consistency controls in SimpleNet. Across eight MVTec AD 2 categories and three seeds, augmentation reduces synthetic normal-score drift by 5.7--133 times. On the annotated public subset, native AU-PRO$_{.05}$ rises from 11.94\% to 13.02\%. Yet its nonregular-light false-positive macro falls from 49.5\% to 43.5\% while recall falls from 68.2\% to 60.6\%, exceeding the declared five-point tolerance. None of three consistency weights passes the normal-data safeguards or preserves nonregular-light recall against the identity-pair baseline. These local RTX results show a localization benefit with a detection trade-off. A separate 45-run MVTec AD reproduction exposes checkpoint-policy sensitivity. Our inspection demo makes frozen decisions, fixed map scales and checkpoint-linked prediction records inspectable.
 \end{abstract}
 
 \section{Introduction}
@@ -29,7 +29,7 @@ We build on SimpleNet \citep{liu2023simplenet}. Its frozen visual features, trai
 
 Our implementation forms spatially aligned normal-image pairs, retains the original discrimination objective, and adds mean squared error (MSE) between their raw patch scores. The control that matters for consistency is relighting without the extra loss. A comparison only against an unaugmented baseline would confound augmentation and consistency.
 
-The evidence exposes a distinction between stability and useful robustness. Relighting reduces synthetic normal-score drift, but fewer public-test false alarms coincide with lower defect recall. No consistency weight passes the full-run normal safeguards or restores nonregular-light recall against B0 within the declared tolerance. Checkpoint policy and late instability also materially affect the faithful reproduction. We report these limitations rather than treating stable scores as sufficient evidence of improvement.
+The evidence exposes a distinction between stability, localization and useful image decisions. Relighting reduces synthetic normal-score drift and improves public-subset AU-PRO, but fewer false alarms coincide with lower defect recall. No consistency weight passes the full-run normal safeguards or restores nonregular-light recall against B0 within the declared tolerance. Checkpoint policy and late instability also materially affect the faithful reproduction.
 
 \section{Related Work and Scope}
 SimpleNet synthesizes anomalous features by perturbing adapted normal features with Gaussian noise \citep{liu2023simplenet}. We reuse its original components and preserve the pinned upstream source, placing our integration in a separate package. Synthetic training anomalies are not evidence that genuine defects remain detectable.
@@ -129,7 +129,7 @@ For each model/category/seed, the image threshold is the higher empirical 95th p
 
 For each lighting group, FPR is false-positive normal images divided by all normal images, and recall is detected defective images divided by all defective images. Both retain their numerators and denominators. Missing denominators remain unavailable. Compute category macros per seed, then mean/sample SD over seeds; pooled-image rates are not category macros. A group absent from a category cannot silently become an eight-category macro.
 
-The agreed recall rule allows at most a five-percentage-point seed-mean macro drop per condition, reporting both category scopes and naming every category with a larger drop. B1 is compared with B0; every B2 weight is compared with both. Image AUROC, pixel localization, AU-PRO integrated to FPR $0.05$, and failure examples complement the operating-point results. Public-reference metric parity has passed synthetic cases; the complete native-localization matrix and primary A40 verification remain pending. Private metrics require the official server.
+The agreed recall rule allows at most a five-percentage-point seed-mean macro drop per condition, reporting both category scopes and naming every category with a larger drop. B1 is compared with B0; every B2 weight is compared with both. Image AUROC, native pixel AUROC, normalized AU-PRO integrated to FPR $0.05$, and failure examples complement the operating-point results. The complete 120-head native matrix uses equal-weight eight-connected defect regions and exact score ties. Primary A40 verification remains pending; private metrics require the official server.
 
 \section{Results}
 \subsection{MVTec AD Reproduction}
@@ -177,25 +177,41 @@ All B2 weights fail the nonregular recall rule against B0: drops are 7.8, 6.6 an
 
 \begin{figure*}[t]
 \centering\includegraphics[width=\textwidth]{build/evidence/ad2-public-examples-first-two.png}
-\caption{Fixed qualitative rule: first sorted regular-light defective image, seed 0, with every method. These are the first two alphabetical categories; the generated gallery includes all eight. All panels use the native mask bounding box plus 10\% padding, at least 16 pixels. Continuous maps are restored to native geometry before the display crop. Each head keeps its validation-fixed display scale; colors across heads need not represent equal scores. Detected/missed labels use the whole-image score and frozen threshold, not a crop-based decision. These examples were not chosen by prediction outcome and do not replace native localization metrics.}
+\caption{First sorted regular-light defective image, seed 0, every method; first two alphabetical categories shown, all eight retained in the gallery. Display crops use the native mask bounding box plus 10\% padding, at least 16 pixels. Maps are restored before cropping and retain each head's validation-fixed scale. Flags use whole-image scores and frozen thresholds. Selection does not consult predictions; examples do not replace localization metrics.}
 \label{fig:examples}
 \end{figure*}
 
+\subsection{Native Public-Subset Localization}
+\begin{table}[t]
+\centering\input{build/evidence/ad2-native-all_categories.tex}
+\caption{Native public localization: percent mean $\pm$ sample SD over three per-seed eight-category macros. Every public lighting capture is retained; these are not per-light results. B2 rows remain ablations because they failed the predeclared normal safeguards.}
+\label{tab:native}
+\end{table}
+
+Table~\ref{tab:native} covers the same 120 fixed heads, with 4.45 billion native pixels per complete category sweep. B1 improves AU-PRO over B0 by 0.98, 1.21 and 1.04 percentage points in seeds 0, 1 and 2. Pixel AUROC also rises on average. Thus augmentation improves a threshold-independent localization endpoint even though the frozen image operating point loses recall. These metrics answer different questions: AU-PRO weights defect regions equally while image recall counts detected defective images at a fixed threshold.
+
+The $\lambda=0.1$ ablation adds 0.65, 0.10 and 0.92 points of AU-PRO over B1, but its mean pixel AUROC is lower and its normal-data safeguard fails. We retain every weight and do not select a new setting from these public results. Without sheet metal, mean AU-PRO is 12.58\% (B0), 13.79\% (B1), and 13.92\%, 14.42\%, 14.29\% for the three B2 weights. Three seeds and correlated captures do not establish statistical significance or private-set generalization.
+
+
+
 \section{Inspection Demo and Reproducibility}
-The local demo uses released fixed heads with either normal-validation images or a single local PNG/JPEG upload. Uploads have unknown labels; a flag is called a false alarm only for known normal inputs. It changes brightness/gamma while showing B0/B1/B2 raw scores, their own frozen thresholds, threshold-relative margins, and fixed-scale maps. Threshold-relative margins use normal-validation score standard deviation; they are not probabilities or confidence estimates. Map scales are fixed per model from the second and 98th percentiles of saved validation patch scores, rather than reset for each image.
+The demo changes brightness/gamma on a normal-validation image or one local PNG/JPEG upload, showing B0/B1/B2 scores, frozen thresholds, threshold-relative margins and fixed-scale maps. Upload labels are unknown; only known normal inputs support false-alarm labels. Margins use normal-validation score standard deviation, not probabilities. Map scales use each model's second and 98th validation patch-score percentiles and remain fixed across images.
 
-A fixed nine-point sweep exposes decision changes on the same image. Exported records include image SHA-256, transform, checkpoint hash, backbone fingerprint and calibration counts. The app distinguishes newly computed, cached, and recorded predictions; a labelled recording provides an offline presentation fallback. Compatible heads share a frozen embedding during inspection; training and detection objectives are unchanged.
+A nine-point sweep exposes decision changes. Exported records retain image/transform, checkpoint/backbone hashes and calibration counts. The app distinguishes live, cached and recorded predictions; a labelled recording provides an offline fallback. Compatible heads share a frozen embedding during inspection.
 
-Interactive inspection and model documentation already exist \citep{gramelt2024interactive,crisan2022cards}. Our demo's purpose is to make this study's controls and limitations inspectable. An attractive map is not localization evidence, and no observer study or novelty claim for the interface is implied.
+Following prior interactive inspection and model documentation work \citep{gramelt2024interactive,crisan2022cards}, the interface exposes study controls; it does not establish predictive quality or usability.
 
-Raw datasets, model weights, generated runs and personal research remain outside source control. Release checksums and source revisions bind the measured evidence. Checkpoint tests cover exact continuation within a numerical environment, including RNG/sampler state. Cross-device bit equality is not promised; inference re-scores saved validation images before accepting a released head.
+Raw data, weights and generated runs remain outside source control. Checksums and source revisions bind evidence. Checkpoint tests verify exact continuation with RNG/sampler state within one numerical environment. Released heads must re-score saved validation images before inference; cross-device bit equality is not assumed.
+
+Disk-backed native evaluation retains exact float32 score ties. On 370 million real pixels, sparse/external differences are below $4.5\times10^{-16}$ in pixel AUROC and $6.3\times10^{-17}$ in AU-PRO. Toy-array PRO agrees with the official utility within $1.9\times10^{-9}$. These are implementation checks, not private-server certification.
 
 \section{Limitations and Completion Boundary}
-Normal data cannot resolve the central defect-retention question. Mild photometric changes can still clip or hide small defects, synthetic Gaussian feature anomalies need not resemble genuine defects, and full-frame resizing sacrifices fine spatial information. Three seeds do not justify strong significance claims. The normal validation set is reused for calibration and diagnostics, so its achieved FPR is not independent validation of a future-data guarantee.
+Normal data cannot establish defect retention. Photometric changes can hide defects, Gaussian feature anomalies need not resemble them, and resizing loses fine detail. Three seeds limit inference. Reusing normal validation for calibration and diagnostics makes achieved FPR an in-sample quantity, not a future-data guarantee.
 
-The data was acquired from pinned mirrors. Byte agreement across mirrors does not establish identity with the official archive, and physical acquisition-group identity is unverified. Vial's public filenames include a fourth shifted group absent from the arXiv v1 lighting table; it is retained as an observed group with physical mapping unverified, rather than assigned an invented lamp configuration.
+Pinned mirrors agree byte-for-byte, but identity with the official archive and physical acquisition groups is unverified. Vial's fourth shifted filename group is absent from the arXiv v1 lighting table; it remains an observed group with physical mapping unresolved.
 
-\textbf{Before submission:} audit the primary A40 artifacts and scoring-copy hashes against this labelled local evaluation; complete native pixel AUROC/AU-PRO; resolve the extra lighting metadata if an authoritative mapping becomes available; and add matriculation numbers. Keep the draft notice until the remaining evidence is verified. The measured public result is fewer nonregular false alarms accompanied by a recall loss beyond tolerance. Extra consistency has not supplied an eligible setting or preserved nonregular recall against B0. This study does not establish an improvement over current state-of-the-art architectures.
+\textbf{Before submission:} audit primary A40 artifacts and copied-scorer hashes, seek authoritative lighting metadata, and add matriculation numbers. The draft notice remains until verification. Public results combine higher AU-PRO, fewer nonregular false alarms and recall loss beyond tolerance. Extra consistency supplies no eligible setting or preserved nonregular recall against B0. No state-of-the-art improvement is established.
 
+\clearpage
 \bibliography{references}
 \end{document}
