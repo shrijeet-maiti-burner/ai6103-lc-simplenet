@@ -53,3 +53,7 @@ native pixel auroc/au-pro completion, independent primary a40 artifact/source au
 | fixed examples | `1005e0a86d7e1acd6b9e732ca6adc6a617f7e0127d61a9cd4031fe6533c6b6a5` |
 
 rebuild from retained scores/maps with `scripts/evaluate.py`, `scripts/build_public_report.py` and `scripts/build_public_examples.py`; see the [report instructions](../report/README.md). data, raw predictions, maps, weights, recordings and personal plans stay outside git.
+
+## review records
+
+[private team artifact](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-public-rtx-2026-11-03) contains the score/calibration records, all image aggregation outputs, conditions, per-run scoring metadata and explicitly labelled minimal run-identity projections. archive sha256: `fd25cac09fb10a380f062ecc20fe585d332d5351e8ecfa1eadb46696cc49b2ba`. all six packaged evaluation files reproduce byte-for-byte from these records. downloaded release bytes, zip crc and all 612 file hashes were checked. maps, image pixels, parameters and personal notes are excluded. the projections omit personal training paths and retain original-file hashes. this artifact audits the independent rtx cohort; it does not supply the missing primary a40 source provenance.

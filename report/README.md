@@ -33,3 +33,7 @@ the evidence builder checks all 120 paired identities, verifies the ad archive c
 - remove the draft notice only after auditing every claim against saved evidence. inspect every rendered page again after results change pagination; reject overfull boxes, unresolved citations and illegible plot labels.
 
 the five-minute recording should explain the problem, original method, controlled change, measured result and limitation as one argument. demonstration timing is not a formal inference-throughput benchmark.
+
+## compact image review archive
+
+[download the private rtx review artifact](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-public-rtx-2026-11-03). verify its zip checksum and per-file manifest, then extract into an ignored folder. it contains all scores needed to reproduce image tables; all six included evaluation outputs replay byte-for-byte. run/result identity files are labelled projections with personal paths omitted and original hashes retained. the archive does not contain maps or image pixels: rebuilding the qualitative gallery additionally needs retained maps and the public dataset. primary a40 provenance remains a separate review.
