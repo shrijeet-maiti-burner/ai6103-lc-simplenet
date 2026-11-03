@@ -27,6 +27,16 @@ def build(evaluation: Path, protocol: Path, out: Path):
         or not frozen["lighting_aggregates"]
     ):
         raise ValueError("public report requires the complete frozen study and operating point")
+    thresholds = json.loads((evaluation / "thresholds.json").read_text(encoding="utf-8"))
+    if (
+        not isinstance(thresholds, dict)
+        or set(thresholds) != {f"{c}/{m}/seed-{s}" for c, m, s in expected}
+        or any(
+            not isinstance(row, dict) or row.get("target_fpr") != frozen["target_fpr"]
+            for row in thresholds.values()
+        )
+    ):
+        raise ValueError("threshold evidence must cover every head at the frozen target FPR")
     rows = {(r["scope"], r["method"], r["condition"]): r for r in aggregate["macros"]}
     scopes = {"all_categories": frozen["categories"]}
     if "sheet_metal" in frozen["categories"]:

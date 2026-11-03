@@ -64,7 +64,12 @@ def inputs(tmp_path):
         "category_recall_checks": [],
     }
     (evaluation / "aggregate.json").write_text(json.dumps(aggregate))
-    for name in ("thresholds.json", "metrics.csv", "predictions.csv"):
+    thresholds = {
+        f"{c}/{m}/seed-{s}": {"target_fpr": frozen["target_fpr"]}
+        for c, m, s in itertools.product(frozen["categories"], frozen["methods"], frozen["seeds"])
+    }
+    (evaluation / "thresholds.json").write_text(json.dumps(thresholds))
+    for name in ("metrics.csv", "predictions.csv"):
         (evaluation / name).write_text("fixture")
     return evaluation, protocol, tmp_path / "out", aggregate
 
@@ -85,6 +90,22 @@ def test_a_missing_head_cannot_be_reported_as_complete(inputs):
     matrix = evaluation / "run_matrix.csv"
     matrix.write_text(matrix.read_text().replace("can,B0,0,ready", "can,B0,0,missing"))
     with pytest.raises(ValueError, match="complete frozen study"):
+        module.build(evaluation, protocol, out)
+    assert not out.exists()
+
+
+@pytest.mark.parametrize("change", ["wrong_target", "missing_head"])
+def test_threshold_evidence_must_match_the_declared_operating_point(inputs, change):
+    evaluation, protocol, out, _ = inputs
+    path = evaluation / "thresholds.json"
+    thresholds = json.loads(path.read_text())
+    key = next(iter(thresholds))
+    if change == "wrong_target":
+        thresholds[key]["target_fpr"] = 0.1
+    else:
+        del thresholds[key]
+    path.write_text(json.dumps(thresholds))
+    with pytest.raises(ValueError, match="threshold evidence"):
         module.build(evaluation, protocol, out)
     assert not out.exists()
 
