@@ -73,8 +73,8 @@ Names for the other comparisons are in `category_recall_checks` in `aggregate.js
 
 ## What this shows
 
-- The calibration works in regular light: FPR is 4.7 to 7.5% against the 5% target.
-- Under the agreed rule, B1 does not preserve recall against B0 in underexposed, overexposed or shift_1 light, and does not overall. No B2 weight does either. In the eight-category macro B2 stays within 5 points of B1 except at weight 1.0 under shift_1 (-6.4) and in the pooled additional-light group (-5.5); without sheet_metal it has no exception (shift_1 -4.8, additional light -3.4).
+- Regular-light public-test macro FPR is 4.7 to 7.5% against the 5% validation target. Achieved validation FPR and counts are reported separately in the supplement.
+- Under the agreed rule, B1 does not preserve recall against B0 in underexposed, overexposed or shift_1 light, or in the non-regular pool. No B2 weight preserves recall against B0 across all reported conditions; B2 at 1.0 passes the underexposed comparison (a 4.7-point drop). In the eight-category macro B2 stays within 5 points of B1 except at weight 1.0 under shift_1 (-6.4) and in the pooled additional-light group (-5.5); without sheet_metal it has no exception in applicable conditions (shift_1 -4.8, additional light -3.4).
 - B1 and B2 lower the FPR under lighting change (overexposed: 0.208 for B0, 0.054 to 0.088 for the others), but the recall falls with it. Image AUROC barely moves (0.63 to 0.64 over all non-regular images), so the change looks like a shift of the operating point, not better ranking of defective against normal images. That reading is an interpretation of these tables, not a tested claim.
 - The frozen regular-light threshold flags 50 to 63% of normal images under shift_1 for every method.
 - With three seeds and small public test sets, a single category's recall change of about 5 points may be noise. The macro SDs above show the spread.
@@ -82,13 +82,13 @@ Names for the other comparisons are in `category_recall_checks` in `aggregate.js
 ## Limits
 
 - Image-level metrics only. Pixel AUROC and AU-PRO are not computed here.
-- The fabric runs in #9 were scored on fabric's public test set with exploratory 100-step checkpoints. They are not part of this evaluation, and that earlier exposure is disclosed here as the hand-off requires.
+- The fabric runs in #9 were scored on fabric's public test set with exploratory 100-step checkpoints. They are not part of this evaluation; that earlier test exposure remains a limitation.
 - Vial `shift_4` is retained as observed, with its lamp setup unverified.
 - Private-set results need the evaluation server.
 
 ## Artifacts
 
-Stored outside Git (TC2 `~/eval-ad2-final`, copied to the evaluator's machine; the bundle is shared privately with reviewers, not in Git). SHA-256:
+Stored outside Git in the [private evaluation release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/ad2-eval-outputs-2026-11-03). ZIP SHA-256: `1c3df9cf83ad5494295b029c907dff695b447ef06b872e1baf68875a24eb318f`. Individual file SHA-256:
 
 | File | SHA-256 |
 |---|---|
@@ -108,11 +108,11 @@ Inference source as run on TC2 (recorded in `scoring-provenance.json`):
 | `src/lc_simplenet/pilot.py` | `bb71dc2f858bf1c52a76512a166aa8792d15738a500470623f2992c304a0dbb9` |
 | `uv.lock` | `3d3b9dd4995622d26fb3077f8000255f974a03c715ebe764a64eeedac3e53aa2` |
 
-Command, run on TC2 after `scripts/build_public_conditions.py` built `conditions.json` from the unpacked archive (1,084 public images):
+Command with portable example paths, after `scripts/build_public_conditions.py` built `conditions.json` from the unpacked archive (1,084 public images):
 
 ```bash
-python scripts/evaluate.py --runs ~/release/paired --out ~/eval-ad2-final \
-  --conditions ~/eval-ad2-final/conditions.json \
+python scripts/evaluate.py --runs results/ad2-study/paired --out results/ad2-evaluation \
+  --conditions results/ad2-evaluation/conditions.json \
   --categories can fabric fruit_jelly rice sheet_metal vial wallplugs walnuts --seeds 0 1 2 \
   --methods B0 B1 B2@0.01 B2@0.1 B2@1 --target-fpr 0.05 --recall-tolerance 0.05 --lighting-aggregates
 ```

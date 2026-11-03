@@ -2,7 +2,7 @@
 
 Companion to [the evaluation](ad2-test-evaluation.md). It gives both declared macro scopes, every comparison agreed on #8, the categories that exceed the 5-point recall drop, and the achieved validation false-positive rate with counts. All numbers come from `aggregate.json`, `metrics.csv` and `thresholds.json` (hashes in the main document). Macros are unweighted over categories per seed, then mean ± sample SD over seeds 0, 1 and 2. `n/a` means the condition is not available in every category of the scope, so the tool computes no macro.
 
-Conditions: `nonregular` is every non-regular image; `exposure_changed` pools underexposed and overexposed; `additional_light` pools shift_1 to shift_4. The pooled groups use every image in the group, so their category mix follows the dataset (see [lighting definitions](ad2-lighting.md)).
+Conditions: `nonregular` is every non-regular image; `exposure_changed` pools underexposed and overexposed; `additional_light` pools shift_1 to shift_4. Within each category, pooled rates use every image in the group; category macros remain unweighted (see [lighting definitions](ad2-lighting.md)).
 
 ## Eight categories: Recall
 
@@ -196,4 +196,3 @@ Each run's threshold is the higher empirical 95% quantile of its normal validati
 | B2@1 | 24 | 19–48 | 0–2 | 0.000–0.049 | 0.033 |
 
 Test-set FPR and recall counts (false positives over normal images, true positives over defective images) for every category, method, seed and condition are in `metrics.csv`.
-
