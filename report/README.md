@@ -1,6 +1,6 @@
 # report draft
 
-`main.tex` uses the supplied, unchanged `aaai24.sty` and `aaai24.bst`. the current draft reports measured ad reproduction, ad 2 normal-validation evidence and the complete, separately labelled rtx3060 public image-level matrix. native localization and independent primary-artifact verification remain pending. role d has reported the a40 image matrix in #18; all 150 published means/sds match the local run at their displayed precision. it is not a submission-ready report.
+`main.tex` uses the supplied, unchanged `aaai24.sty` and `aaai24.bst`. the current draft reports measured ad reproduction, ad 2 normal-validation evidence and complete, separately labelled rtx3060 public image/native-localization matrices. primary-artifact verification remains pending. role d has reported the a40 image matrix in #18; all 150 published means/sds match the local run at their displayed precision. it is not a submission-ready report.
 
 the five official names are confirmed. matriculation numbers will be added by shrijeet. the course limit is six body pages, excluding references; retain the original layout and readable figures.
 
@@ -11,6 +11,7 @@ download the `dev-ad2-study-2026-10-31` release zips and checksum manifests into
 ```powershell
 uv run --frozen --extra cpu python scripts/build_report_evidence.py --runs results/study-artifacts/paired --ad-release results/release-ad2-20261031/ad-reproduction-2026-10-29.zip
 uv run --frozen --extra cpu python scripts/build_public_report.py --evaluation results/public-evaluation-rtx3060-20261103/evaluation --protocol results/public-evaluation-rtx3060-20261103/frozen-protocol.json
+uv run --frozen python scripts/build_native_report.py --native results/native-public-external-20261103 --scoring results/public-evaluation-rtx3060-20261103
 uv run --frozen --extra cpu python scripts/build_public_examples.py --runs results/public-evaluation-rtx3060-20261103/runs --root data/evaluation-ad2 --protocol results/public-evaluation-rtx3060-20261103/frozen-protocol.json
 Push-Location report
 pdflatex -interaction=nonstopmode -halt-on-error -output-directory=build main.tex
@@ -27,7 +28,7 @@ the evidence builder checks all 120 paired identities, verifies the ad archive c
 ## remaining gates
 
 - compare the primary a40 image matrix with the complete local rtx matrix; retain any numerical/hardware differences.
-- finish native-coordinate pixel metrics and au-pro-0.05. reference utility parity passed synthetic cases in #17; full predictive results are still required. keep private-server outputs separate.
+- audit the [complete native matrix](../docs/ad2-native-public-results.md) and its retained input/source hashes. keep private-server outputs separate.
 - inspect the generated all-eight-category gallery and retain its fixed selection rule, calibration and display scales.
 - incorporate the team's verified contributions and the missing matriculation numbers.
 - remove the draft notice only after auditing every claim against saved evidence. inspect every rendered page again after results change pagination; reject overfull boxes, unresolved citations and illegible plot labels.
@@ -37,3 +38,5 @@ the five-minute recording should explain the problem, original method, controlle
 ## compact image review archive
 
 [download the private rtx review artifact](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-public-rtx-2026-11-03). verify its zip checksum and per-file manifest, then extract into an ignored folder. it contains all scores needed to reproduce image tables; all six included evaluation outputs replay byte-for-byte. run/result identity files are labelled projections with personal paths omitted and original hashes retained. the archive does not contain maps or image pixels: rebuilding the qualitative gallery additionally needs retained maps and the public dataset. primary a40 provenance remains a separate review.
+
+the [native review artifact](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-native-2026-11-03) contains all 120 native outputs, their source/input bindings and the exact evaluator snapshots. run `build_native_report.py` against its `native` and `scoring` directories to reproduce both category scopes. metadata projections explicitly omit historical absolute source paths and retain their original hashes. restoring maps from dataset images requires the released heads and original scoring cohort; aggregation alone requires neither images nor weights.
