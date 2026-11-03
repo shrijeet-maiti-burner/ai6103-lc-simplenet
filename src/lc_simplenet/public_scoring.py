@@ -54,9 +54,9 @@ def list_public_test(root: Path, category: str) -> list[PublicImage]:
 def condition_from_name(image_id: str) -> str:
     """Lighting condition from the AD 2 file-name suffix, e.g. `003_shift_1.png`.
 
-    This relies on the naming seen in the audited archives (regular, overexposed, underexposed,
-    shift_N). Verify it against the dataset documentation before reporting per-condition
-    results; an unrecognised name raises instead of guessing a group.
+    Lighting definitions were checked against the dataset paper's Table VI;
+    see docs/ad2-lighting.md. An unrecognised name raises instead of guessing.
+    The inventory CLI additionally checks the allowed shifts for each category.
     """
     match = CONDITION_PATTERN.fullmatch(Path(image_id).stem)
     if not match:

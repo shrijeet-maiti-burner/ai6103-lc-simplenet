@@ -89,7 +89,7 @@ def discover_runs(root: Path) -> list[RunRef]:
 def run_matrix(runs: list[RunRef], categories, seeds, methods=()) -> list[dict]:
     """Expected category x method x seed grid with what exists. Missing runs stay visible."""
     found = {(r.category, r.method, r.seed): r for r in runs}
-    names = sorted({r.method for r in runs} | {"B0", "B1"} | set(methods))
+    names = sorted(set(methods)) if methods else sorted({r.method for r in runs} | {"B0", "B1"})
     rows = []
     for category, method, seed in itertools.product(categories, names, seeds):
         run = found.get((category, method, seed))
@@ -101,14 +101,20 @@ def run_matrix(runs: list[RunRef], categories, seeds, methods=()) -> list[dict]:
     return rows
 
 
-def evaluate_all(runs: list[RunRef], target_fpr: float, conditions=None) -> dict:
+def evaluate_all(
+    runs: list[RunRef], target_fpr: float, conditions=None, lighting_aggregates=False
+) -> dict:
     """Evaluate each run once; runs without test scores contribute thresholds only."""
     results = {}
     for run in runs:
         validation = load_scores(run.path / VALIDATION_FILE)
         test_file = run.path / TEST_FILE
         test = load_scores(test_file) if test_file.exists() else []
-        evaluated = evaluate_run(validation, test, target_fpr, conditions) if test else None
+        evaluated = (
+            evaluate_run(validation, test, target_fpr, conditions, lighting_aggregates)
+            if test
+            else None
+        )
         calibration = calibrate(validation, target_fpr)
         result_file = run.path / "result.json"
         checkpoint = (

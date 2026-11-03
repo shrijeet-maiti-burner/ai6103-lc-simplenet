@@ -1,0 +1,181 @@
+\documentclass[letterpaper]{article}
+\usepackage{aaai24}
+\usepackage{times,helvet,courier}
+\usepackage[hyphens]{url}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{caption}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\urlstyle{rm}
+\def\UrlFont{\rm}
+\nocopyright
+\pdfinfo{/Title (Paired Relighting in SimpleNet) /Author (AI6103 project group)}
+\title{Paired Relighting in SimpleNet:\\Stability, Discrimination, and Defect Detection}
+\author{MAITI SHRIJEET, ANAND ARYAMAN, BOBAN ATHUL KRISHNA,\\UMESH GJH, HARSH SAAND}
+\affiliations{Nanyang Technological University\\AI6103 -- Deep Learning and Applications}
+\begin{document}
+\maketitle
+\begin{abstract}
+\textbf{Working draft, 2 November 2026: real-lighting test evaluation is pending.}
+Industrial inspection must tolerate illumination changes without suppressing defects. We study whether raw patch-score consistency adds to photometric augmentation in SimpleNet, using a matched identity-pair control, relighting alone, and relighting with consistency. Across eight MVTec AD 2 categories and three training seeds, augmentation reduces normal-validation score drift under synthetic lighting by 5.7--133 times. Consistency reduces drift further, but none of three tested weights satisfies the study's normal-data safeguards at full training length. A second software-stack replicate supports these qualitative findings. Separately, a 45-run MVTec AD reproduction exposes sensitivity to fixed-final versus test-selected checkpoints. These observations establish neither improved real-lighting false-alarm rates nor preserved defect recall. We specify the frozen-threshold evaluation needed to test those claims and provide a local inspection demo with fixed calibration, fixed display scales, and checkpoint-linked prediction records.
+\end{abstract}
+
+\section{Introduction}
+A detector can reject a normal product because a lamp changes, or accept a defective product because its score becomes insensitive to visible structure. Reducing either error alone is insufficient. Our question is whether paired lighting consistency improves on lighting augmentation while retaining real-defect sensitivity and regular-light performance.
+
+We build on SimpleNet \citep{liu2023simplenet}. Its frozen visual features, trainable adapter, and feature-noise discriminator give a compact setting in which to isolate this question. MVTec AD provides a reproduction check; MVTec AD 2 supplies a separate, harder industrial setting with real illumination variation \citep{bergmann2019mvtec,heckler2025ad2}. AD and AD 2 have different categories, so we train category-specific models on each dataset rather than describing this as direct cross-dataset transfer.
+
+Our implementation forms spatially aligned normal-image pairs, retains the original discrimination objective, and adds mean squared error (MSE) between their raw patch scores. The control that matters for consistency is relighting without the extra loss. A comparison only against an unaugmented baseline would confound augmentation and consistency.
+
+The current evidence supports three bounded observations. First, relighting substantially reduces synthetic-light score drift on normal validation images. Second, a smaller consistency error can coincide with weaker synthetic discrimination, and no tested AD 2 weight passes the declared full-run safeguards. Third, checkpoint policy and late training instability materially affect a faithful baseline. The real-lighting false-alarm/recall result remains an open measurement, not an inferred consequence of these diagnostics.
+
+\section{Related Work and Scope}
+SimpleNet synthesizes anomalous features by perturbing adapted normal features with Gaussian noise \citep{liu2023simplenet}. We reuse its original components and preserve the pinned upstream source, placing our integration in a separate package. Synthetic training anomalies are not evidence that genuine defects remain detectable.
+
+Illumination robustness and consistency are established directions. Generalized normality learning addresses distribution shifts through normal-data representation alignment and inference-time adaptation \citep{cao2023shift}. Paired well-lit/low-light industrial detection also predates this study \citep{hoang2025lighting}. Our work therefore does not claim to introduce consistency, paired lighting, or the use of AD 2. Its contribution is a controlled integration and an empirical analysis of the resulting trade-offs in SimpleNet.
+
+Recent AD 2 challenge work uses stronger frozen backbones, overlapping patches and intensity-augmented reference banks \citep{roming2026superadd}. The challenge analysis also treats efficiency and illumination shifts as separate deployment concerns \citep{heckler2026vand}. These are relevant higher-capacity alternatives, not matched architectural comparisons with our controlled SimpleNet study.
+
+The AD 2 benchmark distinguishes threshold-independent localization quality from thresholded decisions. Our image-level operating point is calibrated from normal validation images; it differs from the benchmark's pixel-threshold rule. Local public-subset results and official private-server results must consequently be reported as separate evidence. No state-of-the-art claim is made.
+
+\section{Method}
+\subsection{Backbone, Adapter, and Score}
+Let $E$ be the frozen feature extractor and patch aggregation, $A$ the trainable adapter, and $D$ the discriminator. Upstream $D$ assigns larger values to normal features. For patch $u$, the anomaly score and image score are
+\begin{equation}
+ s_u(x)=-D(A(E(x))_u),\qquad S(x)=\max_u s_u(x).
+\end{equation}
+We use ImageNet V1 WideResNet50-2 features from layers 2 and 3, upstream patch size 3 and 1,536-dimensional aggregation. The adapter is linear; the two-layer discriminator has hidden dimension 1,024. Both paired branches share weights. At deployment, a single image follows one scoring path; a paired input is unnecessary.
+
+\subsection{Aligned Photometric Pairs}
+After shared spatial preprocessing, raw RGB pixels $x\in[0,1]$ form the pair $(x,T(x))$, where
+\begin{equation}
+ T_{b,\gamma}(x)=\operatorname{clip}(b x^{\gamma},0,1),
+ \quad b,\gamma\overset{\mathrm{ind}}{\sim}\mathcal U(0.8,1.2).
+\end{equation}
+The transform precedes ImageNet normalization. No spatial transform differs between views, so corresponding patch locations align. We log newly clipped channel values; clipping and downsampling can remove information even when positions align. This transformation family does not reproduce every physical shadow, reflection, or light-source change.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=5mm,box/.style={draw,rounded corners=2pt,align=center,font=\small,minimum height=8mm,text width=29mm},arr/.style={-{Latex[length=1.5mm]},thin}]
+\node[box] (x) {normal $x$};
+\node[box,right=8mm of x] (t) {relit $T(x)$};
+\node[box,below=of x] (ex) {shared frozen $E$};
+\node[box,below=of t] (et) {shared frozen $E$};
+\node[box,below=of ex] (ax) {shared $A,D$};
+\node[box,below=of et] (at) {shared $A,D$};
+\node[draw,rounded corners=2pt,below=6mm of ax.south west,anchor=north west,text width=66mm,align=center,font=\small] (loss) {two-view discrimination + $\lambda$ raw-score MSE};
+\draw[arr] (x)--(ex);\draw[arr] (t)--(et);\draw[arr] (ex)--(ax);\draw[arr] (et)--(at);
+\draw[arr] (ax.south)--(loss.north -| ax.south);\draw[arr] (at.south)--(loss.north -| at.south);
+\end{tikzpicture}
+\caption{Training compares aligned views. Independent Gaussian perturbations of adapted features supply the discrimination negatives (omitted for clarity). Both normal-score branches retain gradients through $A,D$; $E$ remains frozen.}
+\label{fig:method}
+\end{figure}
+
+\subsection{Discrimination and Consistency}
+For each view $v\in\{x,T(x)\}$, set $z_v=A(E(v))$ and $\tilde z_v=z_v+\epsilon_v$, with independent $\epsilon_v\sim\mathcal N(0,0.015^2 I)$. The two-view hinge objective is
+\begin{align}
+ L_{\mathrm{disc}}=\frac12\sum_v\big[&\operatorname{mean}_u(m-D(z_{v,u}))_+\notag\\
+ &+\operatorname{mean}_u(m+D(\tilde z_{v,u}))_+\big],
+\end{align}
+where $m=0.5$ and $(a)_+=\max(a,0)$. With $N$ corresponding normal patch positions,
+\begin{align}
+ L_{\mathrm{score}}&=\frac1N\sum_u[D(z_{x,u})-D(z_{T(x),u})]^2,\\
+ L&=L_{\mathrm{disc}}+\lambda L_{\mathrm{score}}.
+\end{align}
+Consistency uses raw scores before image aggregation, interpolation, smoothing, or normalization. Its sign is unchanged if $D$ is replaced by $-D$ in both branches.
+
+One joint discriminator forward receives normal original, normal relit, synthetic original, then synthetic relit features. This ordering matters because discriminator batch normalization depends on the joint batch. We use adapter AdamW ($10^{-4}$ learning rate, $0.01$ decay) and discriminator Adam ($2\cdot10^{-4}$, $10^{-5}$ decay), with constant learning rates.
+
+\subsection{Controls and Identifiability}
+\begin{table}[t]
+\centering
+\begin{tabular}{lll}
+\toprule
+Model & Second view & Consistency\\
+\midrule
+B0 & identical original & $0$\\
+B1 & relit & $0$\\
+B2 & relit & $\lambda>0$\\
+\bottomrule
+\end{tabular}
+\caption{B1 versus B0 measures augmentation; B2 versus B1 isolates consistency under matched settings. The faithful upstream single-view reference is separate.}
+\label{tab:controls}
+\end{table}
+B1/B2 share data order, initialization, transform and noise RNG streams, batch handling, and optimizer updates. B0 consumes the same transform draws but uses an identity second view. Zero-weight B2 must replay B1 exactly, including heads, batch-normalization buffers, optimizers, sampler, RNGs, and validation scores.
+
+A constant anomaly score gives zero pair MSE. Calibrating its threshold on normal scores and using a strict greater-than decision flags no image: FPR and recall are both zero, and AUROC is $0.5$ when both classes exist. This analytic control explains why stability cannot substitute for defect evaluation. The hinge objective discourages trivial discrimination collapse but does not prove that actual defects remain distinguishable.
+
+\section{Experimental Protocol}
+\subsection{Data, Geometry, and Training Budget}
+MVTec AD uses a deterministic, exact-RGB-grouped normal holdout. Validation files remain physically in \texttt{train/good}, so membership is enforced by a pinned manifest. The single-view reproduction covers 15 categories and seeds $\{0,1,2\}$. It uses resize 329, center crop 288, batch 8, and 40 meta-epochs with four discriminator data passes each.
+
+AD 2 uses its own 2,528 normal training and 302 normal validation images across eight categories. Each paired model uses a full-frame bilinear resize to $256\times256$, batch 8, 80 source passes and the same three seeds: 1,440--4,320 updates depending on category. Two views give 160 input-view passes; equal view exposure is not identical compute or an exact match to the single-view update count. The single-view AD 2 references use 40 meta-epochs. A $288\times288$ sensitivity check is kept separate from the main setting.
+
+We do not crop AD 2, where border defects matter. Full-frame resizing changes aspect ratio on non-square images and can erase small defects; restored native map dimensions do not recover lost feature detail. Cropped AD maps and masks use identical crop coordinates and are never presented as full-native coverage.
+
+The paired runner sets the backbone to evaluation mode before shape probing, preserving pretrained batch-normalization buffers. The faithful upstream reference retains its original training-mode ones-image probe, which changes those buffers once. Paired-control conclusions use the shared paired implementation; reference differences are disclosed rather than attributed solely to the proposed loss.
+
+\subsection{Selection and Recorded Deviations}
+Normal-only selection uses an independent tuning seed 3 and 256 updates per trial. Candidates are $\lambda\in\{0.01,0.1,1.0\}$. A weight must retain at least half of B1's patch-score standard deviation and keep synthetic hinge at most 1.25 times B1 in every category. Among eligible weights, the proxy minimizes the category-macro B2/B1 pair-MSE ratio over four brightness/gamma corners, with a declared smallest-weight tie rule.
+
+No AD 2 candidate passed. B2 was nevertheless trained at $1.0$, the earlier MVTec AD choice, as a documented deviation from the stop rule. A second full-run rule applied the same safeguards to seed-mean diagnostics. It was written before full-length $0.01/0.1$ results but after the $1.0$ outcomes were known, so it is not wholly independent preregistration. No weight passes that rule either. All weights remain ablations; test outcomes select none of them.
+
+Final checkpoints are fixed before testing. Upstream test-based checkpoint selection and per-test-set min/max normalization are not used. The AD per-epoch test trajectories are disclosed diagnostics for explaining reproduction differences; they do not change training or select a submitted model. Public fabric test scoring of earlier 100-step exploratory checkpoints is also disclosed and kept outside the formal study.
+
+\subsection{Frozen Operating Point and Evaluation}
+For each model/category/seed, the image threshold is the higher empirical 95th percentile of regular-light normal validation scores, with decision $S(x)>\tau$. The threshold is retained across lighting groups. Report achieved validation FPR and sample size; this is not a population or shifted-distribution guarantee. Sheet metal has only 19 validation images, motivating predeclared all-eight and seven-without-sheet-metal macros.
+
+For each lighting group, FPR is false-positive normal images divided by all normal images, and recall is detected defective images divided by all defective images. Both retain their numerators and denominators. Missing denominators remain unavailable. Compute category macros per seed, then mean/sample SD over seeds; pooled-image rates are not category macros. A group absent from a category cannot silently become an eight-category macro.
+
+The agreed recall rule allows at most a five-percentage-point seed-mean macro drop per condition, reporting both category scopes and naming every category with a larger drop. B1 is compared with B0; every B2 weight is compared with both. Image AUROC, pixel localization, AU-PRO integrated to FPR $0.05$, and failure examples complement the operating-point results. AU-PRO parity and formal AD 2 test results are pending in this draft. Private metrics require the official server.
+
+\section{Results Available Before Real-Light Evaluation}
+\subsection{MVTec AD Reproduction}
+\begin{table}[t]
+\centering\input{build/evidence/ad-reproduction.tex}
+\caption{Fixed-final single-view reproduction, percent mean $\pm$ sample SD over three per-seed category macros. The without-grid row is a disclosed sensitivity analysis, not a replacement for the full result.}
+\label{tab:ad}
+\end{table}
+Table~\ref{tab:ad} is regenerated from 45 released final-epoch records. Grid's image AUROC is $72.07\pm25.09\%$: two seeds collapse late. Its much stronger earlier test-epoch scores explain why the original checkpoint rule can conceal this instability. We retain the final checkpoint because no stopping rule was fixed before test exposure.
+
+The separate matched bottle/grid study reports image AUROC on grid of $98.61\pm0.27$ (B0), $98.64\pm0.24$ (B1), and $99.11\pm0.35$ (B2). Pixel AUROC is essentially unchanged. On bottle, all variants are near the ceiling. These two categories do not establish a general benefit; the large gap to the collapsed single-view endpoint is not clean evidence for consistency.
+
+\subsection{AD 2 Normal-Validation Stability}
+\begin{table}[t]
+\centering\input{build/evidence/ad2-normal.tex}
+\caption{Normal-validation patch-score MSE under four synthetic brightness/gamma corners, averaged over seeds. Reduction is the ratio of seed means. These are not test false-alarm rates or defect recall.}
+\label{tab:normal}
+\end{table}
+Table~\ref{tab:normal} shows B1 reducing normal score drift in every category. The range is 5.7 times for sheet metal to 132.9 times for fruit jelly. This is evidence of invariance to the chosen synthetic transformations, not proof of robustness to real lighting captures.
+
+\begin{figure}[t]
+\centering\includegraphics[width=\columnwidth]{build/evidence/hinge-safeguard.pdf}
+\caption{Full-length B2/B1 synthetic-hinge ratios, from three-seed means. An asterisk marks a ratio above the 1.25 safeguard. Color saturates outside $[0.25,4]$; numbers retain actual values. No weight passes every category. The hinge is a proxy, not real-defect recall.}
+\label{fig:hinge}
+\end{figure}
+Consistency lowers pair MSE further, but fails the full-run safeguards: $0.01$ fails on fabric and rice, $0.1$ on vial, and $1.0$ on five categories (Figure~\ref{fig:hinge}). At $1.0$, wallplugs is dominated by a late unstable seed. Such runs remain in the result rather than being removed because they are inconvenient.
+
+The independent 72-run replicate uses Python 3.11, torch 2.11/CUDA 12.8 rather than the locked Python 3.12, torch 2.6/CUDA 12.4 environment. It reproduces B1's pair-MSE reduction (5.9--132 times) and rejects $0.01$, though its failing categories differ. Synthetic hinge varies markedly across stacks and seeds. Thus the safeguard's exact boundary is unstable, while the qualitative consistency limitation is reproduced.
+
+At 288 pixels, the documented sensitivity runs retain the normal pair-MSE reduction but not the direction of score-spread change in several categories. Their raw artifacts are not yet released. They neither replace the 256px study nor justify selecting image size from test outcomes.
+
+\section{Inspection Demo and Reproducibility}
+The local demo uses the released fixed heads and normal-validation images only. It changes brightness/gamma while showing B0/B1/B2 raw scores, their own frozen thresholds, threshold-relative margins, and fixed-scale maps. Threshold-relative margins use normal-validation score standard deviation; they are not probabilities or confidence estimates. Map scales are fixed per model from the second and 98th percentiles of saved validation patch scores, rather than reset for each image.
+
+A fixed nine-point sweep exposes decision changes on the same image. Exported records include image SHA-256, transform, checkpoint hash, backbone fingerprint and calibration counts. The app distinguishes newly computed, cached, and recorded predictions; a labelled recording provides an offline presentation fallback. Reusing one frozen embedding across compatible heads is an inspection optimization, not a claim about training cost or a new detection architecture.
+
+Interactive inspection and model documentation already exist \citep{gramelt2024interactive,crisan2022cards}. Our demo's purpose is to make this study's controls and limitations inspectable. An attractive map is not localization evidence, and no observer study or novelty claim for the interface is implied.
+
+Raw datasets, model weights, generated runs and personal research remain outside source control. Release checksums and source revisions bind the measured evidence. Checkpoint tests cover exact continuation within a numerical environment, including RNG/sampler state. Cross-device bit equality is not promised; inference re-scores saved validation images before accepting a released head.
+
+\section{Limitations and Completion Boundary}
+Normal data cannot resolve the central defect-retention question. Mild photometric changes can still clip or hide small defects, synthetic Gaussian feature anomalies need not resemble genuine defects, and full-frame resizing sacrifices fine spatial information. Three seeds do not justify strong significance claims. The normal validation set is reused for calibration and diagnostics, so its achieved FPR is not independent validation of a future-data guarantee.
+
+The data was acquired from pinned mirrors. Byte agreement across mirrors does not establish identity with the official archive, and physical acquisition-group identity is unverified. Vial's public filenames include a fourth shifted group absent from the arXiv v1 lighting table; it is retained as an observed group with physical mapping unverified, rather than assigned an invented lamp configuration.
+
+\textbf{Before submission:} complete the frozen real-lighting FPR/recall matrix and localization metrics; add matched, deterministic success/failure examples; reconcile the official lighting metadata; add matriculation numbers; and replace this working-draft notice only when every result is traceable. The current supported conclusion is that augmentation improves synthetic normal-score stability, while extra consistency has not yielded an eligible AD 2 setting under the chosen safeguards. Its effect on real defect detection remains to be measured.
+
+\bibliography{references}
+\end{document}

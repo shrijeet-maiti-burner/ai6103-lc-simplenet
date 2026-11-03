@@ -14,6 +14,7 @@ import json
 from pathlib import Path
 
 from lc_simplenet.evaluate_runs import discover_runs, evaluate_all, run_matrix, write_outputs
+from lc_simplenet.evaluation_summary import aggregate_results, filter_runs
 
 
 def main() -> None:
@@ -24,6 +25,13 @@ def main() -> None:
     parser.add_argument("--categories", nargs="+", help="default: those found under --runs")
     parser.add_argument("--seeds", nargs="+", type=int, default=[0, 1, 2])
     parser.add_argument("--conditions", type=Path)
+    parser.add_argument("--methods", nargs="+", help="declared methods; missing runs stay visible")
+    parser.add_argument("--recall-tolerance", type=float, default=0.05)
+    parser.add_argument(
+        "--lighting-aggregates",
+        action="store_true",
+        help="also report nonregular/exposure/additional-light groups",
+    )
     args = parser.parse_args()
 
     runs = discover_runs(args.runs)
@@ -31,9 +39,14 @@ def main() -> None:
         raise SystemExit(f"No {'validation-scores.json'} found under {args.runs}")
     conditions = json.loads(args.conditions.read_text()) if args.conditions else None
     categories = args.categories or sorted({r.category for r in runs})
-    matrix = run_matrix(runs, categories, args.seeds)
-    results = evaluate_all(runs, args.target_fpr, conditions)
+    runs = filter_runs(runs, categories, args.seeds, args.methods)
+    matrix = run_matrix(runs, categories, args.seeds, args.methods or ())
+    results = evaluate_all(runs, args.target_fpr, conditions, args.lighting_aggregates)
+    aggregate = aggregate_results(results, matrix, args.recall_tolerance)
     write_outputs(results, matrix, args.out, conditions)
+    (args.out / "aggregate.json").write_text(
+        json.dumps(aggregate, indent=2, allow_nan=False) + "\n", encoding="utf-8"
+    )
     counts = {
         s: sum(r["status"] == s for r in matrix) for s in ("ready", "validation_only", "missing")
     }
