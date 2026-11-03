@@ -8,6 +8,7 @@ from pathlib import Path, PurePosixPath
 import numpy as np
 from PIL import Image
 
+from lc_simplenet.external_localization import ExternalNativeMetrics
 from lc_simplenet.localization import restore_native
 from lc_simplenet.streaming_localization import NativeMetrics
 
@@ -20,7 +21,42 @@ def digest(path):
     return value.hexdigest()
 
 
-def evaluate(run_dir, root, output, fpr_limit=0.05, histogram_mib=2048, progress=None):
+def evaluate(
+    run_dir,
+    root,
+    output,
+    fpr_limit=0.05,
+    histogram_mib=2048,
+    progress=None,
+    *,
+    engine="sparse",
+    work_dir=None,
+):
+    if engine == "sparse":
+        if work_dir is not None:
+            raise ValueError("work_dir is only used by the external engine")
+        return _evaluate(run_dir, root, output, fpr_limit, histogram_mib, progress, NativeMetrics)
+    if engine != "external":
+        raise ValueError("engine must be sparse or external")
+    instances = []
+
+    def factory(limit, budget):
+        item = ExternalNativeMetrics(
+            work_dir or output.with_suffix(output.suffix + ".buckets"), limit, budget
+        )
+        instances.append(item)
+        return item
+
+    try:
+        result = _evaluate(run_dir, root, output, fpr_limit, histogram_mib, progress, factory)
+        instances[0].cleanup()
+        return result
+    finally:
+        for item in instances:
+            item.close()
+
+
+def _evaluate(run_dir, root, output, fpr_limit, histogram_mib, progress, factory):
     if output.exists():
         raise FileExistsError("refusing to overwrite localization evidence")
     rows = json.loads((run_dir / "test-scores.json").read_text())
@@ -40,7 +76,7 @@ def evaluate(run_dir, root, output, fpr_limit=0.05, histogram_mib=2048, progress
         raise ValueError("scored checkpoint hash does not match the retained checkpoint")
     root = root.resolve(strict=True)
     maps_path = run_dir / "test-maps.npz"
-    metrics = NativeMetrics(fpr_limit, histogram_mib * 2**20)
+    metrics = factory(fpr_limit, histogram_mib * 2**20)
     mask_hashes = {}
     with np.load(maps_path, allow_pickle=False) as archive:
         if archive["image_ids"].tolist() != identifiers or len(archive["maps"]) != len(rows):
@@ -104,6 +140,10 @@ def evaluate(run_dir, root, output, fpr_limit=0.05, histogram_mib=2048, progress
         "image_ids_sha256": hashlib.sha256("\n".join(identifiers).encode()).hexdigest(),
         "mask_sha256": mask_hashes,
     }
+    if isinstance(metrics, ExternalNativeMetrics):
+        result["engine_source_sha256"] = digest(
+            Path(__file__).resolve().parents[1] / "src/lc_simplenet/external_localization.py"
+        )
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("x", encoding="utf-8") as stream:
         json.dump(result, stream, indent=2, allow_nan=False)
@@ -118,6 +158,10 @@ def main():
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--fpr-limit", type=float, default=0.05)
     parser.add_argument("--histogram-mib", type=int, default=2048)
+    parser.add_argument("--engine", choices=["sparse", "external"], default="sparse")
+    parser.add_argument(
+        "--work-dir", type=Path, help="new temporary directory for external buckets"
+    )
     args = parser.parse_args()
     result = evaluate(
         args.run_dir,
@@ -126,6 +170,8 @@ def main():
         args.fpr_limit,
         args.histogram_mib,
         progress=lambda row: print(json.dumps(row), flush=True),
+        engine=args.engine,
+        work_dir=args.work_dir,
     )
     print(json.dumps({k: result[k] for k in ("status", "images", "pixel_auroc", "au_pro")}))
 
