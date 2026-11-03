@@ -68,6 +68,32 @@ def test_native_metric_path_retains_geometry_and_mask_evidence(tmp_path):
         module.evaluate(run, root, output)
 
 
+def test_external_cli_preserves_exact_metrics_and_cleans_only_its_workspace(tmp_path):
+    run, root, output = fixture(tmp_path)
+    reference = module.evaluate(run, root, output)
+    external_out = tmp_path / "external.json"
+    work = tmp_path / "owned-buckets"
+    actual = module.evaluate(
+        run, root, external_out, histogram_mib=64, engine="external", work_dir=work
+    )
+    assert actual["pixel_auroc"] == pytest.approx(reference["pixel_auroc"], abs=1e-14)
+    assert actual["au_pro"] == pytest.approx(reference["au_pro"], abs=1e-14)
+    assert len(actual["engine_source_sha256"]) == 64
+    assert json.loads(external_out.read_text()) == actual
+    assert not work.exists()
+
+
+def test_existing_external_workspace_is_never_reused_or_removed(tmp_path):
+    run, root, output = fixture(tmp_path)
+    work = tmp_path / "existing"
+    work.mkdir()
+    sentinel = work / "unrelated.txt"
+    sentinel.write_text("retain")
+    with pytest.raises(FileExistsError):
+        module.evaluate(run, root, output, engine="external", work_dir=work)
+    assert sentinel.read_text() == "retain" and not output.exists()
+
+
 @pytest.mark.parametrize("fault", ["order", "crop", "mask", "checkpoint"])
 def test_mismatched_provenance_or_geometry_is_rejected(tmp_path, fault):
     run, root, output = fixture(tmp_path)
