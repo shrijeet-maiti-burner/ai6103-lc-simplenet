@@ -10,7 +10,7 @@ D's evaluation of the 120 released runs (`dev-ad2-study-2026-10-31`) on the AD 2
 - Macro: unweighted mean over categories for each seed, then mean and sample SD over seeds 0, 1 and 2. Reported over all eight categories and without sheet_metal.
 - Recall rule (agreed on #8): recall is preserved in a condition when the candidate's macro recall is within 5 percentage points of the reference. B1 against B0 is the main comparison. Each B2 weight is compared with both B0 and B1. Every category more than 5 points below the reference is named.
 - Lighting groups come from the documented file-name suffixes ([lighting definitions](ad2-lighting.md)). `shift_2`, `shift_3` and `shift_4` do not exist in every category, so their eight-category macro is not applicable; the tool does not compute it over fewer categories. The physical setup of vial's `shift_4` is unverified.
-- Scoring: `scripts/score_public_test.py` on A40 GPUs, the locked environment, each run's `heads.pt`. The saved validation scores were re-derived for three images per run before test scoring. The encoder hash was checked against the checkpoint. The scoring metadata records the TC2 copy's commit as `b0b23be`; the copy had no git history, so that field is stale. Evaluation used main at `2518602`.
+- Scoring: `scripts/score_public_test.py` on A40 GPUs, the locked environment, each run's `heads.pt`. The saved validation scores were re-derived for three images per run before test scoring. The encoder hash was checked against the checkpoint. The scoring metadata records the TC2 copy's commit as `b0b23be`; the copy had no git history, so that field is stale and is kept as recorded. `scoring-provenance.json` (below) gives the SHA-256 of the inference source actually run and each run's checkpoint, run-config, image-id and score-file identities. Evaluation used main at `2518602`, which identifies the aggregation, not the copied inference source.
 
 ## Results, eight-category macro (mean ± SD over three seeds)
 
@@ -44,7 +44,7 @@ Image AUROC:
 | B2 at 0.1 | 0.668 ± 0.063 | 0.668 ± 0.021 | 0.684 ± 0.081 | 0.662 ± 0.013 | 0.638 ± 0.021 |
 | B2 at 1.0 | 0.689 ± 0.023 | 0.667 ± 0.022 | 0.694 ± 0.021 | 0.646 ± 0.027 | 0.636 ± 0.003 |
 
-`aggregate.json` also holds the without-sheet_metal macros, the pooled exposure-changed and additional-light groups, and every comparison. The without-sheet_metal figures differ little from the above.
+The [supplement](ad2-test-evaluation-supplement.md) gives the same tables for both declared scopes (eight categories and without sheet_metal), the pooled exposure-changed and additional-light groups, every comparison and the achieved validation FPR with counts. Without sheet_metal the drops against B0 are larger (B1: underexposed -7.9, overexposed -16.2, shift_1 -8.3, pooled non-regular -8.7 points), and the B2 weights stay within 5 points of B1 in every condition.
 
 ## Recall rule
 
@@ -74,7 +74,7 @@ Names for the other comparisons are in `category_recall_checks` in `aggregate.js
 ## What this shows
 
 - The calibration works in regular light: FPR is 4.7 to 7.5% against the 5% target.
-- Under the agreed rule, B1 does not preserve recall against B0 in underexposed, overexposed or shift_1 light, and does not overall. No B2 weight does either. B2 stays within 5 points of B1 except at weight 1.0 under shift_1.
+- Under the agreed rule, B1 does not preserve recall against B0 in underexposed, overexposed or shift_1 light, and does not overall. No B2 weight does either. In the eight-category macro B2 stays within 5 points of B1 except at weight 1.0 under shift_1 (-6.4) and in the pooled additional-light group (-5.5); without sheet_metal it has no exception (shift_1 -4.8, additional light -3.4).
 - B1 and B2 lower the FPR under lighting change (overexposed: 0.208 for B0, 0.054 to 0.088 for the others), but the recall falls with it. Image AUROC barely moves (0.63 to 0.64 over all non-regular images), so the change looks like a shift of the operating point, not better ranking of defective against normal images. That reading is an interpretation of these tables, not a tested claim.
 - The frozen regular-light threshold flags 50 to 63% of normal images under shift_1 for every method.
 - With three seeds and small public test sets, a single category's recall change of about 5 points may be noise. The macro SDs above show the spread.
@@ -88,7 +88,7 @@ Names for the other comparisons are in `category_recall_checks` in `aggregate.js
 
 ## Artifacts
 
-Stored outside Git (TC2 `~/eval-ad2-final`, copied to the evaluator's machine). SHA-256:
+Stored outside Git (TC2 `~/eval-ad2-final`, copied to the evaluator's machine; the bundle is shared privately with reviewers, not in Git). SHA-256:
 
 | File | SHA-256 |
 |---|---|
@@ -97,6 +97,16 @@ Stored outside Git (TC2 `~/eval-ad2-final`, copied to the evaluator's machine). 
 | `metrics.csv` | `f6896643b264b2ab141ff1368269ae007c1bc52c1fd4343c0272129fe56d3a22` |
 | `thresholds.json` | `f9419718a159ca4d98e4a789e473997b63430429edaac69d0c1d4db2d6ca1f43` |
 | `conditions.json` | `9000f41b6d7dadc54ce68ca856d86b2221411480d9007fd6a275910e994c5823` |
+| `scoring-provenance.json` | `537705618c74c15f82d2ac40658bf523840bd7fba530f001382e8631ad26fbbc` |
+
+Inference source as run on TC2 (recorded in `scoring-provenance.json`):
+
+| File | SHA-256 |
+|---|---|
+| `scripts/score_public_test.py` | `99e875a2a9503839b7caf55ba84efebd3c4811a9a4134fb38b01b019479f5d21` |
+| `src/lc_simplenet/public_scoring.py` | `0a78de70658958577771f91a3c38b42b2871a7f071181bb74a94d5059b131fc0` |
+| `src/lc_simplenet/pilot.py` | `bb71dc2f858bf1c52a76512a166aa8792d15738a500470623f2992c304a0dbb9` |
+| `uv.lock` | `3d3b9dd4995622d26fb3077f8000255f974a03c715ebe764a64eeedac3e53aa2` |
 
 Command, run on TC2 after `scripts/build_public_conditions.py` built `conditions.json` from the unpacked archive (1,084 public images):
 
