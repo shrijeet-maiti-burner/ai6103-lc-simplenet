@@ -51,4 +51,6 @@ data/                local dataset instructions; images ignored
 results/             evidence convention; run outputs ignored
 ```
 
-The complete, separately labelled RTX public [image](docs/ad2-public-rtx-results.md) and [native localization](docs/ad2-native-public-results.md) matrices are available. Primary A40 artifact/source verification and official private-server evaluation remain pending. The pinned upstream training entry point selects checkpoints using test labels and must not be used unchanged for this study. The single-view runner calls only its discriminator-training loop; the paired runner reuses its components with a fixed-step loop. See [the audit](docs/source-review.md#upstream-code).
+The complete, separately labelled RTX public [image](docs/ad2-public-rtx-results.md) and [native localization](docs/ad2-native-public-results.md) matrices are available. The [primary A40 image-output/source audit](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/18#issuecomment-6605059690) also passed; official private-server evaluation remains pending. The pinned upstream training entry point selects checkpoints using test labels and must not be used unchanged for this study. The single-view runner calls only its discriminator-training loop; the paired runner reuses its components with a fixed-step loop. See [the audit](docs/source-review.md#upstream-code).
+
+The working project due date is **23 November 2026**. The [submission checklist](docs/submission.md) records the current report, video and code requirements.

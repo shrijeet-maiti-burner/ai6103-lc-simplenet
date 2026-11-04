@@ -1,8 +1,8 @@
 # report draft
 
-`main.tex` uses the supplied, unchanged `aaai24.sty` and `aaai24.bst`. the current draft reports measured ad reproduction, ad 2 normal-validation evidence and complete, separately labelled rtx3060 public image/native-localization matrices. primary-artifact verification remains pending. role d has reported the a40 image matrix in #18; all 150 published means/sds match the local run at their displayed precision. it is not a submission-ready report.
+`main.tex` uses the supplied, unchanged `aaai24.sty` and `aaai24.bst`. the current draft reports measured ad reproduction, ad 2 normal-validation evidence and complete, separately labelled rtx3060 public image/native-localization matrices. the [primary a40 image-output audit](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/18#issuecomment-6605059690) is now complete: all 120 score-file hashes reconstruct and six evaluation outputs replay. a40 native maps remain outside that audit. the draft source still needs its obsolete audit-pending wording and final evidence updated before submission.
 
-the five official names are confirmed. matriculation numbers will be added by shrijeet. the course limit is six body pages, excluding references; retain the original layout and readable figures.
+the five official names are confirmed. matriculation numbers and ntu email addresses must be added on the first page. the course limit is six body pages, excluding references; retain the original layout and readable figures. the current project due date is 23 november 2026; follow the [submission checklist](../docs/submission.md).
 
 ## rebuild
 
@@ -27,16 +27,16 @@ the evidence builder checks all 120 paired identities, verifies the ad archive c
 
 ## remaining gates
 
-- compare the primary a40 image matrix with the complete local rtx matrix; retain any numerical/hardware differences.
+- replace obsolete a40-pending wording after checking the completed image-output audit; retain the separate hardware/cohort identities.
 - audit the [complete native matrix](../docs/ad2-native-public-results.md) and its retained input/source hashes. keep private-server outputs separate.
 - inspect the generated all-eight-category gallery and retain its fixed selection rule, calibration and display scales.
-- incorporate the team's verified contributions and the missing matriculation numbers.
+- incorporate the team's verified contributions and all missing matriculation numbers/ntu emails.
 - remove the draft notice only after auditing every claim against saved evidence. inspect every rendered page again after results change pagination; reject overfull boxes, unresolved citations and illegible plot labels.
 
 the five-minute recording should explain the problem, original method, controlled change, measured result and limitation as one argument. demonstration timing is not a formal inference-throughput benchmark.
 
 ## compact image review archive
 
-[download the private rtx review artifact](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-public-rtx-2026-11-03). verify its zip checksum and per-file manifest, then extract into an ignored folder. it contains all scores needed to reproduce image tables; all six included evaluation outputs replay byte-for-byte. run/result identity files are labelled projections with personal paths omitted and original hashes retained. the archive does not contain maps or image pixels: rebuilding the qualitative gallery additionally needs retained maps and the public dataset. primary a40 provenance remains a separate review.
+[download the private rtx review artifact](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-public-rtx-2026-11-03). verify its zip checksum and per-file manifest, then extract into an ignored folder. it contains all scores needed to reproduce image tables; all six included evaluation outputs replay byte-for-byte. run/result identity files are labelled projections with personal paths omitted and original hashes retained. the archive does not contain maps or image pixels: rebuilding the qualitative gallery additionally needs retained maps and the public dataset. the primary a40 image audit is complete and remains separately identified above.
 
 the [native review artifact](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-native-2026-11-03) contains all 120 native outputs, their source/input bindings and the exact evaluator snapshots. run `build_native_report.py` against its `native` and `scoring` directories to reproduce both category scopes. metadata projections explicitly omit historical absolute source paths and retain their original hashes. restoring maps from dataset images requires the released heads and original scoring cohort; aggregation alone requires neither images nor weights.

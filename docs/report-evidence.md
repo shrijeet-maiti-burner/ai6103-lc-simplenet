@@ -18,4 +18,4 @@ checked against released records and the complete local public matrix on 3 novem
 
 the evidence builder emits `report/build/evidence/evidence.json` with diagnostic and archive hashes. retain it alongside the final pdf. source code and a rendered report are separate artifacts; neither establishes that an experiment ran.
 
-the current operational targets remain 8 november for the report and 15 november for the video, as confirmed by shrijeet on 2 november. current portal instructions and official announcements have not been independently checked. the [rubric](requirements.md) remains the authority for content; no grade is guaranteed.
+the current project submission date is 23 november 2026, confirmed by shrijeet on 4 november. it supersedes the earlier provisional 8/15 november targets. the supplied final-submission announcement requires one report submitter, all names/matriculation numbers/ntu emails on page one, a playable video of at most five minutes at normal speed, and a code zip or repository link. see the [requirements](requirements.md) and [submission checklist](submission.md). the exact portal cutoff is not in the supplied text.
