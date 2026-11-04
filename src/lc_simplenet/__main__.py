@@ -4,23 +4,24 @@ import argparse
 import importlib.util
 import json
 import platform
-import subprocess
 import sys
 from pathlib import Path
 
-UPSTREAM_SHA = "351a2b8d4e8cfc944dbccbf9bc6ceda930c6f26b"
+from lc_simplenet.source_identity import UPSTREAM_SHA, source_record
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
 def doctor(require_cuda: bool) -> int:
     info = {"python": platform.python_version(), "executable": sys.executable}
     ok = sys.version_info[:2] == (3, 12)
-    submodule = ROOT / "third_party/SimpleNet"
-    result = subprocess.run(
-        ["git", "-C", str(submodule), "rev-parse", "HEAD"], capture_output=True, text=True
-    )
-    info["upstream_sha"] = result.stdout.strip() if result.returncode == 0 else None
-    ok &= info["upstream_sha"] == UPSTREAM_SHA
+    try:
+        source = source_record(ROOT)
+        info.update(source=source, upstream_sha=source["upstream_commit"])
+        ok &= info["upstream_sha"] == UPSTREAM_SHA and not source["upstream_dirty"]
+    except (ValueError, OSError) as error:
+        info.update(source_error=str(error), upstream_sha=None)
+        ok = False
     if importlib.util.find_spec("torch"):
         import torch
         import torchvision

@@ -10,7 +10,6 @@ import argparse
 import hashlib
 import json
 import platform
-import subprocess
 import time
 from pathlib import Path
 
@@ -32,11 +31,7 @@ from lc_simplenet.baseline import (
 )
 from lc_simplenet.data import NormalManifestDataset
 from lc_simplenet.provenance import capture_rng_state, file_sha256, runtime_record, state_sha256
-
-
-def _git(path: Path, *args: str) -> str:
-    result = subprocess.run(["git", *args], cwd=path, capture_output=True, text=True, check=True)
-    return result.stdout.strip()
+from lc_simplenet.source_identity import source_record
 
 
 def _sha256(path: Path) -> str:
@@ -114,9 +109,7 @@ def main() -> None:
         "checkpoint_policy": "fixed_final",
         "manifest_sha256": args.manifest_sha256,
         "uv_lock_sha256": _sha256(ROOT / "uv.lock"),
-        "git_commit": _git(ROOT, "rev-parse", "HEAD"),
-        "git_dirty": bool(_git(ROOT, "status", "--porcelain")),
-        "upstream_commit": _git(ROOT / "third_party/SimpleNet", "rev-parse", "HEAD"),
+        **source_record(ROOT),
         "runtime": runtime_record(device),
         "backbone_after_probe_sha256": encoder_hash,
         "pretrained_weight_sha256": file_sha256(weight_path),
@@ -158,9 +151,7 @@ def main() -> None:
         "manifest_sha256": args.manifest_sha256,
         "checkpoint_sha256": _sha256(checkpoint),
         "uv_lock_sha256": _sha256(ROOT / "uv.lock"),
-        "git_commit": _git(ROOT, "rev-parse", "HEAD"),
-        "git_dirty": bool(_git(ROOT, "status", "--porcelain")),
-        "upstream_commit": _git(ROOT / "third_party/SimpleNet", "rev-parse", "HEAD"),
+        **source_record(ROOT),
         "python": platform.python_version(),
         "torch": torch.__version__,
         "device": torch.cuda.get_device_name(device) if cuda else "cpu",
