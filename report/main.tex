@@ -162,7 +162,7 @@ The independent 72-run replicate uses Python 3.11, torch 2.11/CUDA 12.8 rather t
 At 288 pixels, the documented sensitivity runs retain the normal pair-MSE reduction but not the direction of score-spread change in several categories. Their raw artifacts are not yet released. They neither replace the 256px study nor justify selecting image size from test outcomes.
 
 \subsection{Frozen Public-Subset Detection}
-We scored all 120 released heads on the same 1,084 annotated public images (379 normal, 705 defective), giving 16,260 image predictions. TC2 disk quota prevented the planned A40 setup before scoring; this separate contingency uses an RTX 3060 Laptop GPU and the locked torch 2.6/CUDA 12.4 stack. The protocol, scorer hashes and complete category/weight scope were recorded before scoring. Each head passed three saved-normal re-score checks. Role D has completed the primary A40 matrix: all 150 published mean/SD values agree with this local run at the reported three-decimal rate precision. Raw A40 artifacts and the copied scoring source remain to be independently audited. No private-server result is reported.
+We scored all 120 released heads on the same 1,084 annotated public images (379 normal, 705 defective), giving 16,260 image predictions. TC2 disk quota prevented the planned A40 setup before scoring; this separate contingency uses an RTX 3060 Laptop GPU and the locked torch 2.6/CUDA 12.4 stack. The protocol, scorer hashes and complete category/weight scope were recorded before scoring. Each head passed three saved-normal re-score checks. Role D completed the primary A40 image matrix: all 150 published mean/SD values agree at the reported three-decimal rate precision. Independent source/output-hash checks and replay of six evaluation outputs passed; no image decision differs between devices. Native localization remains a separate RTX cohort. No private-server result is reported.
 
 \begin{table}[t]
 \centering
@@ -210,7 +210,7 @@ Normal data cannot establish defect retention. Photometric changes can hide defe
 
 Pinned mirrors agree byte-for-byte, but identity with the official archive and physical acquisition groups is unverified. Vial's fourth shifted filename group is absent from the arXiv v1 lighting table; it remains an observed group with physical mapping unresolved.
 
-\textbf{Before submission:} audit primary A40 artifacts and copied-scorer hashes, seek authoritative lighting metadata, and add matriculation numbers. The draft notice remains until verification. Public results combine higher AU-PRO, fewer nonregular false alarms and recall loss beyond tolerance. Extra consistency supplies no eligible setting or preserved nonregular recall against B0. No state-of-the-art improvement is established.
+\textbf{Before submission:} seek authoritative lighting metadata, complete first-page author details, and review the final deliverables. The draft notice remains until that review. Public results combine higher AU-PRO, fewer nonregular false alarms and recall loss beyond tolerance. Extra consistency supplies no eligible setting or preserved nonregular recall against B0. No state-of-the-art improvement is established.
 
 \clearpage
 \bibliography{references}
