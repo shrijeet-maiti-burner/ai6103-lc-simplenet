@@ -10,7 +10,7 @@ from a checkout with committed tracked changes and the initialized submodule:
 uv run --frozen python scripts/build_source_bundle.py --out results/submission/source.zip
 ```
 
-the builder refuses an existing output, tracked changes or a different simplenet pin. it reads committed git objects, fixes zip timestamps and writes `SOURCE_BUNDLE.json` with both commits and every included file's sha-256. repeating the build from the same commits produces identical bytes with the same python/zlib runtime. fingerprints detect changed files; they do not authenticate the publisher.
+the builder refuses an existing output, tracked changes or a different simplenet pin. it reads committed git objects, fixes zip timestamps, preserves committed executable flags and writes `SOURCE_BUNDLE.json` with both commits and every included file's sha-256. repeating the build from the same commits produces identical bytes with the same python/zlib runtime. fingerprints detect changed files; they do not authenticate the publisher. unix permissions also depend on the unzip tool; python's `ZipFile.extractall` does not restore executable bits.
 
 ## run after extraction
 

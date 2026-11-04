@@ -47,6 +47,8 @@ def checkout(tmp_path, monkeypatch):
     commit(upstream)
     pin = git(upstream, "rev-parse", "HEAD")
     git(root, "add", "main.py")
+    (root / "main.py").chmod(0o755)
+    git(root, "update-index", "--chmod=+x", "main.py")
     git(root, "update-index", "--add", "--cacheinfo", f"160000,{pin},{UPSTREAM_PATH}")
     commit(root)
     monkeypatch.setattr(builder, "UPSTREAM_SHA", pin)
@@ -69,6 +71,9 @@ def test_deterministic_zip_includes_upstream_and_excludes_untracked(checkout, tm
     second = tmp_path / "second.zip"
     builder.build_bundle(checkout, second)
     assert first.read_bytes() == second.read_bytes()
+    with zipfile.ZipFile(first) as archive:
+        assert archive.getinfo("main.py").external_attr >> 16 == 0o100755
+        assert archive.getinfo(UPSTREAM_PATH + "/LICENSE").external_attr >> 16 == 0o100644
     assert (extracted / UPSTREAM_PATH / "simplenet.py").is_file()
     assert (extracted / UPSTREAM_PATH / "LICENSE").is_file()
     assert not (extracted / "private-secret.txt").exists()

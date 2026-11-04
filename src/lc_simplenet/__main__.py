@@ -51,7 +51,7 @@ def plan(path: Path) -> int:
     jobs = sum(len(cats) for cats in study["datasets"].values())
     jobs *= len(study["seeds"]) * len(study["variants"])
     print(f"Planned method/category/seed runs: {jobs}")
-    print("Draft only: categories and hyperparameters are unresolved; training is not implemented.")
+    print("draft configuration preview; see documented training commands and study policies.")
     return 0
 
 

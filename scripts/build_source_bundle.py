@@ -20,7 +20,7 @@ from lc_simplenet.source_identity import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def committed_files(root: Path, prefix: str = "") -> dict[str, bytes]:
+def committed_files(root: Path, prefix: str = "", *, executables: set[str]) -> dict[str, bytes]:
     archive = subprocess.check_output(
         [
             "git",
@@ -43,6 +43,8 @@ def committed_files(root: Path, prefix: str = "") -> dict[str, bytes]:
             if not member.isfile():
                 raise ValueError(f"Source bundles do not accept symlinks: {member.name}")
             files[prefix + member.name] = source.extractfile(member).read()
+            if member.mode & 0o111:
+                executables.add(prefix + member.name)
     return files
 
 
@@ -58,8 +60,11 @@ def build_bundle(root: Path, output: Path) -> dict:
     linked = git(root, "ls-tree", "HEAD", UPSTREAM_PATH).split()
     if linked[:3] != ["160000", "commit", UPSTREAM_SHA]:
         raise ValueError("The committed SimpleNet gitlink does not match the required pin")
-    files = committed_files(root)
-    files.update(committed_files(root / UPSTREAM_PATH, UPSTREAM_PATH + "/"))
+    executables = set()
+    files = committed_files(root, executables=executables)
+    files.update(
+        committed_files(root / UPSTREAM_PATH, UPSTREAM_PATH + "/", executables=executables)
+    )
     if BUNDLE_NAME in files:
         raise ValueError("SOURCE_BUNDLE.json is generated and must not be tracked")
     manifest = {
@@ -71,12 +76,12 @@ def build_bundle(root: Path, output: Path) -> dict:
     }
     files[BUNDLE_NAME] = (json.dumps(manifest, indent=2, sort_keys=True) + "\n").encode()
     output.parent.mkdir(parents=True, exist_ok=True)
-    # Refuse overwrite; timestamps and permissions are fixed for reproducible bytes.
+    # Refuse overwrite; fixed timestamps and committed executable flags preserve reproducibility.
     with zipfile.ZipFile(output, "x", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
         for name, data in sorted(files.items()):
             entry = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
             entry.create_system = 3
-            entry.external_attr = 0o100644 << 16
+            entry.external_attr = (0o100755 if name in executables else 0o100644) << 16
             entry.compress_type = zipfile.ZIP_DEFLATED
             archive.writestr(entry, data, compresslevel=9)
     return {
