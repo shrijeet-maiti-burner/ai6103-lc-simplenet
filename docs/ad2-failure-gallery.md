@@ -19,8 +19,8 @@ Retrievable here: [select_failure_gallery.py](../scripts/select_failure_gallery.
 |---|---|
 | `predictions.csv` (in the [private evaluation release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/ad2-eval-outputs-2026-11-03), same hash as in the evaluation) | `e3752f45ac298e08d1ef1b62ac61e15d34a6ee3b8bff8613886b6451b0f1a614` |
 | `ad2-failure-gallery-selection.json` | `df1b950153cfe7f06906f43e5edb3ff8203ae1659f59211bea62002b66906ca1` |
-| `scripts/select_failure_gallery.py` | `2add5b50efe51e3f9439ee1ad0d1c72e46dea9ae487d39ff9258a8f8782b7fbb` |
-| `scripts/make_failure_gallery.py` | `305f3c01ed35393cfa0354d879ea2f839db5696aba3e71c01fb2d9fc7f72b0ee` |
+| `scripts/select_failure_gallery.py` | `6a645b5a7df8f013a8bc5404e0808ff4ffd3cbe844674ce144cf27e328256751` |
+| `scripts/make_failure_gallery.py` | `c0ba199fdcb7540c60af114e1739625ec75ca6d0b568eb2fde34c2cfe41dfd89` |
 
 Saved score maps used for the panels (seed 0, from the released paired runs `dev-ad2-study-2026-10-31`):
 
@@ -43,7 +43,7 @@ Saved score maps used for the panels (seed 0, from the released paired runs `dev
 | `walnuts-B0-seed0` | `ea9343d38007e78eb4b4e60c162d38a5f5fdfd59f15b0117ad107c7b93219932` |
 | `walnuts-B1-seed0` | `6ff6b7c678ddb4642003068f469de9b1fc4951cf4c8aa0c9f94be108f816e0d7` |
 
-Running the selection script on that `predictions.csv` regenerates the selection file byte for byte. The selection was first made with an unsaved inline snippet; `select_failure_gallery.py` was written afterwards and checked against it. The rendering script is the one that produced the panels, except that its docstring was edited.
+Running the selection script on that `predictions.csv` regenerates the selection file byte for byte. The selection was first made with an unsaved inline snippet; `select_failure_gallery.py` was written afterwards and checked against it. The rendering script is the one that produced the panels, except that its docstring was edited and the file was reformatted with ruff (line wraps only) to pass the repository lint. The selection script was reformatted the same way and its output hash is unchanged.
 
 ```bash
 python scripts/select_failure_gallery.py predictions.csv ad2-failure-gallery-selection.json
