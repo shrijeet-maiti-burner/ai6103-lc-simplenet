@@ -3,8 +3,10 @@
 Each panel: the image, the saved input-size map shown with a per-panel display scale (display only,
 never used for any metric), and for defective images the ground-truth mask outline when found.
 Selection comes from select_failure_gallery.py (predictions.csv, seed 0, score rank). Usage:
-python make_failure_gallery.py <dataset root> <runs dir with <cat>-<method>-seed0/test-maps.npz> <out dir> <selection json>
+python make_failure_gallery.py <dataset root> <runs dir> <out dir> <selection json>
+where <runs dir> holds <cat>-<method>-seed0/test-maps.npz.
 """
+
 import json
 import sys
 from pathlib import Path
@@ -50,7 +52,9 @@ for (category, method), items in sorted(groups.items()):
             axes[0][col].contour(mask, levels=[0.5], colors="cyan", linewidths=0.8)
         for row in (0, 1):
             axes[row][col].axis("off")
-    fig.suptitle(f"{category}, {method}, seed 0 (threshold from regular-light normal validation)", fontsize=9)
+    fig.suptitle(
+        f"{category}, {method}, seed 0 (threshold from regular-light normal validation)", fontsize=9
+    )
     fig.tight_layout()
     fig.savefig(out / f"{category}-{method}.png", dpi=110)
     plt.close(fig)

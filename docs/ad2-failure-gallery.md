@@ -6,10 +6,10 @@ Companion to [the evaluation](ad2-test-evaluation.md) and the [native localizati
 
 The cases are chosen by score rank from `predictions.csv` at seed 0 and the regular-light threshold frozen for that run. The rule was fixed before the gallery images were rendered or viewed. The project had earlier public-test exposure (see the evaluation's Limits), so this does not mean the images were never seen.
 
-- the two highest-scoring normal images that the threshold flags (false positives);
-- the two lowest-scoring defective images that it misses (false negatives).
+- up to two of the highest-scoring normal images that the threshold flags (false positives);
+- up to two of the lowest-scoring defective images that it misses (false negatives).
 
-Ties break on `image_id` in ascending order. A category with fewer than two such images contributes fewer cases. One panel per category for B0 and B1 (16 panels, 60 cases). B2 weights are not shown. Seed 0 only, so a panel illustrates one run, not a rate.
+Ties break on `image_id` in ascending order. A slot with no qualifying image stays empty and is not filled with a correctly classified one. fruit_jelly has no false positives for B0 or B1 at seed 0 (0 of 20 normal images flagged, checked as score above threshold), so its two panels show misses only. One panel per category for B0 and B1 (16 panels, 60 cases). Selected images can be repeated lighting captures of one object: both vial B1 misses are object 007 (regular and shift_2), so they are not two independent defect examples. B2 weights are not shown. Seed 0 only, so a panel illustrates one run, not a rate.
 
 ## Reproduce
 
