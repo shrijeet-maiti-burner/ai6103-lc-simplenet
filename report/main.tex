@@ -18,7 +18,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-\textbf{Working draft, 3 November 2026: primary A40 artifact audit remains pending.}
+\textbf{Working draft, 4 November 2026: author details and final submission review remain open.}
 Industrial inspection must tolerate illumination changes without suppressing defects. We compare matched identity-pair, relighting-only, and score-consistency controls in SimpleNet. Across eight MVTec AD 2 categories and three seeds, augmentation reduces synthetic normal-score drift by 5.7--133 times. On the annotated public subset, native AU-PRO$_{.05}$ rises from 11.94\% to 13.02\%. Yet its nonregular-light false-positive macro falls from 49.5\% to 43.5\% while recall falls from 68.2\% to 60.6\%, exceeding the declared five-point tolerance. None of three consistency weights passes the normal-data safeguards or preserves nonregular-light recall against the identity-pair baseline. These local RTX results show a localization benefit with a detection trade-off. A separate 45-run MVTec AD reproduction exposes checkpoint-policy sensitivity. Our inspection demo makes frozen decisions, fixed map scales and checkpoint-linked prediction records inspectable.
 \end{abstract}
 
@@ -129,7 +129,7 @@ For each model/category/seed, the image threshold is the higher empirical 95th p
 
 For each lighting group, FPR is false-positive normal images divided by all normal images, and recall is detected defective images divided by all defective images. Both retain their numerators and denominators. Missing denominators remain unavailable. Compute category macros per seed, then mean/sample SD over seeds; pooled-image rates are not category macros. A group absent from a category cannot silently become an eight-category macro.
 
-The agreed recall rule allows at most a five-percentage-point seed-mean macro drop per condition, reporting both category scopes and naming every category with a larger drop. B1 is compared with B0; every B2 weight is compared with both. Image AUROC, native pixel AUROC, normalized AU-PRO integrated to FPR $0.05$, and failure examples complement the operating-point results. The complete 120-head native matrix uses equal-weight eight-connected defect regions and exact score ties. Primary A40 verification remains pending; private metrics require the official server.
+The agreed recall rule allows at most a five-percentage-point seed-mean macro drop per condition, reporting both category scopes and naming every category with a larger drop. B1 is compared with B0; every B2 weight is compared with both. Image AUROC, native pixel AUROC, normalized AU-PRO integrated to FPR $0.05$, and failure examples complement the operating-point results. The complete 120-head native matrix uses equal-weight eight-connected defect regions and exact score ties. The uploaded A40 image outputs and source identities were independently verified; native localization remains a separate RTX cohort. Private metrics require the official server.
 
 \section{Results}
 \subsection{MVTec AD Reproduction}
