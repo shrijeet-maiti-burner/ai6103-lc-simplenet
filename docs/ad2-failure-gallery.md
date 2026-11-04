@@ -20,7 +20,7 @@ Retrievable here: [select_failure_gallery.py](../scripts/select_failure_gallery.
 | `predictions.csv` (in the [private evaluation release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/ad2-eval-outputs-2026-11-03), same hash as in the evaluation) | `e3752f45ac298e08d1ef1b62ac61e15d34a6ee3b8bff8613886b6451b0f1a614` |
 | `ad2-failure-gallery-selection.json` (LF newlines, as committed) | `38fc64d32cf4bdb6009d825f72c5426ec517129bd8e5c0b79e7e6ab5b0084f1d` |
 | `scripts/select_failure_gallery.py` | `66b460a54ef431588a1fed5fb2001782e801bf5f8c332955aa00a6c8072ed717` |
-| `scripts/make_failure_gallery.py` | `c0ba199fdcb7540c60af114e1739625ec75ca6d0b568eb2fde34c2cfe41dfd89` |
+| `scripts/make_failure_gallery.py` | `e19b1b83c137d980077a2e0bf9aab1522a4678ec24046f49d72fa1d35458dcdd` |
 
 Saved score maps used for the panels (seed 0, from the released paired runs `dev-ad2-study-2026-10-31`):
 

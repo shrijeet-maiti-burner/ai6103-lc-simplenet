@@ -1,7 +1,8 @@
 """Failure gallery from a rule-based selection (score rank), one PNG per category and method.
 
-Each panel: the image, the saved input-size map shown with a per-panel display scale (display only,
-never used for any metric), and for defective images the ground-truth mask outline when found.
+Each panel: the image, the saved input-size map shown with a separate display scale for every case
+(display only, never used for any metric), and for defective images the ground-truth mask outline
+when found.
 Selection comes from select_failure_gallery.py (predictions.csv, seed 0, score rank). Usage:
 python make_failure_gallery.py <dataset root> <runs dir> <out dir> <selection json>
 where <runs dir> holds <cat>-<method>-seed0/test-maps.npz.
