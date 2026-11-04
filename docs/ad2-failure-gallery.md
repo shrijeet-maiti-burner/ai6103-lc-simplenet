@@ -22,6 +22,27 @@ Retrievable here: [select_failure_gallery.py](../scripts/select_failure_gallery.
 | `scripts/select_failure_gallery.py` | `2add5b50efe51e3f9439ee1ad0d1c72e46dea9ae487d39ff9258a8f8782b7fbb` |
 | `scripts/make_failure_gallery.py` | `305f3c01ed35393cfa0354d879ea2f839db5696aba3e71c01fb2d9fc7f72b0ee` |
 
+Saved score maps used for the panels (seed 0, from the released paired runs `dev-ad2-study-2026-10-31`):
+
+| Run | `test-maps.npz` SHA-256 |
+|---|---|
+| `can-B0-seed0` | `bfc5d9a5738d6a58766c15271a64e0f129f52b84ae35b5a2d32365a31f52b3c6` |
+| `can-B1-seed0` | `ad5cea5742b4e7e96bc4bb849e06908d5979b38f8bddd92280995fe78320bbe4` |
+| `fabric-B0-seed0` | `93f7421f6bdbcb40ea1ba3c0d8fe3f6dcb2d3b520b2950fb727762b891fce458` |
+| `fabric-B1-seed0` | `63d14550a9658103eaf2757707e7eeb5a008ee54972294753d464376e5b20220` |
+| `fruit_jelly-B0-seed0` | `9ffc6e7553e19d914972a8b26b69ee1f4dc2d8e49fe6c0416945411c52a2ca4b` |
+| `fruit_jelly-B1-seed0` | `58e2d5c2e485bd6f97bf4c0860f76f1531390910eb05fc8c378551d326a13d64` |
+| `rice-B0-seed0` | `939828827e2c88925ed84459069f8958ef49ac2a891f0d27023a29e13783e83f` |
+| `rice-B1-seed0` | `9c184934e779fde3db7b731a48aede0a35de744bf95d97f7bfc6543a1fbc9855` |
+| `sheet_metal-B0-seed0` | `516fcbdc260101263b0c4805bd84ea231c6fbe6199803fa608c6af7d0f3cd601` |
+| `sheet_metal-B1-seed0` | `cfd4d2bdf7b201f8ce3bdedeea333e251d2eceba3de4f463d28975f787e351b4` |
+| `vial-B0-seed0` | `46bae03abf33e8b67fcc9ae86656663d67a4f3fcea65542a06d994e43468f429` |
+| `vial-B1-seed0` | `b893502f71172a59e9dfd16a4de467a3a4a50e1aa819deb36a8a895c16bcf06b` |
+| `wallplugs-B0-seed0` | `2c8fe8136e74819d7119e820e83f2396c67b7a4f32176ff1ae46f2cffccc6841` |
+| `wallplugs-B1-seed0` | `e603422d6918020be83020aeeebd84eac293e27a03c390c20f8cdf896e6a9fdd` |
+| `walnuts-B0-seed0` | `ea9343d38007e78eb4b4e60c162d38a5f5fdfd59f15b0117ad107c7b93219932` |
+| `walnuts-B1-seed0` | `6ff6b7c678ddb4642003068f469de9b1fc4951cf4c8aa0c9f94be108f816e0d7` |
+
 Running the selection script on that `predictions.csv` regenerates the selection file byte for byte. The selection was first made with an unsaved inline snippet; `select_failure_gallery.py` was written afterwards and checked against it. The rendering script is the one that produced the panels, except that its docstring was edited.
 
 ```bash
