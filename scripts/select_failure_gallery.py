@@ -11,7 +11,7 @@ import csv
 import json
 import sys
 
-with open(sys.argv[1], newline="") as handle:
+with open(sys.argv[1], newline="", encoding="utf-8") as handle:
     rows = list(csv.DictReader(handle))
 
 out = []
@@ -44,5 +44,5 @@ for category in sorted({r["category"] for r in rows}):
                         "condition": r["condition"],
                     }
                 )
-with open(sys.argv[2], "w") as handle:
+with open(sys.argv[2], "w", encoding="utf-8", newline="\n") as handle:
     json.dump(out, handle, indent=1)
