@@ -81,7 +81,11 @@ Names for the other comparisons are in `category_recall_checks` in `aggregate.js
 
 ## Limits
 
-- Image-level metrics only. Pixel AUROC and AU-PRO are not computed here.
+- This document is image-level. Pixel AUROC and AU-PRO for the same trained heads are in [the native results](ad2-native-public-results.md), which come from a separate RTX scoring of those heads, while this image evaluation used A40 scoring, so the two are not the same scoring outputs. They are pooled over lighting conditions, so localization is not split by light. Selected failure cases and per-category localization are in [the failure gallery](ad2-failure-gallery.md).
+- Thresholds come from the regular-light normal validation images of each run and are frozen across lighting. A lighting-specific threshold was not evaluated.
+- Three seeds and small public test sets: category-level differences of a few points may be noise, and no significance test was run.
+- Categories with few normal validation images give coarse threshold quantiles (sheet_metal has 19), which is why the seven-category scope is reported as well.
+- Public-subset results only. They are not private-server results and say nothing about the hidden test lighting.
 - The fabric runs in #9 were scored on fabric's public test set with exploratory 100-step checkpoints. They are not part of this evaluation; that earlier test exposure remains a limitation.
 - Vial `shift_4` is retained as observed, with its lamp setup unverified.
 - Private-set results need the evaluation server.
