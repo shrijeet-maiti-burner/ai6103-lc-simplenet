@@ -9,7 +9,7 @@ The cases are chosen by score rank from `predictions.csv` at seed 0 and the regu
 - up to two of the highest-scoring normal images that the threshold flags (false positives);
 - up to two of the lowest-scoring defective images that it misses (false negatives).
 
-Ties break on `image_id` in ascending order. A slot with no qualifying image stays empty and is not filled with a correctly classified one. fruit_jelly has no false positives for B0 or B1 at seed 0 (0 of 20 normal images flagged, checked as score above threshold), so its two panels show misses only. One panel per category for B0 and B1 (16 panels, 60 cases). Selected images can be repeated lighting captures of one object: both vial B1 misses are object 007 (regular and shift_2), so they are not two independent defect examples. B2 weights are not shown. Seed 0 only, so a panel illustrates one run, not a rate.
+Ties break on `image_id` in ascending order. A slot with no qualifying image stays empty and is not filled with a correctly classified one. fruit_jelly has no false positives for B0 or B1 at seed 0 (0 of 20 normal images flagged, checked as score above threshold), so its two panels show misses only. One panel per category for B0 and B1 (16 panels, 60 cases). Selected images can be repeated lighting captures of one object. In 9 of the 30 groups of two, both images are the same object, so they are not two independent examples: can B0 false positives (object 004, shift_1 and shift_2), fruit_jelly B1 misses (003, overexposed and regular), sheet_metal B0 misses (006) and false positives (003), sheet_metal B1 misses (006), vial B0 misses (007) and B1 misses (007), wallplugs B0 misses (009), walnuts B0 misses (005). B2 weights are not shown. Seed 0 only, so a panel illustrates one run, not a rate.
 
 ## Reproduce
 
@@ -58,11 +58,17 @@ Top row: the image, with the ground-truth defect outlined in cyan for false nega
 
 ## Inspection status
 
-Only one panel (vial, B1) has been checked by eye. The other 15 have not been inspected, so this document does not establish that they render correctly. The rendered PNGs are not in the repository and are not published; they are generated outputs.
+All 16 panels were opened and read on 4 November 2026. What this checks and what it does not:
+
+- Every panel renders four cases (fruit_jelly two), with the titles, scores and thresholds matching the selection file. The image row keeps the image's aspect ratio and the map row is a square, because the maps are at the 256 x 256 input size. The cyan ground-truth outline appears on every false negative and sits on a plausible defect. Several outlines are only a few pixels wide (can, rice, wallplugs) and are hard to see at panel size.
+- It does not check pixel alignment of map and mask. The outline is drawn from the native mask over the native image, and the map is shown separately, so no overlay is made.
+- Across panels the false positives are mostly shift_1 to shift_3 captures with concentrated hot spots (walnuts, can), or a bright band at the image edge (wallplugs B0, shift_3). The missed defects have maps with scores near or below zero and no clear peak at the defect. These are observations of 30 selected cases at one seed, not rates.
+
+The rendered PNGs are generated outputs and are not committed to Git. They are in the private [A40 localization release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/ad2-a40-localization-2026-11-04) as `ad2-failure-gallery-B0.zip` (SHA-256 `29e34c4e419026c1f2d4ea66692d22a2907dd7263adae3edb8ddbc4b021634db`) and `ad2-failure-gallery-B1.zip` (`6bcb32672d3dba11e114a24768d82b65887cebb72ea6a2af8f4d6e718e05f960`), each with a `MANIFEST.sha256`.
 
 ## Localization by category
 
-Pixel AUROC and AU-PRO pool every lighting condition of a category, so they cannot say which lighting drives a change. The per-category values are in `native-evidence.json` inside the published native evidence archive (SHA-256 `9e18c2f8808c775cc563258dcbd6f2cef73e92b6a8830edfe1418dc6a0e4448a`, see the [native results](ad2-native-public-results.md)), not in a separate file. The values below are from the A40 aggregation of the same 120 runs (mean over seeds 0 to 2); the eight-category macros agree with that archive, but I have not compared the per-category values against it yet.
+Pixel AUROC and AU-PRO pool every lighting condition of a category, so they cannot say which lighting drives a change. The values below are the A40 per-category means over seeds 0 to 2, from `native-aggregate.json` in `ad2-a40-native-outputs.zip` (SHA-256 `4215228599f223de2e825deb4537674979a189c017b11af97cbca6bea460c4ef`) in the same release, which also holds the 120 per-run native JSONs and `aggregate_native.py`. Each native JSON records `test_maps_sha256`, and the 16 gallery maps in the table above match those records, so the panels show the maps the metrics were computed from. The RTX cohort is separate: its per-category values are in `native-evidence.json` inside the published native evidence archive (SHA-256 `9e18c2f8808c775cc563258dcbd6f2cef73e92b6a8830edfe1418dc6a0e4448a`, see the [native results](ad2-native-public-results.md)). The eight-category macros agree between the two cohorts; I have not compared the per-category values. The A40 native maps themselves are not in either release, so recomputing the A40 metrics needs the saved maps and the dataset.
 
 | Category | AU-PRO B0 | AU-PRO B1 |
 |---|---|---|
