@@ -1,6 +1,6 @@
 # report draft
 
-`main.tex` uses the supplied, unchanged `aaai24.sty` and `aaai24.bst`. the current draft reports measured ad reproduction, ad 2 normal-validation evidence and complete, separately labelled rtx3060 public image/native-localization matrices. the [primary a40 image-output audit](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/18#issuecomment-6605059690) is now complete: all 120 score-file hashes reconstruct and six evaluation outputs replay. a40 native maps remain outside that audit. the draft source still needs its obsolete audit-pending wording and final evidence updated before submission.
+`main.tex` uses the supplied, unchanged `aaai24.sty` and `aaai24.bst`. the current draft reports measured ad reproduction, ad 2 normal-validation evidence and complete, separately labelled rtx3060 public image/native-localization matrices. the [primary a40 image-output audit](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/18#issuecomment-6605059690) is complete: all 120 score-file hashes reconstruct and six evaluation outputs replay. the draft reflects that audit; a40 native maps remain outside its scope. author details and the team's final claim review remain open.
 
 the five official names are confirmed. matriculation numbers and ntu email addresses must be added on the first page. the course limit is six body pages, excluding references; retain the original layout and readable figures. the current project due date is 23 november 2026; follow the [submission checklist](../docs/submission.md).
 
@@ -27,9 +27,8 @@ the evidence builder checks all 120 paired identities, verifies the ad archive c
 
 ## remaining gates
 
-- replace obsolete a40-pending wording after checking the completed image-output audit; retain the separate hardware/cohort identities.
-- audit the [complete native matrix](../docs/ad2-native-public-results.md) and its retained input/source hashes. keep private-server outputs separate.
-- inspect the generated all-eight-category gallery and retain its fixed selection rule, calibration and display scales.
+- retain the separate hardware/cohort identities after the completed image-output audit; official private-server outputs remain separate.
+- retain the [complete native matrix](../docs/ad2-native-public-results.md), input/source hashes and audited gallery selection from [#23](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/23). a40 map pixels were not independently replayed.
 - incorporate the team's verified contributions and all missing matriculation numbers/ntu emails.
 - remove the draft notice only after auditing every claim against saved evidence. inspect every rendered page again after results change pagination; reject overfull boxes, unresolved citations and illegible plot labels.
 

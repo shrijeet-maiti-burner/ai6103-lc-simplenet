@@ -9,7 +9,7 @@ working due date: **23 november 2026**, confirmed by shrijeet on 4 november. the
 - [ ] original simplenet, our changes, matched controls and protocol deviations are explained precisely.
 - [ ] every result has a traceable artifact; seed variability, category failures and test exposure are disclosed.
 - [ ] modern reference results, if added, use a declared protocol and distinguish our contribution from reused components.
-- [ ] obsolete a40-pending wording is removed from the draft after checking the [completed image audit](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/18#issuecomment-6605059690). native rtx and official private-server evidence remain distinct.
+- [x] obsolete a40-pending wording is removed from the draft after checking the [completed image audit](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/18#issuecomment-6605059690). native rtx and official private-server evidence remain distinct.
 - [ ] final pdf has at most six body pages in the unchanged aaai layout, plus references; every page is visually inspected.
 
 ## presentation: 10 points
