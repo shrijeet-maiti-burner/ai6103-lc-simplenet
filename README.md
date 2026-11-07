@@ -2,7 +2,7 @@
 
 AI6103 group project: test whether paired relighting and patch-score consistency reduce lighting-induced false alarms without reducing defect recall.
 
-**Status: training complete; formal AD 2 test evaluation pending.** The [45-run AD reproduction](docs/ad-reproduction-results.md) and [120-run paired AD 2 study](docs/ad2-study-results.md) are recorded. AD 2 results currently cover normal-validation diagnostics, not real-lighting defect performance. A [local inspection demo](docs/demo.md) and [report draft](report/README.md) use the released evidence. Datasets and model weights are excluded from Git. The selected source is [the revised proposal](references/proposal.pdf); older chat suggestions do not override it.
+**Status: training and public-subset evaluation complete; official private-server evaluation remains open.** The [45-run AD reproduction](docs/ad-reproduction-results.md) and [120-run paired AD 2 study](docs/ad2-study-results.md) are recorded. AD 2 evidence covers normal-validation diagnostics and separately labelled public image/native-localization results. Relighting improves localization but reduces nonregular-light defect recall; the study establishes no overall detection improvement. A [local inspection demo](docs/demo.md) and [report draft](report/README.md) use the released evidence. Datasets and model weights are excluded from Git. The selected source is [the revised proposal](references/proposal.pdf); older chat suggestions do not override it.
 
 ## Start
 
