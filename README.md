@@ -19,6 +19,8 @@ Python 3.12.15 and uv 0.13.0 are the setup baseline. If `uv` is installed only a
 
 ## Read
 
+- [source zip](docs/source-package.md): build and run a complete package without git history.
+
 - [Project and method](docs/project.md): scope, objective, controls, first feasibility gate.
 - [Evaluation protocol](docs/protocol.md): splits, thresholds, seeds, metrics, evidence.
 - [Course requirements](docs/requirements.md): rubric and deliverables.

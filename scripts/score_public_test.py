@@ -12,7 +12,6 @@ guard against a wrong geometry, score direction or checkpoint.
 import argparse
 import hashlib
 import json
-import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -26,6 +25,7 @@ from lc_simplenet.public_scoring import (
     score_records,
     smooth_map,
 )
+from lc_simplenet.source_identity import source_record
 
 ROOT = Path(__file__).resolve().parents[1]
 CHECKPOINT_NAMES = ("final.pt", "heads.pt")
@@ -108,9 +108,7 @@ def main() -> None:
     rows, patch_maps = score_records(images, predict, config.load_size, config.image_size)
     maps = np.stack([smooth_map(m, config.image_size) for m in patch_maps])
     ids_hash = hashlib.sha256("\n".join(i.image_id for i in images).encode()).hexdigest()
-    commit = subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=False
-    ).stdout.strip()
+    source = source_record(ROOT)
 
     (run_dir / "test-scores.json").write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
     np.savez_compressed(
@@ -132,7 +130,8 @@ def main() -> None:
         "validation_rescored": args.check_validation,
         "map": "bilinear to input size, Gaussian sigma 4; coordinates full_frame at image_size",
         "score": "max raw -D patch score",
-        "scoring_git_commit": commit,
+        "scoring_git_commit": source["git_commit"],
+        "scoring_source": source,
         "torch": torch.__version__,
         "device": args.device,
     }

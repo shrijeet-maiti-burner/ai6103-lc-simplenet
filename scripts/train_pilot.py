@@ -5,7 +5,6 @@ import ctypes
 import hashlib
 import json
 import platform
-import subprocess
 import sys
 import time
 from dataclasses import asdict
@@ -30,6 +29,7 @@ from lc_simplenet.pilot import (
     state_hash,
     validate_input_geometry,
 )
+from lc_simplenet.source_identity import source_record
 
 
 def sha256(path):
@@ -38,10 +38,6 @@ def sha256(path):
         for block in iter(lambda: stream.read(2**20), b""):
             digest.update(block)
     return digest.hexdigest()
-
-
-def git(*args):
-    return subprocess.check_output(["git", "-C", str(ROOT), *args], text=True).strip()
 
 
 def write_json(path, value):
@@ -265,10 +261,7 @@ def main():
             key: str(value) if isinstance(value, Path) else value
             for key, value in vars(args).items()
         },
-        "git_commit": git("rev-parse", "HEAD"),
-        "git_status": git("status", "--porcelain"),
-        "git_diff_sha256": hashlib.sha256(git("diff", "HEAD").encode()).hexdigest(),
-        "upstream_commit": git("-C", str(ROOT / "third_party/SimpleNet"), "rev-parse", "HEAD"),
+        **source_record(ROOT),
         "lock_sha256": sha256(ROOT / "uv.lock"),
         "python": sys.version,
         "platform": platform.platform(),

@@ -17,7 +17,6 @@ import json
 import os
 import platform
 import random
-import subprocess
 import sys
 import time
 from pathlib import Path
@@ -43,6 +42,7 @@ from lc_simplenet.baseline import (
     upstream_module,
 )
 from lc_simplenet.data import NormalManifestDataset
+from lc_simplenet.source_identity import source_record
 
 CATEGORY, SEED, OUT = sys.argv[1], int(sys.argv[2]), Path(sys.argv[3])
 ORIGINAL = Path(sys.argv[4]) if len(sys.argv) > 4 else None
@@ -59,12 +59,6 @@ MEAN = torch.tensor(IMAGENET_MEAN).reshape(1, 3, 1, 1)
 STD = torch.tensor(IMAGENET_STD).reshape(1, 3, 1, 1)
 device = torch.device(os.environ.get("LC_DEVICE", "cuda"))
 cuda = device.type == "cuda"
-
-
-def git(path, *args):
-    return subprocess.run(
-        ["git", *args], cwd=path, capture_output=True, text=True, check=True
-    ).stdout.strip()
 
 
 def sha256(path):
@@ -258,9 +252,7 @@ def main():
         "manifest_sha256": SHA,
         "checkpoint_sha256": sha256(checkpoint),
         "uv_lock_sha256": sha256(ROOT / "uv.lock"),
-        "git_commit": git(ROOT, "rev-parse", "HEAD"),
-        "git_dirty": bool(git(ROOT, "status", "--porcelain")),
-        "upstream_commit": git(ROOT / "third_party/SimpleNet", "rev-parse", "HEAD"),
+        **source_record(ROOT),
         "python": platform.python_version(),
         "torch": torch.__version__,
         "device": torch.cuda.get_device_name(device) if cuda else "cpu",
