@@ -1,6 +1,6 @@
 # fixed-teacher pilot
 
-experimental follow-up to the [recovery plan](simplenet-recovery-plan.md). this changes the training loss within simplenet. there is no measured improvement yet, and a synthetic pass would not establish one on real defects.
+experimental follow-up to the [recovery plan](simplenet-recovery-plan.md). this changes the training loss within simplenet. the [first fixed screen failed](anchored-pilot-results.md); no real-defect improvement is established.
 
 ## fixed comparison
 

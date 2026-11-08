@@ -1,6 +1,6 @@
 # simplenet recovery plan
 
-8 november 2026. shrijeet asked to share this plan and start work. the original study stays frozen; this is a new follow-up. implementation has started, but the candidate has no measured improvement yet.
+8 november 2026. shrijeet asked to share this plan and start work. the original study stays frozen; this is a new follow-up. the first [fixed-teacher screen](anchored-pilot-results.md) has now failed on both seeds. no candidate is promoted, and confirmation remains closed.
 
 ## goal
 
@@ -15,7 +15,7 @@ aim for no recall regression. retain the previously agreed five-point tolerance 
 - the current brightness/gamma model covers only part of the physical lighting variation. a generic gradient-conflict explanation and global intensity normalization are insufficient explanations.
 - a stronger borrowed backbone is a reference. it does not establish an improvement to our simplenet method.
 
-## next candidate
+## evaluated candidate
 
 implementation and reproducible commands: [fixed-teacher pilot](anchored-pilot.md).
 
@@ -41,22 +41,22 @@ retain the frozen teacher as a reference. the candidate must be assessed against
 ### baseline and implementation
 
 - [ ] resolve or explicitly bound the faithful single-view reload issue with b; do not relax replay tolerances.
-- [ ] specify teacher/student tensor locations, fixed coefficients, forward modes, batchnorm behavior and noise sharing before fitting.
-- [ ] use a teacher fitted only on pilot fit parents. a full-data checkpoint cannot support an unseen-parent claim on its own training images.
-- [ ] test zero-weight control equivalence, frozen teacher parameters/buffers, gradients, continuation and prediction replay.
-- [ ] keep the upstream submodule unchanged. put shared integration and tests in our package.
-- [ ] record teacher cost and adaptation cost. matched steps are not a claim of matched compute with the old study.
+- [x] specify teacher/student tensor locations, fixed coefficients, forward modes, batchnorm behavior and noise sharing before fitting.
+- [x] use a teacher fitted only on pilot fit parents. a full-data checkpoint cannot support an unseen-parent claim on its own training images.
+- [x] test zero-weight control equivalence, frozen teacher parameters/buffers, gradients, continuation and prediction replay.
+- [x] keep the upstream submodule unchanged. put shared integration and tests in our package.
+- [x] record teacher cost and adaptation cost. matched steps are not a claim of matched compute with the old study.
 
 ### bounded pilot
 
-- [ ] audit parent identities and previous model-scoring exposure before fixing fit, calibration, development and confirmation roles.
-- [ ] fix a short eight-category, two-seed pilot, 256px geometry and one candidate before screening. keep the current augmentation family fixed to isolate the loss change.
-- [ ] use normal data and fixed procedural changes only for development; never choose settings from public labels, test lighting or server feedback.
-- [ ] write the numerical false-alarm, recall and category safeguards before training. require the candidate to qualify against both controls and the frozen teacher.
-- [ ] use a separate confirmation role and training seed only if the complete screen passes. do not recycle exposed parents or repurpose the failed dinov3 candidate's sealed set.
-- [ ] retain every attempt. a failed gate stops that candidate; no silent fallback or threshold change.
+- [x] audit parent identities and recorded model-scoring exposure before fixing fit, calibration, development and confirmation roles; bound unrecorded/full-data exposure explicitly.
+- [x] fix a short eight-category, two-seed pilot, 256px geometry and one candidate before screening. keep the current augmentation family fixed to isolate the loss change.
+- [x] use normal data and fixed procedural changes only for development; never choose settings from public labels, test lighting or server feedback.
+- [x] write the numerical false-alarm, recall and category safeguards before training. require qualification against identity continuation, augmentation, anchor and frozen teacher.
+- [x] reserve a separate confirmation role and seed; verify that a failed screen blocks model-input decoding. do not recycle exposed parents or repurpose the failed dinov3 candidate's sealed set.
+- [x] retain every attempt. a failed gate stops that candidate; no silent fallback or threshold change.
 
-target: a go/no-go within 48-72 hours, subject to measured runtime. the next available experiment slot goes to this simplenet question.
+the first go/no-go completed on 8 november. this candidate failed; its confirmation and real-test stages remain closed. another candidate needs a separate hypothesis and audited development/confirmation data before fitting. no coefficient sweep or control substitution follows from this result.
 
 ### real evaluation
 
