@@ -28,7 +28,7 @@ on the pilot cuda runtime, with the original run artifacts:
 python scripts/diagnose_anchor.py --run <pilot-run> --out results/anchor-diagnosis-001
 ```
 
-the script verifies the frozen training source/policy, cache identities and checkpoint bindings. it reads only fit/calibration caches. calibration parents were unseen by this optimizer, but participated in prior development; they are not an untouched evaluation set. source integration happened after the initial diagnosis and must reproduce its parent-level records before being treated as its reproducer.
+the script verifies the frozen training source/policy, cache identities and checkpoint bindings. it reads only fit/calibration caches. calibration parents were unseen by this optimizer, but participated in prior development; they are not an untouched evaluation set. source integration happened after the initial diagnosis. its complete cuda execution reproduced all 5,120 parent-arm records and 160 aggregates with identical file hashes, and matched all 80 checkpoint hashes.
 
 all 80 checkpoint hashes match the earlier complete replay receipt. a separate recount reproduced all 160 aggregates from the 5,120 records with maximum error 0.0. the retained private records are identified below; no public raw-artifact release is implied.
 
