@@ -27,6 +27,7 @@ python scripts/build_anchored_inputs.py --recorded-runs <prior-run-root> --rgb-a
 python scripts/anchored_pilot.py plan --out results/anchored-001 --normal-root <dataset-root> --reused-roles <prior-protocol.json> --exclusions results/anchored-inputs-001/exclusions.json --rgb-audit results/anchored-inputs-001/rgb-audit.json
 python scripts/anchored_pilot.py prepare --out results/anchored-001 --normal-root <dataset-root>
 python scripts/anchored_pilot.py train --out results/anchored-001
+python scripts/audit_anchored_pilot.py --run results/anchored-001 --out results/anchored-001/independent-audit.json
 ```
 
 only after a complete screening pass:
