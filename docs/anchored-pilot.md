@@ -28,6 +28,7 @@ python scripts/anchored_pilot.py plan --out results/anchored-001 --normal-root <
 python scripts/anchored_pilot.py prepare --out results/anchored-001 --normal-root <dataset-root>
 python scripts/anchored_pilot.py train --out results/anchored-001
 python scripts/audit_anchored_pilot.py --run results/anchored-001 --out results/anchored-001/independent-audit.json
+python scripts/replay_anchored_pilot.py --run results/anchored-001 --out results/anchored-001/checkpoint-replay.json
 ```
 
 only after a complete screening pass:
