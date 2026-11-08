@@ -6,6 +6,16 @@ on 9 november, the original a40 reconstruction replayed six released heads' save
 
 the complete laptop audit then failed: 19 of 24 heads passed across 906 normal predictions. all five failures occurred on the final single-image batch in `vial` or `wallplugs`; the maximum map error was 0.0008004. thirteen normal decisions changed, all on images whose saved score equalled the saved q95 threshold. the eight-case check therefore does not authorize laptop test scoring. the full original-device replay remains required; neither the tolerance nor the threshold changes to accommodate these differences.
 
+the subsequent complete a40 audit passed: all 24 heads, 906 normal predictions, complete maps and saved-threshold decisions were bit-exact. an independent comparison rechecked every returned score/map against the original npz files and verified transport hashes and archive crc. the original-device reference is replayable; the laptop remains disqualified for its test scoring. this does not repair the failed consistency method or create a matched comparison with the paired-study models.
+
+| retained private record | sha256 |
+|---|---|
+| complete normal input manifest | `abf6e7c65772c9088531afb01cd8b2b0546d3983000a1e0a2a355248d1f03e3d` |
+| a40 runtime receipt | `b421eea3d6d59efd7c8bf309250da0561297279fefb15fd1985b7da1a5900b46` |
+| a40 completion receipt | `928be0578e6adf4bfcef99a6f83e9612914ab17a07a7a082bab8f8adeec0df28` |
+
+the remote audit used the verified source archive at `a05eb9e41fca0106abf72aae0ff632248c1e0c42`, plus the inference helper from `c8c23ab` (file sha256 `5e742d18cc40c5dad94d6450a1a7f2330bf22c8ee59f57518f798d7128ba8510`). the exact cached computation-library versions matched the original runtime. the unused metrics module was imported lazily, and pinned pretrained weights were loaded from verified memory bytes; neither changes the prediction path. data and binary outputs remain outside git.
+
 ## capture and restore
 
 capture after the original probe, on the original device and runtime:
