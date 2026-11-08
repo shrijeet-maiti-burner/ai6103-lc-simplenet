@@ -16,7 +16,7 @@ module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
 
-def fixture(tmp_path):
+def fixture(tmp_path, checkpoint_file="heads.pt"):
     run = tmp_path / "run"
     run.mkdir()
     root = tmp_path / "data"
@@ -38,12 +38,12 @@ def fixture(tmp_path):
         for i, name in enumerate(ids)
     ]
     (run / "test-scores.json").write_text(json.dumps(rows))
-    (run / "heads.pt").write_bytes(b"checkpoint fixture")
+    (run / checkpoint_file).write_bytes(b"checkpoint fixture")
     (run / "test-scores.meta.json").write_text(
         json.dumps(
             {
                 "images": 2,
-                "checkpoint_file": "heads.pt",
+                "checkpoint_file": checkpoint_file,
                 "checkpoint_sha256": hashlib.sha256(b"checkpoint fixture").hexdigest(),
                 "scoring_git_commit": "source-fixture",
             }
@@ -57,8 +57,9 @@ def fixture(tmp_path):
     return run, root, tmp_path / "out.json"
 
 
-def test_native_metric_path_retains_geometry_and_mask_evidence(tmp_path):
-    run, root, output = fixture(tmp_path)
+@pytest.mark.parametrize("checkpoint_file", ["heads.pt", "final.pt", "checkpoint.pt"])
+def test_native_metric_path_retains_geometry_and_mask_evidence(tmp_path, checkpoint_file):
+    run, root, output = fixture(tmp_path, checkpoint_file)
     result = module.evaluate(run, root, output)
     assert result["images"] == 2 and result["regions"] == 1
     assert result["normal_pixels"] == 36 and result["defect_pixels"] == 12
