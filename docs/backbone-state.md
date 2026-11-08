@@ -34,6 +34,14 @@ the manifest must produce the same ordered validation identities. preprocessing 
 
 [`predict_reference_batch`](../src/lc_simplenet/reference_inference.py) omits only an unused dense feature visualization. the score/map computation stays the same; a cpu architecture test checks complete-array equality with upstream `_predict`. this memory adaptation is explicit, and the upstream submodule is unchanged.
 
+## full-resolution memory check
+
+```powershell
+python scripts/smoke_reference_memory.py --image <normal-image> --size 1024 --out results/memory-1024-001.json
+```
+
+one 1024 × 1024 fp32 forward on the 6 gb rtx 3060 laptop gpu produced a finite complete map, peaking at 4.72 gib allocated and 5.06 gib reserved. the omitted 1,536-channel visualization alone would occupy 6 gib at this size; the replacement occupies 4 mib. this is a measured graph/shape/resource check with imagenet backbone weights and random anomaly heads, not a trained high-resolution detector, accuracy result or latency benchmark. the original dense-visualization path was not run at 1024. the command records input, source and helper identities before execution and preserves existing outputs.
+
 ## score the frozen public cohort
 
 freeze every category/seed and complete the full normal matrix before opening public inputs. the original-reference public audit uses the stricter original-device requirement of bit-exact scores/maps and unchanged decisions. the numeric-tolerance replay above remains useful for diagnosing portability; a numeric-only pass does not qualify this scoring command.
