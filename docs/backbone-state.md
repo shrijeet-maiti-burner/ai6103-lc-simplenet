@@ -36,6 +36,16 @@ the manifest must produce the same ordered validation identities. preprocessing 
 
 [`predict_reference_batch`](../src/lc_simplenet/reference_inference.py) omits only an unused dense feature visualization. the score/map computation stays the same; a cpu architecture test checks complete-array equality with upstream `_predict`. this memory adaptation is explicit, and the upstream submodule is unchanged.
 
+## score the frozen public cohort
+
+freeze every category/seed and complete the full normal matrix before opening public inputs. the original-reference public audit uses the stricter original-device requirement of bit-exact scores/maps and unchanged decisions. the numeric-tolerance replay above remains useful for diagnosing portability; a numeric-only pass does not qualify this scoring command.
+
+```powershell
+python scripts/score_single_view_public.py --run <released-run> --snapshot <backbone-state.pt> --manifest <normal-manifest.jsonl> --manifest-sha256 <manifest-sha256> --data <normal-dataset-root> --public-root <public-dataset-root> --out results/original-public-001
+```
+
+the command repeats the complete normal replay before listing any public input and rechecks snapshot, head and normal-file hashes afterward. it preserves cpu preprocessing, saved batch size, raw max-patch image scores and smoothed maps. outputs include native-map geometry, input/checkpoint hashes, conditions and the original normal calibration scores. the annotated public subset is already exposed; these outputs cannot select a method or become an untouched evaluation.
+
 ## limits
 
 the recovered a40 snapshot is a verified reconstruction, not a binary exported by the original training run. future runs should capture their actual initialized state. matching state does not guarantee identical kernels across devices; saved-normal replay remains necessary. legacy checkpoint bytes and the frozen paired study are unchanged. the full validation audit and any subsequent public scoring must retain their own source, input, snapshot and output identities.
