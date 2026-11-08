@@ -47,4 +47,6 @@ training source: `23a672a015c9634a6c3cb4977951a5959a15571c`. the upstream submod
 
 ## next work
 
+the [fit/calibration diagnosis](anchored-pilot-diagnosis.md) finds reduced gaussian separation on fit parents as well as calibration parents; it does not support treating overfitting as the established explanation.
+
 retain this as a negative follow-up, without a coefficient sweep or confirmation scoring. b's original single-view portability check and d's authenticated private-evaluation access remain open. the existing dataset archive contains both private splits and matches its recorded mirror-lfs hash; original archive equality and server output fields remain separate checks. another loss experiment needs a distinct written hypothesis and an audited development/confirmation population before fitting. no setting may be chosen from public labels or private-server feedback.
