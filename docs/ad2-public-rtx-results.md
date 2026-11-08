@@ -43,7 +43,7 @@ independent raw-score recounts and sklearn auroc checks reproduce every applicab
 
 fixed examples use the first sorted regular-light defective image in every category, seed 0, all five methods, with validation-fixed scales. the first two alphabetical categories are included in the report; the full eight-category gallery remains a generated local artifact. whole-image detected/missed decisions are kept separate from localization.
 
-the [complete native pixel auroc/au-pro matrix](ad2-native-public-results.md) is now available separately for all 120 heads. independent primary a40 artifact/source audit and official private-server results remain pending. image-level detection and localization are evaluated separately.
+the [complete native pixel auroc/au-pro matrix](ad2-native-public-results.md) is available separately for all 120 heads. the [primary a40 image audit](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/18#issuecomment-6605059690) has also passed: all 120 score-file hashes reconstruct, six evaluation outputs replay and no image flags differ across the two scoring cohorts. a40 native maps were not included in that bundle; official private-server results remain pending. image-level detection and localization are evaluated separately.
 
 | local evidence identifier | sha256 |
 |---|---|

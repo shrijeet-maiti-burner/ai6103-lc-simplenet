@@ -18,7 +18,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-\textbf{Working draft, 3 November 2026: primary A40 artifact audit remains pending.}
+\textbf{Working draft, 4 November 2026: author details and final submission review remain open.}
 Industrial inspection must tolerate illumination changes without suppressing defects. We compare matched identity-pair, relighting-only, and score-consistency controls in SimpleNet. Across eight MVTec AD 2 categories and three seeds, augmentation reduces synthetic normal-score drift by 5.7--133 times. On the annotated public subset, native AU-PRO$_{.05}$ rises from 11.94\% to 13.02\%. Yet its nonregular-light false-positive macro falls from 49.5\% to 43.5\% while recall falls from 68.2\% to 60.6\%, exceeding the declared five-point tolerance. None of three consistency weights passes the normal-data safeguards or preserves nonregular-light recall against the identity-pair baseline. These local RTX results show a localization benefit with a detection trade-off. A separate 45-run MVTec AD reproduction exposes checkpoint-policy sensitivity. Our inspection demo makes frozen decisions, fixed map scales and checkpoint-linked prediction records inspectable.
 \end{abstract}
 
@@ -34,7 +34,7 @@ The evidence exposes a distinction between stability, localization and useful im
 \section{Related Work and Scope}
 SimpleNet synthesizes anomalous features by perturbing adapted normal features with Gaussian noise \citep{liu2023simplenet}. We reuse its original components and preserve the pinned upstream source, placing our integration in a separate package. Synthetic training anomalies are not evidence that genuine defects remain detectable.
 
-Illumination robustness and consistency are established directions. Generalized normality learning addresses distribution shifts through normal-data representation alignment and inference-time adaptation \citep{cao2023shift}. Paired well-lit/low-light industrial detection also predates this study \citep{hoang2025lighting}. Our work therefore does not claim to introduce consistency, paired lighting, or the use of AD 2. Its contribution is a controlled integration and an empirical analysis of the resulting trade-offs in SimpleNet.
+Illumination robustness and consistency are established directions. Generalized normality learning addresses distribution shifts \citep{cao2023shift}; paired well-lit/low-light detection predates this study \citep{hoang2025lighting}. Recent nuisance filtering estimates feature-shift subspaces from perturbed normal images and separates detection from localization read-outs \citep{cao2026nfad}. Our contribution is the controlled SimpleNet integration and its measured trade-offs, without an invariance novelty claim.
 
 Recent AD 2 challenge work uses stronger frozen backbones, overlapping patches and intensity-augmented reference banks \citep{roming2026superadd}. The challenge analysis also treats efficiency and illumination shifts as separate deployment concerns \citep{heckler2026vand}. These are relevant higher-capacity alternatives, not matched architectural comparisons with our controlled SimpleNet study.
 
@@ -129,7 +129,7 @@ For each model/category/seed, the image threshold is the higher empirical 95th p
 
 For each lighting group, FPR is false-positive normal images divided by all normal images, and recall is detected defective images divided by all defective images. Both retain their numerators and denominators. Missing denominators remain unavailable. Compute category macros per seed, then mean/sample SD over seeds; pooled-image rates are not category macros. A group absent from a category cannot silently become an eight-category macro.
 
-The agreed recall rule allows at most a five-percentage-point seed-mean macro drop per condition, reporting both category scopes and naming every category with a larger drop. B1 is compared with B0; every B2 weight is compared with both. Image AUROC, native pixel AUROC, normalized AU-PRO integrated to FPR $0.05$, and failure examples complement the operating-point results. The complete 120-head native matrix uses equal-weight eight-connected defect regions and exact score ties. Primary A40 verification remains pending; private metrics require the official server.
+The agreed recall rule allows at most a five-percentage-point seed-mean macro drop per condition, reporting both category scopes and naming every category with a larger drop. B1 is compared with B0; every B2 weight is compared with both. Image AUROC, native pixel AUROC, normalized AU-PRO integrated to FPR $0.05$, and failure examples complement the operating-point results. The complete 120-head native matrix uses equal-weight eight-connected defect regions and exact score ties. The uploaded A40 image outputs and source identities were independently verified; native localization remains a separate RTX cohort. Private metrics require the official server.
 
 \section{Results}
 \subsection{MVTec AD Reproduction}
@@ -162,7 +162,7 @@ The independent 72-run replicate uses Python 3.11, torch 2.11/CUDA 12.8 rather t
 At 288 pixels, the documented sensitivity runs retain the normal pair-MSE reduction but not the direction of score-spread change in several categories. Their raw artifacts are not yet released. They neither replace the 256px study nor justify selecting image size from test outcomes.
 
 \subsection{Frozen Public-Subset Detection}
-We scored all 120 released heads on the same 1,084 annotated public images (379 normal, 705 defective), giving 16,260 image predictions. TC2 disk quota prevented the planned A40 setup before scoring; this separate contingency uses an RTX 3060 Laptop GPU and the locked torch 2.6/CUDA 12.4 stack. The protocol, scorer hashes and complete category/weight scope were recorded before scoring. Each head passed three saved-normal re-score checks. Role D has completed the primary A40 matrix: all 150 published mean/SD values agree with this local run at the reported three-decimal rate precision. Raw A40 artifacts and the copied scoring source remain to be independently audited. No private-server result is reported.
+We scored all 120 released heads on the same 1,084 annotated public images (379 normal, 705 defective), giving 16,260 image predictions. TC2 disk quota prevented the planned A40 setup before scoring; this separate contingency uses an RTX 3060 Laptop GPU and the locked torch 2.6/CUDA 12.4 stack. The protocol, scorer hashes and complete category/weight scope were recorded before scoring. Each head passed three saved-normal re-score checks. Role D completed the primary A40 image matrix: all 150 published mean/SD values agree at the reported three-decimal rate precision. Independent source/output-hash checks and replay of six evaluation outputs passed; no image decision differs between devices. Native localization remains a separate RTX cohort. No private-server result is reported.
 
 \begin{table}[t]
 \centering
@@ -210,7 +210,7 @@ Normal data cannot establish defect retention. Photometric changes can hide defe
 
 Pinned mirrors agree byte-for-byte, but identity with the official archive and physical acquisition groups is unverified. Vial's fourth shifted filename group is absent from the arXiv v1 lighting table; it remains an observed group with physical mapping unresolved.
 
-\textbf{Before submission:} audit primary A40 artifacts and copied-scorer hashes, seek authoritative lighting metadata, and add matriculation numbers. The draft notice remains until verification. Public results combine higher AU-PRO, fewer nonregular false alarms and recall loss beyond tolerance. Extra consistency supplies no eligible setting or preserved nonregular recall against B0. No state-of-the-art improvement is established.
+\textbf{Before submission:} seek authoritative lighting metadata, complete first-page author details, and review the final deliverables. The draft notice remains until that review. Public results combine higher AU-PRO, fewer nonregular false alarms and recall loss beyond tolerance. Extra consistency supplies no eligible setting or preserved nonregular recall against B0. No state-of-the-art improvement is established.
 
 \clearpage
 \bibliography{references}
