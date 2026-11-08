@@ -10,7 +10,7 @@ aim for no recall regression. retain the previously agreed five-point tolerance 
 
 ## what we know
 
-- the paired b0/b1/b2 matrix has valid saved-normal replay checks. the older faithful single-view ad2 reference has a separate reload/source-state problem; resolve it before claiming an improvement over that reference.
+- the paired b0/b1/b2 matrix has valid saved-normal replay checks. the faithful single-view ad2 reference now replays all 24 heads and 906 normal predictions, including complete maps, bit-exactly on a40 ([#29](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/29)). the complete laptop replay fails; that runtime remains excluded from its test scoring.
 - [athul's validation-only projection experiment](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/issues/26#issuecomment-6719168403) failed its recall rule. its synthetic recall also failed to predict b1's real-public recall loss. synthetic tests can reject a candidate; passing them cannot establish defect retention.
 - the current brightness/gamma model covers only part of the physical lighting variation. a generic gradient-conflict explanation and global intensity normalization are insufficient explanations.
 - a stronger borrowed backbone is a reference. it does not establish an improvement to our simplenet method.
@@ -40,7 +40,7 @@ retain the frozen teacher as a reference. the candidate must be assessed against
 
 ### baseline and implementation
 
-- [ ] resolve or explicitly bound the faithful single-view reload issue with b; do not relax replay tolerances.
+- [x] resolve or explicitly bound the faithful single-view reload issue with b; do not relax replay tolerances. complete original-device replay is exact; the full exposed-public reference audit is separately frozen.
 - [x] specify teacher/student tensor locations, fixed coefficients, forward modes, batchnorm behavior and noise sharing before fitting.
 - [x] use a teacher fitted only on pilot fit parents. a full-data checkpoint cannot support an unseen-parent claim on its own training images.
 - [x] test zero-weight control equivalence, frozen teacher parameters/buffers, gradients, continuation and prediction replay.
