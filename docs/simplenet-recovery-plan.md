@@ -17,6 +17,8 @@ aim for no recall regression. retain the previously agreed five-point tolerance 
 
 ## next candidate
 
+implementation and reproducible commands: [fixed-teacher pilot](anchored-pilot.md).
+
 keep simplenet's frozen feature extractor, adapter, discriminator, discrimination objective and normal paired-score mse. add a training-only frozen baseline teacher that anchors the student's clean-normal and shared gaussian-corruption scores while the student adapts to relighting.
 
 the hypothesis is that a fixed reference may limit loss of useful discrimination. it is not a guarantee: preserving synthetic responses need not preserve genuine defects. response preservation during adaptation is established work, including [learning without forgetting](https://arxiv.org/abs/1606.09282); do not claim that general principle is new.
@@ -27,6 +29,7 @@ compare the same fitted teacher, student initialization and adaptation budget:
 
 | arm | relighting | clean-response anchor | paired-score mse |
 |---|---|---|---|
+| identity continuation control | no | no | no |
 | augmentation control | yes | no | no |
 | anchor control | yes | yes | no |
 | candidate | yes | yes | yes |
