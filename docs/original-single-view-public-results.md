@@ -28,7 +28,23 @@ these rates describe the original reference. its backbone initialization, batch 
 
 ## native localization
 
-the complete 24-head native matrix is running with the frozen exact float32 evaluator, au-pro fpr limit 0.05, eight-connected regions and no score quantization. partial category values are not reported as a complete result.
+the complete 24-head matrix uses the frozen exact float32 evaluator, au-pro fpr limit 0.05, eight-connected regions and no score quantization. saved 256px smoothed maps are restored to native masks with pil bilinear interpolation. the full cohort contains 4,454,464,384 native pixels and 1,615 defect regions per seed.
+
+percentages, mean/sample sd across seeds:
+
+| category | native pixel auroc | native au-pro at fpr 0.05 |
+|---|---:|---:|
+| can | 61.19 ± 2.85 | 2.88 ± 0.57 |
+| fabric | 75.44 ± 8.40 | 10.52 ± 4.73 |
+| fruit jelly | 95.79 ± 3.18 | 29.94 ± 7.54 |
+| rice | 57.96 ± 0.65 | 6.08 ± 1.89 |
+| sheet metal | 82.95 ± 0.59 | 7.00 ± 0.47 |
+| vial | 88.68 ± 1.03 | 15.78 ± 4.25 |
+| wallplugs | 77.18 ± 6.03 | 3.09 ± 1.15 |
+| walnuts | 91.37 ± 1.32 | 17.86 ± 3.36 |
+| all eight, category macro within seed | 78.82 ± 0.69 | 11.64 ± 1.04 |
+
+a separate audit verified every source/score/map/checkpoint binding, identical native masks/populations across seeds and the complete matrix. it reconstructed the macros with standard-library means/sample sds, differing by at most `1.31e-17`. this audits provenance and aggregation; it is not a second full native-pixel computation. the exact evaluator has separate dense/sparse/external agreement tests.
 
 ## evidence and reproduction
 
@@ -42,5 +58,8 @@ scoring used the verified source archive at `a05eb9e41fca0106abf72aae0ff632248c1
 | complete input manifest | `53a680dbca0cae3e10814f548826ce6ee67fc4a1ed8499bdb4b6af33a549a8e3` |
 | complete image results | `4cea435beff510ddfd1686e1852281f67c028787670fd3c9b21f37a7af0cfc50` |
 | collection audit | `1962266fd1fcbc36586ed9f222635cd4bbb8317b6e747021f69e069c7431f991` |
+| frozen native protocol | `7b3fbec1f4480a39cc98c2bd97f80f2a42bcc35a1ae33fbde91777addbde1df8` |
+| complete native results | `9c17ce18962aaf462c972af3a04b1278c1ae6c8ae3da3a9c2f09432fc2cbe082` |
+| native provenance/aggregation audit | `84d4b94b69bba85a8c201e1e64c3ef46818f86086ae2f3e87e44685788cc933c` |
 
 data, checkpoints, raw predictions and maps remain outside git. these hashes identify retained local evidence, not a public artifact release. official private-server evaluation remains separate.

@@ -2,11 +2,9 @@
 
 the single-view checkpoint saves trained heads but reconstructs the frozen pretrained backbone. upstream's training-mode shape probe changes its batchnorm buffers. that initialization can differ across runtimes even when the weight file, parameters and seed match.
 
-on 9 november, the original a40 reconstruction replayed six released heads' saved normal scores and complete maps bit-exactly. its post-probe backbone fingerprint differed from the laptop reconstruction. restoring the a40 buffers on the laptop made all 24 heads pass the unchanged normal score/map guard on eight cases each. this is a reproducibility result; no detector was retrained or improved.
+on 9 november, the complete original a40 reconstruction replayed all 24 heads, 906 saved normal predictions, complete maps and threshold decisions bit-exactly. an independent comparison checked every returned score/map against the original npz files, transport hashes and archive crc. the reference is replayable on its original device. this is a reproducibility result; no detector was retrained or improved.
 
-the complete laptop audit then failed: 19 of 24 heads passed across 906 normal predictions. all five failures occurred on the final single-image batch in `vial` or `wallplugs`; the maximum map error was 0.0008004. thirteen normal decisions changed, all on images whose saved score equalled the saved q95 threshold. the eight-case check therefore does not authorize laptop test scoring. the full original-device replay remains required; neither the tolerance nor the threshold changes to accommodate these differences.
-
-the subsequent complete a40 audit passed: all 24 heads, 906 normal predictions, complete maps and saved-threshold decisions were bit-exact. an independent comparison rechecked every returned score/map against the original npz files and verified transport hashes and archive crc. the original-device reference is replayable; the laptop remains disqualified for its test scoring. this does not repair the failed consistency method or create a matched comparison with the paired-study models.
+restoring those buffers on the laptop passes the eight-case check for every head, but the complete audit passes only 19 of 24. all five failures occur on the final single-image batch in `vial` or `wallplugs`; maximum map error is 0.0008004. thirteen decisions change, all at saved q95 ties. partial replay is insufficient, and the laptop remains excluded from original-reference test scoring. neither tolerance nor threshold changes to accommodate these differences. recovering this reference does not create a matched comparison with the paired-study models.
 
 | retained private record | sha256 |
 |---|---|
