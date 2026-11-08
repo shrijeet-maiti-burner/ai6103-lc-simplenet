@@ -4,6 +4,8 @@ the single-view checkpoint saves trained heads but reconstructs the frozen pretr
 
 on 9 november, the original a40 reconstruction replayed six released heads' saved normal scores and complete maps bit-exactly. its post-probe backbone fingerprint differed from the laptop reconstruction. restoring the a40 buffers on the laptop made all 24 heads pass the unchanged normal score/map guard on eight cases each. this is a reproducibility result; no detector was retrained or improved.
 
+the complete laptop audit then failed: 19 of 24 heads passed across 906 normal predictions. all five failures occurred on the final single-image batch in `vial` or `wallplugs`; the maximum map error was 0.0008004. thirteen normal decisions changed, all on images whose saved score equalled the saved q95 threshold. the eight-case check therefore does not authorize laptop test scoring. the full original-device replay remains required; neither the tolerance nor the threshold changes to accommodate these differences.
+
 ## capture and restore
 
 capture after the original probe, on the original device and runtime:
