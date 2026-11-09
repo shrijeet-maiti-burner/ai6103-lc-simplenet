@@ -135,8 +135,10 @@ Normal validation at 288, mean over the three seeds:
 - No test image has been scored for this study.
 - The full-run rule was written after the seed-3 search failed and after the 1.0 runs were known. It keeps the original safeguards, and its outcome selects no weight.
 - sheet_metal has 19 normal-validation images, so its threshold and diagnostics rest on 19 images. Reporting gives macro averages over all eight categories and over the seven without sheet_metal.
-- The 288 runs are not in the release.
+- The 288 runs are in a separate release.
 
 ## Artifacts
 
 The [study release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-study-2026-10-31) has the trained heads for the 72 paired runs (B2 at 1.0) and the 48 B2 runs at 0.01 and 0.1, the 24 single-view checkpoints, normal-validation outputs, run metadata, the weight search and the run audit. Dataset images and pretrained backbone weights are not included.
+
+The [288 release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/dev-ad2-288-2026-11-09) has the trained heads, normal-validation outputs, run metadata and audit for the 96 runs at 288 × 288. Their full training checkpoints and raw logs were not kept.
