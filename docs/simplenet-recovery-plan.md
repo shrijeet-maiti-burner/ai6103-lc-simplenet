@@ -1,6 +1,6 @@
 # simplenet recovery plan
 
-8 november 2026. shrijeet asked to share this plan and start work. the original study stays frozen; this is a new follow-up. the first [fixed-teacher screen](anchored-pilot-results.md) has now failed on both seeds. no candidate is promoted, and confirmation remains closed.
+8 november 2026. shrijeet asked to share this plan and start work. the original study stays frozen; this is a new follow-up. implementation has started, but the candidate has no measured improvement yet.
 
 ## goal
 
@@ -10,14 +10,12 @@ aim for no recall regression. retain the previously agreed five-point tolerance 
 
 ## what we know
 
-- the paired b0/b1/b2 matrix has valid saved-normal replay checks. the faithful single-view ad2 reference now replays all 24 heads and 906 normal predictions, including complete maps, bit-exactly on a40 ([#29](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/29)). the complete laptop replay fails; that runtime remains excluded from its test scoring.
+- the paired b0/b1/b2 matrix has valid saved-normal replay checks. the older faithful single-view ad2 reference has a separate reload/source-state problem; resolve it before claiming an improvement over that reference.
 - [athul's validation-only projection experiment](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/issues/26#issuecomment-6719168403) failed its recall rule. its synthetic recall also failed to predict b1's real-public recall loss. synthetic tests can reject a candidate; passing them cannot establish defect retention.
 - the current brightness/gamma model covers only part of the physical lighting variation. a generic gradient-conflict explanation and global intensity normalization are insufficient explanations.
 - a stronger borrowed backbone is a reference. it does not establish an improvement to our simplenet method.
 
-## evaluated candidate
-
-implementation and reproducible commands: [fixed-teacher pilot](anchored-pilot.md).
+## next candidate
 
 keep simplenet's frozen feature extractor, adapter, discriminator, discrimination objective and normal paired-score mse. add a training-only frozen baseline teacher that anchors the student's clean-normal and shared gaussian-corruption scores while the student adapts to relighting.
 
@@ -29,7 +27,6 @@ compare the same fitted teacher, student initialization and adaptation budget:
 
 | arm | relighting | clean-response anchor | paired-score mse |
 |---|---|---|---|
-| identity continuation control | no | no | no |
 | augmentation control | yes | no | no |
 | anchor control | yes | yes | no |
 | candidate | yes | yes | yes |
@@ -40,23 +37,23 @@ retain the frozen teacher as a reference. the candidate must be assessed against
 
 ### baseline and implementation
 
-- [x] resolve or explicitly bound the faithful single-view reload issue with b; do not relax replay tolerances. complete original-device replay is exact; the full exposed-public reference audit is separately frozen.
-- [x] specify teacher/student tensor locations, fixed coefficients, forward modes, batchnorm behavior and noise sharing before fitting.
-- [x] use a teacher fitted only on pilot fit parents. a full-data checkpoint cannot support an unseen-parent claim on its own training images.
-- [x] test zero-weight control equivalence, frozen teacher parameters/buffers, gradients, continuation and prediction replay.
-- [x] keep the upstream submodule unchanged. put shared integration and tests in our package.
-- [x] record teacher cost and adaptation cost. matched steps are not a claim of matched compute with the old study.
+- [ ] resolve or explicitly bound the faithful single-view reload issue with b; do not relax replay tolerances.
+- [ ] specify teacher/student tensor locations, fixed coefficients, forward modes, batchnorm behavior and noise sharing before fitting.
+- [ ] use a teacher fitted only on pilot fit parents. a full-data checkpoint cannot support an unseen-parent claim on its own training images.
+- [ ] test zero-weight control equivalence, frozen teacher parameters/buffers, gradients, continuation and prediction replay.
+- [ ] keep the upstream submodule unchanged. put shared integration and tests in our package.
+- [ ] record teacher cost and adaptation cost. matched steps are not a claim of matched compute with the old study.
 
 ### bounded pilot
 
-- [x] audit parent identities and recorded model-scoring exposure before fixing fit, calibration, development and confirmation roles; bound unrecorded/full-data exposure explicitly.
-- [x] fix a short eight-category, two-seed pilot, 256px geometry and one candidate before screening. keep the current augmentation family fixed to isolate the loss change.
-- [x] use normal data and fixed procedural changes only for development; never choose settings from public labels, test lighting or server feedback.
-- [x] write the numerical false-alarm, recall and category safeguards before training. require qualification against identity continuation, augmentation, anchor and frozen teacher.
-- [x] reserve a separate confirmation role and seed; verify that a failed screen blocks model-input decoding. do not recycle exposed parents or repurpose the failed dinov3 candidate's sealed set.
-- [x] retain every attempt. a failed gate stops that candidate; no silent fallback or threshold change.
+- [ ] audit parent identities and previous model-scoring exposure before fixing fit, calibration, development and confirmation roles.
+- [ ] fix a short eight-category, two-seed pilot, 256px geometry and one candidate before screening. keep the current augmentation family fixed to isolate the loss change.
+- [ ] use normal data and fixed procedural changes only for development; never choose settings from public labels, test lighting or server feedback.
+- [ ] write the numerical false-alarm, recall and category safeguards before training. require the candidate to qualify against both controls and the frozen teacher.
+- [ ] use a separate confirmation role and training seed only if the complete screen passes. do not recycle exposed parents or repurpose the failed dinov3 candidate's sealed set.
+- [ ] retain every attempt. a failed gate stops that candidate; no silent fallback or threshold change.
 
-the first go/no-go completed on 8 november. this candidate failed; its confirmation and real-test stages remain closed. another candidate needs a separate hypothesis and audited development/confirmation data before fitting. no coefficient sweep or control substitution follows from this result.
+target: a go/no-go within 48-72 hours, subject to measured runtime. the next available experiment slot goes to this simplenet question.
 
 ### real evaluation
 
