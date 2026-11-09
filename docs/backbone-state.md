@@ -4,10 +4,13 @@ the single-view checkpoint saves trained heads but reconstructs the frozen pretr
 
 on 9 november, the complete original a40 reconstruction replayed all 24 heads, 906 saved normal predictions, complete maps and threshold decisions bit-exactly. an independent comparison checked every returned score/map against the original npz files, transport hashes and archive crc. the reference is replayable on its original device. this is a reproducibility result; no detector was retrained or improved.
 
+the initialized-backbone state digest in all 24 completed receipts matches the full digest in [athul's separate a40 reconstruction review](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/29#pullrequestreview-5820854567). he also reports exact complete a40 replay and failed cpu replay. his raw replay outputs have not been independently collected here. cpu remains unqualified for this reference's scoring, as does the laptop after its failed complete audit.
+
 restoring those buffers on the laptop passes the eight-case check for every head, but the complete audit passes only 19 of 24. all five failures occur on the final single-image batch in `vial` or `wallplugs`; maximum map error is 0.0008004. thirteen decisions change, all at saved q95 ties. partial replay is insufficient, and the laptop remains excluded from original-reference test scoring. neither tolerance nor threshold changes to accommodate these differences. recovering this reference does not create a matched comparison with the paired-study models.
 
 | retained private record | sha256 |
 |---|---|
+| initialized backbone, full state digest | `dadf1b487e736fc17a56fa6b5f38097d45f76f90662074a22dff9694768f15ce` |
 | complete normal input manifest | `abf6e7c65772c9088531afb01cd8b2b0546d3983000a1e0a2a355248d1f03e3d` |
 | a40 runtime receipt | `b421eea3d6d59efd7c8bf309250da0561297279fefb15fd1985b7da1a5900b46` |
 | a40 completion receipt | `928be0578e6adf4bfcef99a6f83e9612914ab17a07a7a082bab8f8adeec0df28` |
