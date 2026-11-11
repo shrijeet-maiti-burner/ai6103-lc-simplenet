@@ -304,8 +304,14 @@ def select_downsample_size(runs: Iterable[dict]) -> dict:
     if not materialized:
         raise ValueError("No validation runs were provided")
     identities = []
+    cohorts = {}
     for run in materialized:
         validate_selection_run(run)
+        category = run["category"]
+        cohort = frozenset(run["image_ids"])
+        if category in cohorts and cohorts[category] != cohort:
+            raise ValueError(f"Validation cohort mismatch within category {category}")
+        cohorts[category] = cohort
         identities.append((run["category"], run["seed"], run["variant"]))
     if len(identities) != len(set(identities)):
         raise ValueError("Duplicate category, seed and variant")

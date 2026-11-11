@@ -229,3 +229,27 @@ def test_image_score_is_the_max_residual():
     assert scores.shape == (2,)
     assert float(scores[1]) == pytest.approx(0, abs=1e-5)
     assert float(scores[0]) > 0
+
+
+@pytest.mark.parametrize("change", ["replace", "remove"])
+def test_selection_rejects_mismatched_category_cohorts(change):
+    runs = _matrix(_peaked(1))
+    run = runs[0]
+    if change == "replace":
+        run["image_ids"][0] = f"{run['category']}/validation/good/different.png"
+    else:
+        run["image_ids"] = run["image_ids"][1:]
+        run["regular"] = run["regular"][1:]
+        run["relit"] = {name: maps[1:] for name, maps in run["relit"].items()}
+    with pytest.raises(ValueError, match="cohort mismatch"):
+        select_downsample_size(runs)
+
+
+def test_selection_accepts_reordered_identical_cohorts():
+    runs = _matrix(_peaked(1))
+    expected = select_downsample_size(runs)
+    run = runs[0]
+    run["image_ids"] = run["image_ids"][::-1]
+    run["regular"] = run["regular"][::-1]
+    run["relit"] = {name: maps[::-1] for name, maps in run["relit"].items()}
+    assert select_downsample_size(runs) == expected
