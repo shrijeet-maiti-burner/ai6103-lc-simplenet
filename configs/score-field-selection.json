@@ -1,0 +1,29 @@
+{
+  "method": "low_frequency_anomaly_residual",
+  "selected_downsample_size": null,
+  "selection_status": "protocol_frozen_not_executed",
+  "public_test_used": false,
+  "reason_not_executed": "Released B0/B1 heads are not in this checkout, so validation relight maps were not computed and no FPR is claimed.",
+  "downsample_sizes": [4, 8, 16],
+  "downsample": "adaptive_avg_pool2d to (k, k), PyTorch integer cell bounds floor(i*H/k) and ceil((i+1)*H/k)",
+  "upsample": "bilinear, align_corners=false, antialias=false",
+  "boundary": "bilinear samples are clamped inside the coarse grid; nothing is read outside it",
+  "residual": "anomaly_map - upsampled_field",
+  "image_score": "maximum residual patch",
+  "threshold": "higher empirical quantile of corrected regular-light normal validation image scores at 1 - 0.05; released scores and thresholds are not written",
+  "std_ratio_floor": 0.5,
+  "std_scope": "per category, seed and B0/B1 run; population standard deviation of all residual patches",
+  "selection_rule": "a size is eligible only if every run passes the std floor; minimize the worst absolute relight FPR gap from 0.05; tie keeps the smaller k",
+  "brightness_gamma_corners": [[0.8, 0.8], [0.8, 1.2], [1.2, 0.8], [1.2, 1.2]],
+  "spatial_maps": {
+    "horizontal": "gain = 0.8 + 0.4 * (x + 0.5) / W",
+    "vertical": "gain = 0.8 + 0.4 * (y + 0.5) / H",
+    "spotlight": "gain = 0.8 + 0.4 * exp(-((u - 0.5)^2 + (v - 0.5)^2) / (2 * 0.25^2))",
+    "clip": "clip(image * gain, 0, 1), with no extra gamma"
+  },
+  "comparison_arms": ["B0", "B1"],
+  "categories": ["can", "fabric", "fruit_jelly", "rice", "sheet_metal", "vial", "wallplugs", "walnuts"],
+  "seeds": [0, 1, 2],
+  "required_identities": 48,
+  "identity_rule": "exactly eight categories, seeds 0-2, and arms B0 and B1; a partial matrix is rejected"
+}
