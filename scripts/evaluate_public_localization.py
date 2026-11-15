@@ -70,6 +70,7 @@ def _evaluate(run_dir, root, output, fpr_limit, histogram_mib, progress, factory
     if metadata["images"] != len(rows) or metadata["checkpoint_file"] not in {
         "heads.pt",
         "final.pt",
+        "checkpoint.pt",
     }:
         raise ValueError("scoring metadata does not identify the expected population/checkpoint")
     if digest(run_dir / metadata["checkpoint_file"]) != metadata["checkpoint_sha256"]:

@@ -1,6 +1,6 @@
 # Decisions
 
-Updated 4 November 2026 (Singapore).
+Updated 9 November 2026 (Singapore).
 
 | Item | State |
 |---|---|
@@ -21,7 +21,7 @@ Updated 4 November 2026 (Singapore).
 | AD split and AD 2 lighting metadata | Frozen manifests and public filename/label mapping retained. Vial shift_4 is observed but its physical lamp setup remains unverified |
 | Private server access / submission fields | Not tested; confirm before promising private metrics |
 | Data foundation | Normal manifest builder/reader and continuous-map restoration implemented; see [the contract](data-contract.md) |
-| Development training integration | Paired pilot and full paired study implemented; 45-run AD fixed-final reproduction released. Faithful single-view AD 2 replay remains unresolved and must not be replaced with an unqualified reference result |
+| Development training integration | Paired pilot and full paired study implemented; 45-run AD fixed-final reproduction released. [Original single-view AD 2 reference](backbone-state.md) now replays all 24 heads and 906 normal predictions bit-exactly on A40. Complete laptop replay fails five heads and remains excluded from its public scoring |
 | AD 2 evaluation loader / official PRO implementation | Complete 120-head public image evaluation and exact native RTX pixel AUROC/AU-PRO released and audited; official private-server evaluation remains pending |
 
 Do not replace score MSE with feature cosine or score L1 because they appeared in an older chat answer. Such changes require an explicit experiment decision. No additional architectures or datasets are part of the initial commitment.
