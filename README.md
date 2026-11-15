@@ -19,6 +19,7 @@ Python 3.12.15 and uv 0.13.0 are the setup baseline. If `uv` is installed only a
 
 ## Read
 
+- [coding freeze](docs/code-freeze.md): 16 november source checks, evidence boundaries and final handoff.
 - [simplenet recovery plan](docs/simplenet-recovery-plan.md): the proposed teacher-anchored follow-up, matched controls and acceptance gates.
 - [source zip](docs/source-package.md): build and run a complete package without git history.
 
@@ -35,6 +36,7 @@ Python 3.12.15 and uv 0.13.0 are the setup baseline. If `uv` is installed only a
 - [Decisions](docs/decisions.md): what is fixed and what remains open.
 - [Verification](docs/verification.md): actual setup checks and limits.
 - [AD 2 data audit](docs/ad2-data-audit.md): archive extract, Table IV expected counts, and the formal study's 256×256 full-frame resize, separate from the fabric smoke check.
+- [Score-field validation](docs/score-field-validation-results.md): low-frequency residual on frozen B0/B1 anomaly maps. Validation-only; k=4 is the only eligible grid and the relight result is negative.
 - [local inspection demo](docs/demo.md): released-head comparison, frozen calibration and recorded fallback.
 - [evaluation hand-off](docs/evaluation-handoff.md): staged public data, lighting groups and complete macro/recall reporting.
 
