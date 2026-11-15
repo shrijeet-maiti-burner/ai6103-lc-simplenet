@@ -148,11 +148,18 @@ Pass that file and its `.sha256` sidecar to the pilot. The Slurm wrapper require
 
 There is no script that loops over all 48 runs. The can job script does not generate the other 42 categories. A full matrix is one generator invocation per identity, with `--device cuda` when a GPU is used, then one selector invocation. The generator's default is CPU and 4 threads. The can pilot is the only entry point that enforces the locked A40 stack, and it refuses any head other than the six can runs.
 
-Recompute the recorded selection from the external maps, without copying them into Git:
+## external artifacts and recomputation
+
+the 48 validation `.npz` maps and the original `selection.json` are external artifacts. neither is committed, and this repository records no download location for them. a fresh checkout is therefore insufficient to recompute the recorded result. the execution record is a summary of the supplied artifacts, not a self-contained rerun.
+
+the original selection file has SHA-256 `179f30dd96b0408e0759ede3b5b4156042ad6a9878ca10c9c7d0d6e6733447bb` and contains 215,662 bytes. retain that file when comparing a rerun; this digest does not establish that its input maps are locally available.
+
+after obtaining all 48 external validation maps, replace the placeholder directory below with their actual location. the shell expands the glob into individual filenames; the selector does not download or locate the artifacts.
 
 ```bash
+export SCORE_FIELD_MAPS=/absolute/path/to/external-validation-maps
 uv run --frozen --extra cuda python scripts/select_score_field.py \
-  --maps results/score-field-final/maps/*.npz \
+  --maps "$SCORE_FIELD_MAPS"/*.npz \
   --out results/score-field-selection-recompute.json
 ```
 
@@ -194,9 +201,9 @@ SLURM job 53275 on 2026-11-11 exited `0:0` in `00:13:24` and generated 48 valida
 
 | Item | Value |
 |---|---|
-| Selection JSON | `selection.json` in the external result directory |
+| Selection JSON | External artifact named `selection.json`; not committed |
 | Selection SHA-256 | `179f30dd96b0408e0759ede3b5b4156042ad6a9878ca10c9c7d0d6e6733447bb` |
-| Maps | `maps/` in the external result directory (48 files, not in Git) |
+| Maps | 48 external `.npz` files; no repository location or download link recorded |
 | Provenance sidecar | `cfade5ec7459d3e1ffdb34253c4f2a57938d8f8974f691ed39b29ff77a7f6f2a` |
 | Git HEAD at execution | `1f4de6afc1911a3ad44c03a33cbaeb6296aff66c` |
 | SimpleNet | `351a2b8d4e8cfc944dbccbf9bc6ceda930c6f26b` |

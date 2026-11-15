@@ -5,11 +5,15 @@
   "slurm_exit_status": "0:0",
   "runtime": "00:13:24",
   "validation_maps_generated": 48,
-  "selection_json_path": "selection.json",
+  "selection_json_path": null,
+  "selection_json_artifact_name": "selection.json",
+  "selection_json_included_in_git": false,
   "selection_json_sha256": "179f30dd96b0408e0759ede3b5b4156042ad6a9878ca10c9c7d0d6e6733447bb",
   "selection_json_bytes": 215662,
-  "maps_directory": "maps/",
+  "maps_directory": null,
   "maps_included_in_git": false,
+  "artifact_availability": "the 48 validation maps and selection JSON are external; no repository-local path or download location is recorded",
+  "recomputation_status": "requires obtaining all 48 external validation maps; a fresh checkout alone cannot reproduce the recorded selection",
   "source_provenance_sidecar_sha256": "cfade5ec7459d3e1ffdb34253c4f2a57938d8f8974f691ed39b29ff77a7f6f2a",
   "source_provenance_manifest": "provenance/can-pilot-code.json",
   "simplenet_commit": "351a2b8d4e8cfc944dbccbf9bc6ceda930c6f26b",
@@ -53,6 +57,7 @@
     "The transferred result directory contained selection.json and 48 npz maps only. It did not contain environment.json or runtime.json.",
     "No SLURM log was available locally, so node, partition, GPU name, and clock times are unavailable.",
     "The selection_result fields were counted from selection.json. The frozen protocol file was not edited.",
-    "This shared projection omits original machine-specific directories. The source sidecar digest is retained above."
+    "This shared projection omits original machine-specific directories. The source sidecar digest is retained above.",
+    "selection_json_artifact_name identifies the external file only. Neither it nor the 48 maps is committed or made available by this execution record."
   ]
 }
