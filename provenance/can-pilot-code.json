@@ -1,0 +1,73 @@
+{
+  "files": {
+    ".gitmodules": "ebf3f649da0b5ea5ff324d9a600793d17c78e995d4b2c578c5089b5e0b7ded73",
+    "configs/score-field-selection.json": "2dcf5d4c1771df60ec49a4296362e9f868c829e58d2dd8275e11bf57d23b3096",
+    "pyproject.toml": "be62694ebeb84917ddb7073818a0e72e71342efe99f66c579eaf0fd711c9737a",
+    "scripts/generate_validation_score_maps.py": "1aa32de95e2001efc1fed9d0b6ded1c0ace8e2611a898410035186e89a0a1c5e",
+    "scripts/run_can_score_field_pilot.py": "867e9f587a4f21bf7189913de5d18c203804fdf67a65f3a44e6209732aeaa49c",
+    "scripts/run_can_score_field_pilot.sbatch": "e80086bf2e02298950d48a248922358224e2a24611eae74712a76c37b972f409",
+    "scripts/select_score_field.py": "526a4d4925377a4c4c5efc98bb07d7a43e201152c583f960eb40b5d1f5d9acf6",
+    "src/lc_simplenet/__init__.py": "97159f6533badcd342c4d04664a85eef970afd94bcfb34036aa0b59fc70d10fc",
+    "src/lc_simplenet/losses.py": "8c7f21fca1ff9daf18ceace4b42539afe48793c683c355c3e57cb8fe8ebfa1a8",
+    "src/lc_simplenet/metrics.py": "40b129c2c5dee3b99a8e4f8af417a407547fed6f298900f66a73d7d32035f9f2",
+    "src/lc_simplenet/photometric.py": "ea05ff8bdc40b1df292ed571a8d5061f59db9e51d622941f14ebcd5c918678b0",
+    "src/lc_simplenet/pilot.py": "bb71dc2f858bf1c52a76512a166aa8792d15738a500470623f2992c304a0dbb9",
+    "src/lc_simplenet/provenance.py": "aba127ee0ab9268e1dc68a3ee283193d3c9f1122e16d28955c52c372de8515a9",
+    "src/lc_simplenet/score_field.py": "70a32f09f1cddfa3e4044de70390679580ac6365571e719d03e51c8508127291",
+    "src/lc_simplenet/validation_maps.py": "4513f9271b9ef4b87b2eed3aa65ddb790e54395baeeb65c2be28efb126bf4fe3",
+    "tests/test_can_score_field_pilot.py": "785c10430218cc63dcabcd908d47272382d3dfce519b17c4d1cdd23df9da9f53",
+    "tests/test_score_field.py": "60eb167d30c5c8be1b529d9cc498ca410dbe135a3c90c611250cd7094a8da305",
+    "tests/test_validation_maps.py": "e08e9eb104b4ba158ba75bf72989bef07c0b4be74198e4ed75178a2bcd64fdd4",
+    "third_party/SimpleNet/common.py": "5114aa877e4dc57c5582e53ae366ad8544f11dafed2131239e6ed6a6acbe887a",
+    "third_party/SimpleNet/metrics.py": "48ee886b20fa517cd5425a4f9f554dcf429c1a9c2a776577f1e1c53641df9e6c",
+    "third_party/SimpleNet/simplenet.py": "c1a7329f6b7c44d8b9b6f73c9c0e895bab4a5bd02100080060b250de5ce51240",
+    "third_party/SimpleNet/utils.py": "815b372bb5917ccde3d1c9f0fc6a41402d305b42470279c6a8318dd43d6a21f3",
+    "uv.lock": "3d3b9dd4995622d26fb3077f8000255f974a03c715ebe764a64eeedac3e53aa2"
+  },
+  "git_head": "1f4de6afc1911a3ad44c03a33cbaeb6296aff66c",
+  "implementation_files": {
+    "configs/score-field-selection.json": "2dcf5d4c1771df60ec49a4296362e9f868c829e58d2dd8275e11bf57d23b3096",
+    "scripts/generate_validation_score_maps.py": "1aa32de95e2001efc1fed9d0b6ded1c0ace8e2611a898410035186e89a0a1c5e",
+    "scripts/select_score_field.py": "526a4d4925377a4c4c5efc98bb07d7a43e201152c583f960eb40b5d1f5d9acf6",
+    "src/lc_simplenet/score_field.py": "70a32f09f1cddfa3e4044de70390679580ac6365571e719d03e51c8508127291",
+    "src/lc_simplenet/validation_maps.py": "4513f9271b9ef4b87b2eed3aa65ddb790e54395baeeb65c2be28efb126bf4fe3",
+    "tests/test_score_field.py": "60eb167d30c5c8be1b529d9cc498ca410dbe135a3c90c611250cd7094a8da305",
+    "tests/test_validation_maps.py": "e08e9eb104b4ba158ba75bf72989bef07c0b4be74198e4ed75178a2bcd64fdd4"
+  },
+  "pilot_files": {
+    "scripts/run_can_score_field_pilot.py": "867e9f587a4f21bf7189913de5d18c203804fdf67a65f3a44e6209732aeaa49c",
+    "scripts/run_can_score_field_pilot.sbatch": "e80086bf2e02298950d48a248922358224e2a24611eae74712a76c37b972f409",
+    "tests/test_can_score_field_pilot.py": "785c10430218cc63dcabcd908d47272382d3dfce519b17c4d1cdd23df9da9f53"
+  },
+  "project_files": {
+    ".gitmodules": "ebf3f649da0b5ea5ff324d9a600793d17c78e995d4b2c578c5089b5e0b7ded73",
+    "pyproject.toml": "be62694ebeb84917ddb7073818a0e72e71342efe99f66c579eaf0fd711c9737a",
+    "src/lc_simplenet/__init__.py": "97159f6533badcd342c4d04664a85eef970afd94bcfb34036aa0b59fc70d10fc",
+    "src/lc_simplenet/losses.py": "8c7f21fca1ff9daf18ceace4b42539afe48793c683c355c3e57cb8fe8ebfa1a8",
+    "src/lc_simplenet/metrics.py": "40b129c2c5dee3b99a8e4f8af417a407547fed6f298900f66a73d7d32035f9f2",
+    "src/lc_simplenet/photometric.py": "ea05ff8bdc40b1df292ed571a8d5061f59db9e51d622941f14ebcd5c918678b0",
+    "src/lc_simplenet/pilot.py": "bb71dc2f858bf1c52a76512a166aa8792d15738a500470623f2992c304a0dbb9",
+    "src/lc_simplenet/provenance.py": "aba127ee0ab9268e1dc68a3ee283193d3c9f1122e16d28955c52c372de8515a9",
+    "third_party/SimpleNet/common.py": "5114aa877e4dc57c5582e53ae366ad8544f11dafed2131239e6ed6a6acbe887a",
+    "third_party/SimpleNet/metrics.py": "48ee886b20fa517cd5425a4f9f554dcf429c1a9c2a776577f1e1c53641df9e6c",
+    "third_party/SimpleNet/simplenet.py": "c1a7329f6b7c44d8b9b6f73c9c0e895bab4a5bd02100080060b250de5ce51240",
+    "third_party/SimpleNet/utils.py": "815b372bb5917ccde3d1c9f0fc6a41402d305b42470279c6a8318dd43d6a21f3",
+    "uv.lock": "3d3b9dd4995622d26fb3077f8000255f974a03c715ebe764a64eeedac3e53aa2"
+  },
+  "purpose": "Identity of the can score-field pilot sources before transfer.",
+  "submodule": {
+    "commit": "351a2b8d4e8cfc944dbccbf9bc6ceda930c6f26b",
+    "path": "third_party/SimpleNet",
+    "study_sha256": {
+      "third_party/SimpleNet/common.py": "5114aa877e4dc57c5582e53ae366ad8544f11dafed2131239e6ed6a6acbe887a",
+      "third_party/SimpleNet/simplenet.py": "c1a7329f6b7c44d8b9b6f73c9c0e895bab4a5bd02100080060b250de5ce51240"
+    },
+    "url": "https://github.com/DonaldRR/SimpleNet.git"
+  },
+  "worktree": {
+    "status_note": "tracked_diff_sha256 is the SHA-256 of git diff HEAD. The provenance manifest and sidecar are excluded from that diff.",
+    "tracked": "clean",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "untracked": "dirty"
+  }
+}
