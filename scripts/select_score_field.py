@@ -25,19 +25,31 @@ REQUIRED = ("category", "seed", "variant", "regular", "image_ids")
 
 def load_run(path: Path) -> dict:
     refuse_test_path(path.as_posix())
-    payload = np.load(path)
-    missing = [name for name in (*REQUIRED, *RELIGHT_NAMES) if name not in payload]
-    if missing:
-        raise ValueError(f"{path} is missing {missing}")
-    regular = np.asarray(payload["regular"], dtype=np.float32)
-    relit = {name: np.asarray(payload[name], dtype=np.float32) for name in RELIGHT_NAMES}
-    category = str(np.array(payload["category"]).reshape(-1)[0])
-    variant = str(np.array(payload["variant"]).reshape(-1)[0])
-    image_ids = [str(item) for item in np.asarray(payload["image_ids"]).reshape(-1)]
+    with np.load(path, allow_pickle=False) as payload:
+        missing = [name for name in (*REQUIRED, *RELIGHT_NAMES) if name not in payload]
+        if missing:
+            raise ValueError(f"{path} is missing {missing}")
+        seed_array = np.asarray(payload["seed"])
+        if seed_array.ndim != 0 or seed_array.dtype.kind not in "iu":
+            raise ValueError("seed metadata must be a scalar integer")
+        seed = seed_array.item()
+        strings = {}
+        for name in ("category", "variant"):
+            value = np.asarray(payload[name])
+            if value.ndim != 0 or value.dtype.kind != "U":
+                raise ValueError(f"{name} metadata must be a scalar string")
+            strings[name] = value.item()
+        ids = np.asarray(payload["image_ids"])
+        if ids.ndim != 1 or ids.dtype.kind != "U":
+            raise ValueError("image_ids metadata must be a one-dimensional string array")
+        image_ids = ids.tolist()
+        regular = np.asarray(payload["regular"], dtype=np.float32)
+        relit = {name: np.asarray(payload[name], dtype=np.float32) for name in RELIGHT_NAMES}
+    category, variant = strings["category"], strings["variant"]
     refuse_test_path(category)
     run = {
         "category": category,
-        "seed": int(np.asarray(payload["seed"]).reshape(-1)[0]),
+        "seed": seed,
         "variant": variant,
         "image_ids": image_ids,
         "regular": regular,

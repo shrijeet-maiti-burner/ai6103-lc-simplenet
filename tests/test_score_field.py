@@ -221,6 +221,62 @@ def test_loader_rejects_a_missing_map(tmp_path):
         _select_script().load_run(path)
 
 
+@pytest.mark.parametrize(
+    "seed", [np.float64(0.5), np.bool_(False), np.array("0"), np.array([0, 1])]
+)
+def test_loader_rejects_seed_metadata_that_would_be_coerced(tmp_path, seed):
+    path = tmp_path / "can-B0.npz"
+    regular = np.zeros((2, 32, 32), dtype=np.float32)
+    np.savez(
+        path,
+        category="can",
+        seed=seed,
+        variant="B0",
+        image_ids=_ids("can", 2),
+        regular=regular,
+        **{name: regular for name in RELIGHT_NAMES},
+    )
+    with pytest.raises(ValueError, match="seed.*scalar integer"):
+        _select_script().load_run(path)
+
+
+def test_loader_accepts_the_generated_scalar_schema(tmp_path):
+    path = tmp_path / "can-B0.npz"
+    regular = np.zeros((2, 32, 32), dtype=np.float32)
+    np.savez(
+        path,
+        category="can",
+        seed=np.int64(0),
+        variant="B0",
+        image_ids=_ids("can", 2),
+        regular=regular,
+        **{name: regular for name in RELIGHT_NAMES},
+    )
+    run = _select_script().load_run(path)
+    assert (run["category"], run["seed"], run["variant"]) == ("can", 0, "B0")
+    assert run["image_ids"] == _ids("can", 2)
+
+
+@pytest.mark.parametrize(
+    "field,value", [("category", ["can", "fabric"]), ("variant", ["B0", "B1"])]
+)
+def test_loader_rejects_ambiguous_identity_arrays(tmp_path, field, value):
+    path = tmp_path / "ambiguous.npz"
+    regular = np.zeros((2, 32, 32), dtype=np.float32)
+    payload = {
+        "category": "can",
+        "seed": np.int64(0),
+        "variant": "B0",
+        "image_ids": _ids("can", 2),
+        "regular": regular,
+        **{name: regular for name in RELIGHT_NAMES},
+    }
+    payload[field] = np.asarray(value)
+    np.savez(path, **payload)
+    with pytest.raises(ValueError, match=field + ".*scalar string"):
+        _select_script().load_run(path)
+
+
 def test_image_score_is_the_max_residual():
     maps = torch.zeros(2, 16, 16)
     maps[0, 0, 0] = 3

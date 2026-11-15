@@ -102,7 +102,7 @@ The residual is not applied while the maps are generated. Generation writes the 
 | `tests/test_score_field.py` | Residual geometry, relight bounds, identity gate, and the selection rule on synthetic maps. |
 | `tests/test_validation_maps.py` | The \(10^{-3}\) gate and the refusal to write a test path or an existing file. |
 | `tests/test_can_score_field_pilot.py` | Pilot safeguards, including JSON path conversion. No GPU and no real head. |
-| `provenance/can-pilot-code.json` and `.sha256` | Source manifest for the can pilot. The sidecar is the manifest's own SHA-256. |
+| `provenance/can-pilot-code.json` and `.sha256` | Historical can-pilot source snapshot. The sidecar is the manifest's own SHA-256; later code changes deliberately fail those historical hashes. |
 | `provenance/score-field-validation-execution.json` | Execution record for the 48-run validation job. It is not the protocol file. |
 
 `generate_validation_score_maps.py` accepts:
@@ -126,6 +126,14 @@ The dataset root must contain `<category>/validation/good/<file>` for every id i
 
 `run_can_score_field_pilot.py` accepts only `--device cuda` and requires `--threads 3`:
 
+For a new execution, first commit source changes and generate a new manifest:
+
+```bash
+uv run --frozen --extra cpu python scripts/write_source_provenance.py --out results/score-field-source.json
+```
+
+Pass that file and its `.sha256` sidecar to the pilot. The Slurm wrapper requires explicit `SCORE_FIELD_PROVENANCE` and `SCORE_FIELD_PROVENANCE_SHA256` values. Do not overwrite the historical can-pilot manifest or present a new source snapshot as the source of job 53275.
+
 ```text
 --source-root
 --provenance
@@ -144,15 +152,15 @@ Recompute the recorded selection from the external maps, without copying them in
 
 ```bash
 uv run --frozen --extra cuda python scripts/select_score_field.py \
-  --maps /Users/umeshgjh/Research/score-field-final/maps/*.npz \
-  --out /tmp/score-field-selection-recompute.json
+  --maps results/score-field-final/maps/*.npz \
+  --out results/score-field-selection-recompute.json
 ```
 
 That command needs the CUDA extra's interpreter only because `uv run --extra cuda` is the locked environment used for the study. The selector itself is array arithmetic. The output path must not already exist, and no path component may be a forbidden test name.
 
 ## Results
 
-Counted from `/Users/umeshgjh/Research/score-field-final/selection.json`.
+Counted from the transferred `selection.json`; its original machine-specific directory is omitted.
 
 | Metric | Result |
 |---|---:|
@@ -186,9 +194,9 @@ SLURM job 53275 on 2026-11-11 exited `0:0` in `00:13:24` and generated 48 valida
 
 | Item | Value |
 |---|---|
-| Selection JSON | `/Users/umeshgjh/Research/score-field-final/selection.json` |
+| Selection JSON | `selection.json` in the external result directory |
 | Selection SHA-256 | `179f30dd96b0408e0759ede3b5b4156042ad6a9878ca10c9c7d0d6e6733447bb` |
-| Maps | `/Users/umeshgjh/Research/score-field-final/maps/` (48 files, not in Git) |
+| Maps | `maps/` in the external result directory (48 files, not in Git) |
 | Provenance sidecar | `cfade5ec7459d3e1ffdb34253c4f2a57938d8f8974f691ed39b29ff77a7f6f2a` |
 | Git HEAD at execution | `1f4de6afc1911a3ad44c03a33cbaeb6296aff66c` |
 | SimpleNet | `351a2b8d4e8cfc944dbccbf9bc6ceda930c6f26b` |
