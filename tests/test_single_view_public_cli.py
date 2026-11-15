@@ -77,7 +77,10 @@ def test_failed_or_changed_reference_never_opens_public_input(tmp_path, monkeypa
     assert not (args.out / "test-scores.json").exists()
 
 
-def test_original_cpu_preprocessing_batching_and_raw_score_are_retained(tmp_path, monkeypatch):
+@pytest.mark.parametrize("corrupt_copy", [False, True])
+def test_original_cpu_preprocessing_batching_and_raw_score_are_retained(
+    tmp_path, monkeypatch, corrupt_copy
+):
     args, _ = inputs(tmp_path, monkeypatch)
     for index in range(9):
         directory = args.public_root / "can/test_public" / ("good" if index < 8 else "bad")
@@ -106,6 +109,19 @@ def test_original_cpu_preprocessing_batching_and_raw_score_are_retained(tmp_path
         )
 
     monkeypatch.setattr(module, "predict_reference_batch", predict)
+    if corrupt_copy:
+        real_copy = module.shutil.copyfile
+
+        def changed_copy(source, target):
+            real_copy(source, target)
+            target.write_bytes(b"checkpoint changed during copying")
+
+        monkeypatch.setattr(module.shutil, "copyfile", changed_copy)
+        with pytest.raises(ValueError, match="copied checkpoint differs"):
+            module.score(args)
+        assert not (args.out / "test-scores.json").exists()
+        assert not (args.out / "test-scores.meta.json").exists()
+        return
     meta = module.score(args)
     assert batches == [8, 1] and meta["images"] == 9
     assert meta["normal"] == 8 and meta["defective"] == 1

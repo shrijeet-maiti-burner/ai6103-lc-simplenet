@@ -99,6 +99,8 @@ def score(args):
             maps.append(mask)
             inputs.append({"image_id": image.image_id, "sha256": file_sha256(image.path)})
     shutil.copyfile(args.run / "checkpoint.pt", args.out / "checkpoint.pt")
+    if file_sha256(args.out / "checkpoint.pt") != guard["checkpoint_sha256"]:
+        raise ValueError("copied checkpoint differs from the normal-replay binding")
     with np.load(args.run / "validation_normal.npz", allow_pickle=False) as normal:
         validation = [
             {"image_id": i, "label": 0, "score": float(s)}
