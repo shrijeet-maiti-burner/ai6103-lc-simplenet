@@ -1,6 +1,6 @@
 # Course requirements
 
-Sources: supplied `Lecture Slides/Lecture 0 Introduction.pdf`, printed slide labels 29-30 and 38-50, and the current **Final Project Submission** announcement supplied on 4 November 2026. Printed slide labels differ from PDF page indices. The current announcement governs submission logistics.
+Sources: supplied `Lecture Slides/Lecture 0 Introduction.pdf`, printed slide labels 29-30 and 38-50, and the **Final Project Submission** announcement supplied on 4 November 2026 and reconfirmed by the screenshot supplied on 16 November. Printed slide labels differ from PDF page indices. The announcement governs submission logistics. The new screenshot shows no deadline or report page limit; those remain sourced separately below.
 
 | Requirement | Repository response / completion evidence |
 |---|---|
@@ -24,6 +24,8 @@ Shrijeet confirmed **23 November 2026** as the project submission date on 4 Nove
 - **Presentation: 10 points.** Clarity is the main criterion; aesthetics also matter. Submit a playable video, at most five minutes. Each additional minute costs two points; accelerated playback costs five points. Slides or audio alone are not valid video submissions. One speaker or an AI voice is allowed; having every member speak brings no extra credit.
 - **Code:** submit a ZIP or repository link. It has no standalone marks, but missing or non-running code can incur a penalty. Verify instructor access if using the private repository.
 - **Peer evaluation:** will open on NTULearn; retain each member's actual contributions.
+
+The 16 November screenshot confirms these rules without changing our working deadline. It explicitly permits an AI voice and says Q&A is irrelevant. A single speaker is sufficient. Neither narration by every member nor code submission itself earns extra marks. Missing code or code that does not run after reasonable setup may incur a penalty.
 
 The supplied 28-page `Undergrad Oral Presentation.pdf` is presentation advice: explain the contribution, compare against baselines, and build an honest argument from evidence. Its generic 20-minute FYP timing does not apply here; the current announcement sets five minutes and excludes Q&A. See the [submission checklist](submission.md).
 
