@@ -13,6 +13,10 @@ model weights, credentials or private experiment results are included.
 
 ## setup and inputs
 
+until [pr39](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/39)
+is merged, check out its branch with `gh pr checkout 39`, or use the tagged
+source-code archive from the prerelease. the earlier main checkout has no launcher.
+
 use the [locked environment](setup.md): python 3.12, torch 2.6.0,
 torchvision 0.21.0, numpy 1.26.4 and pillow 11.3.0. full training uses the
 original 256-pixel geometry, batch eight, 80 paired source passes and fixed-final
