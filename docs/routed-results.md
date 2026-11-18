@@ -14,12 +14,12 @@ all comparisons retain their recorded preprocessing, budgets and normal-only thr
 |---|---|
 | B0 | original Gaussian/hinge training control |
 | B1 | matched relighting, no consistency |
-| B2 | relighting with the original coupled consistency term |
+| B2 | relighting with the original coupled consistency term, weight 0.1 |
 | L0 | local/global synthesis and supervision with identity pairs, no consistency |
 | L1 | matched local/global supervision with relit pairs, no consistency |
 | L2 | local/global supervision with coupled normal consistency |
 | R0 | local/global supervision with normal consistency routed through the adapter only; no defect-lift loss |
-| previous_B0 | previously frozen paired AD 2 baseline, kept as a second anchor |
+| previous_B0 | B0 heads from the original 120-head AD 2 study (A40), kept as a second anchor |
 
 global ascent and local focal supervision borrow from GLASS. the whole B0-to-R0 difference cannot be attributed to routing; R0 versus L1 isolates the added routed term more closely. the blade evidence also retains L3, R1, R2, P0 and P1 alternatives without selecting a new winner.
 
@@ -27,18 +27,18 @@ global ascent and local focal supervision borrow from GLASS. the whole B0-to-R0 
 
 all 1,084 exposed public images; eight categories; three seeds; seven newly trained arms. 80 source passes, batch 8, 256 x 256 full-frame inputs, all fixed-final checkpoints. the scorer replayed every normal-calibration patch exactly before applying the saved higher-q95 threshold with strict exceedance. sheet_metal has only 19 calibration normals; all eight categories remain primary.
 
-rates below are category-macro means across three seeds, in percent. the downloadable CSV retains counts and each seed; the summary JSON also retains the seven-category sensitivity, both baseline anchors and paired intervals.
+rates and AUROC below are category-macro means across three seeds, in percent. AUROC is the threshold-free image AUROC within changed light. the downloadable CSV retains counts and each seed; the summary JSON also retains the seven-category sensitivity, both baseline anchors and paired intervals.
 
-| arm | regular FPR | regular recall | changed-light FPR | changed-light recall |
-|---|---:|---:|---:|---:|
-| B0 | 4.03 | 27.78 | 46.66 | 66.92 |
-| B1 | 7.78 | 26.67 | 45.45 | 61.68 |
-| B2 | 6.51 | 26.11 | 42.69 | 60.94 |
-| L0 | 5.65 | 24.17 | 20.02 | 37.62 |
-| L1 | 5.93 | 23.89 | 21.53 | 38.56 |
-| L2 | 6.00 | 25.28 | 21.08 | 38.86 |
-| R0 | 6.69 | 26.11 | 21.43 | 39.62 |
-| previous_B0 | 6.01 | 29.17 | 49.51 | 68.17 |
+| arm | regular FPR | regular recall | changed-light FPR | changed-light recall | changed-light AUROC |
+|---|---:|---:|---:|---:|---:|
+| B0 | 4.03 | 27.78 | 46.66 | 66.92 | 63.21 |
+| B1 | 7.78 | 26.67 | 45.45 | 61.68 | 61.80 |
+| B2 | 6.51 | 26.11 | 42.69 | 60.94 | 63.22 |
+| L0 | 5.65 | 24.17 | 20.02 | 37.62 | 67.85 |
+| L1 | 5.93 | 23.89 | 21.53 | 38.56 | 67.64 |
+| L2 | 6.00 | 25.28 | 21.08 | 38.86 | 68.19 |
+| R0 | 6.69 | 26.11 | 21.43 | 39.62 | 68.33 |
+| previous_B0 | 6.01 | 29.17 | 49.51 | 68.17 | 63.15 |
 
 R0 versus matched B0:
 
@@ -51,24 +51,28 @@ the original target also fails against previous_B0. removing sheet_metal does no
 
 versus L1, R0 changes changed-light FPR by **-0.10 points** and recall by **+1.06 points**; both corresponding intervals include zero. the regular recall increase is **+2.22 points**. this is not evidence of a broad routing improvement.
 
+threshold-free, R0 does not rank changed-light images worse than B0 on the category macro: AUROC **68.33** versus **63.21** (L0 67.85). can and fabric fall (48.6 to 41.0 and 64.5 to 47.4); the other six categories rise. the recall loss happens at the fixed normal-only operating point, not through a lower macro ranking. this does not permit a different threshold; thresholds stay normal-only.
+
+B0, B1 and B2 here use the original study's recipe and seeds (80 source passes, batch 8, seeds 0-2, fixed-final checkpoints), retrained on L40S instead of A40 and alongside the new arms with a shared feature encoder. the cause of the gap to previous_B0 was not isolated; per seed, the new B0's changed-light FPR is 5.10, 2.53 and 0.91 points lower. the relighting effect is also smaller in this rerun: B1 minus B0 changed-light FPR is **-1.21 points** (per seed -1.09, -2.55, 0.00), against -6.0 in the original study. the recall loss repeats, **-5.24 points** against -7.5, and still exceeds the 5-point allowance. do not present the original 6-point false-alarm drop as stable across reruns.
+
 ## separate blade experiment
 
 AeBAD_S contains one blade family. the fit uses 128 source normals, 64 normal calibration images, batch 4 and 160 source passes. 1,639 real test images cover illumination, same conditions, background and view changes. all 12 methods and all three seeds remain in the evidence (59,004 image decisions). these three-seed means are not ensemble predictions.
 
-| arm | illumination FPR | illumination recall | same-condition FPR | same-condition recall |
-|---|---:|---:|---:|---:|
-| B0 | 55.56 | 46.46 | 14.78 | 23.53 |
-| B1 | 33.78 | 37.21 | 10.72 | 27.38 |
-| B2 | 17.78 | 31.82 | 6.52 | 25.34 |
-| L0 | 28.89 | 61.62 | 13.62 | 42.48 |
-| L1 | 24.00 | 52.19 | 9.28 | 32.46 |
-| L2 | 26.22 | 54.88 | 9.13 | 35.15 |
-| L3 | 17.33 | 30.98 | 5.07 | 16.70 |
-| R0 | 22.67 | 52.36 | 10.43 | 32.17 |
-| R1 | 26.22 | 55.05 | 11.01 | 37.84 |
-| R2 | 22.67 | 53.03 | 11.16 | 33.62 |
-| P0 | 28.89 | 38.55 | 10.87 | 29.12 |
-| P1 | 24.44 | 34.68 | 5.80 | 18.08 |
+| arm | illumination FPR | illumination recall | same-condition FPR | same-condition recall | illumination AUROC |
+|---|---:|---:|---:|---:|---:|
+| B0 | 55.56 | 46.46 | 14.78 | 23.53 | 42.15 |
+| B1 | 33.78 | 37.21 | 10.72 | 27.38 | 56.75 |
+| B2 | 17.78 | 31.82 | 6.52 | 25.34 | 60.06 |
+| L0 | 28.89 | 61.62 | 13.62 | 42.48 | 71.27 |
+| L1 | 24.00 | 52.19 | 9.28 | 32.46 | 70.54 |
+| L2 | 26.22 | 54.88 | 9.13 | 35.15 | 70.95 |
+| L3 | 17.33 | 30.98 | 5.07 | 16.70 | 66.75 |
+| R0 | 22.67 | 52.36 | 10.43 | 32.17 | 70.77 |
+| R1 | 26.22 | 55.05 | 11.01 | 37.84 | 70.29 |
+| R2 | 22.67 | 53.03 | 11.16 | 33.62 | 70.96 |
+| P0 | 28.89 | 38.55 | 10.87 | 29.12 | 55.37 |
+| P1 | 24.44 | 34.68 | 5.80 | 18.08 | 59.70 |
 
 the illumination/same-condition B0 point targets pass on means: illumination false alarms **55.56% to 22.67%**, recall **46.46% to 52.36%**; same-condition false alarms **14.78% to 10.43%**, recall **23.53% to 32.17%**.
 
@@ -78,6 +82,7 @@ limits that belong beside that result:
 - individual seeds do not all pass: seed 1 loses **8.59 points** of illumination recall; seed 2 raises same-condition FPR **3.91 points**.
 - background-change recall falls **67.61% to 39.62%**. background and view rows remain available in full.
 - L0 retains higher illumination recall (**61.62%**). versus matched L1, routing changes illumination FPR **-1.33 points**, interval **[-4.00, +1.33]**; recall **+0.17 points**, interval **[-1.68, +2.19]**. the incremental routing gain is uncertain.
+- B0 ranks illumination images below chance (AUROC **42.15**), so the B0 targets compare against a weak baseline. threshold-free, R0 (**70.77**) is level with L0 (**71.27**) and L1 (**70.54**).
 - the original synthetic source screen and full source confirmation both failed. R0 was admitted as an explicitly unqualified exploratory candidate, fixed before real-defect feedback. those failures have not been reclassified as passes.
 
 ## interpretation and verification
