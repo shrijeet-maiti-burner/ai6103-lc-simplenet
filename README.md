@@ -2,7 +2,9 @@
 
 AI6103 group project: test whether paired relighting and patch-score consistency reduce lighting-induced false alarms without reducing defect recall.
 
-**Status: training and public-subset evaluation complete; official private-server evaluation remains open.** The [45-run AD reproduction](docs/ad-reproduction-results.md) and [120-run paired AD 2 study](docs/ad2-study-results.md) are recorded. AD 2 evidence covers normal-validation diagnostics and separately labelled public image/native-localization results. Relighting improves localization but reduces nonregular-light defect recall; the study establishes no overall detection improvement. A [local inspection demo](docs/demo.md) and [report draft](report/README.md) use the released evidence. Datasets and model weights are excluded from Git. The selected source is [the revised proposal](references/proposal.pdf); older chat suggestions do not override it.
+**status, 18 november: the routed follow-up is complete, including all 168 AD 2 heads, scoring and a separate raw-score recount.** the [completed results](docs/routed-results.md) show a blade-lighting benefit against our B0 on three-seed averages, with seed and background limitations. the original eight-category AD 2 target does not pass: lighting false alarms fall, but defect recall falls too far. this is not an overall SimpleNet improvement.
+
+the earlier [45-run AD reproduction](docs/ad-reproduction-results.md), [120-run paired AD 2 study](docs/ad2-study-results.md) and separate public image/native-localization results remain recorded. official private-server evaluation is unverified. the [shared report/video drafts](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/review-drafts-2026-11-16) predate the completed follow-ups and still need updating. datasets, weights and personal research are excluded from Git. the selected scope is [the revised proposal](references/proposal.pdf).
 
 ## Start
 
@@ -19,6 +21,7 @@ Python 3.12.15 and uv 0.13.0 are the setup baseline. If `uv` is installed only a
 
 ## Read
 
+- [completed routed results](docs/routed-results.md): both datasets, all controls, fixed gates, limitations and the downloadable aggregate evidence.
 - [coding freeze](docs/code-freeze.md): 16 november source checks, evidence boundaries and final handoff.
 - [simplenet recovery plan](docs/simplenet-recovery-plan.md): the proposed teacher-anchored follow-up, matched controls and acceptance gates.
 - [source zip](docs/source-package.md): build and run a complete package without git history.
