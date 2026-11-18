@@ -22,7 +22,7 @@ Python 3.12.15 and uv 0.13.0 are the setup baseline. If `uv` is installed only a
 - [coding freeze](docs/code-freeze.md): 16 november source checks, evidence boundaries and final handoff.
 - [simplenet recovery plan](docs/simplenet-recovery-plan.md): the proposed teacher-anchored follow-up, matched controls and acceptance gates.
 - [source zip](docs/source-package.md): build and run a complete package without git history.
-- [AD 2 launcher](docs/routed-reproduction.md) and [blade execution source](docs/routed-blade-reproduction.md): input preparation, fixed-budget training/resume, scoring and audit for both routed experiments.
+- [AD 2 launcher](docs/routed-reproduction.md) and [blade execution source](docs/routed-blade-reproduction.md): input preparation, fixed-budget training/resume and scoring for both routed experiments; the blade launcher also runs the audit.
 
 - [Project and method](docs/project.md): scope, objective, controls, first feasibility gate.
 - [Evaluation protocol](docs/protocol.md): splits, thresholds, seeds, metrics, evidence.
