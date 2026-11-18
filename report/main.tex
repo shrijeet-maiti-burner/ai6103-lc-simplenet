@@ -1,0 +1,761 @@
+\begin{filecontents*}{aaai24embedded.sty}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{aaai24}[2023/06/26 AAAI 2024 Submission format]
+\def\year{2024}
+\def\copyright@on{T}
+\def\showauthors@on{T}
+\def\nocopyright{\gdef\copyright@on{}}
+\DeclareOption{submission}{%
+  \gdef\copyright@on{}%
+  \gdef\showauthors@on{}%
+  \long\gdef\pdfinfo #1{\relax}%
+}
+\ProcessOptions\relax
+
+\setlength\topmargin{-0.25in}
+\setlength\oddsidemargin{-0.25in}
+\setlength\textheight{9.0in}
+\setlength\textwidth{7.0in}
+\setlength\columnsep{0.375in}
+\newlength\titlebox
+\setlength\titlebox{2.25in}
+\setlength\headheight{0pt}
+\setlength\headsep{0pt}
+\thispagestyle{empty}
+\pagestyle{empty}
+\flushbottom
+\twocolumn
+\sloppy
+\def\addcontentsline#1#2#3{}
+
+\def\copyright@year{\number\year}
+\def\copyright@text{Copyright \copyright\space \copyright@year,
+Association for the Advancement of Artificial Intelligence (www.aaai.org).
+All rights reserved.}
+\def\copyrighttext#1{\gdef\copyright@on{T}\gdef\copyright@text{#1}}
+\def\copyrightyear#1{\gdef\copyright@on{T}\gdef\copyright@year{#1}}
+
+\def\maketitle{%
+  \par%
+  \begingroup
+    \def\thefootnote{\fnsymbol{footnote}}
+    \twocolumn[\@maketitle] \@thanks%
+  \endgroup%
+  \if T\copyright@on
+    \insert\footins{\noindent\footnotesize\copyright@text}%
+  \fi%
+  \setcounter{footnote}{0}%
+  \let\maketitle\relax%
+  \let\@maketitle\relax%
+  \gdef\@thanks{}%
+  \gdef\@author{}%
+  \gdef\@title{}%
+  \let\thanks\relax%
+}
+\long\gdef\affiliations #1{ \def \affiliations_{\if T\showauthors@on#1\fi}}
+
+\def\@maketitle{%
+  \def\theauthors{\if T\showauthors@on\@author\else Anonymous submission\fi}
+  \newcounter{eqfn}\setcounter{eqfn}{0}%
+  \newsavebox{\titlearea}
+  \sbox{\titlearea}{
+    \let\footnote\relax\let\thanks\relax%
+    \setcounter{footnote}{0}%
+    \def\equalcontrib{%
+      \ifnum\value{eqfn}=0%
+        \footnote{These authors contributed equally.}%
+        \setcounter{eqfn}{\value{footnote}}%
+      \else%
+        \footnotemark[\value{eqfn}]%
+      \fi%
+    }%
+    \vbox{%
+      \hsize\textwidth%
+      \linewidth\hsize%
+      \vskip 0.625in minus 0.125in%
+      \centering%
+      {\LARGE\bf \@title \par}%
+      \vskip 0.1in plus 0.5fil minus 0.05in%
+      {\Large{\textbf{\theauthors\ifhmode\\\fi}}}%
+      \vskip .2em plus 0.25fil%
+      {\normalsize \affiliations_\ifhmode\\\fi}%
+      \vskip .5em plus 2fil%
+    }%
+  }%
+  \newlength\actualheight%
+  \settoheight{\actualheight}{\usebox{\titlearea}}%
+  \ifdim\actualheight>\titlebox%
+    \setlength{\titlebox}{\actualheight}%
+  \fi%
+  \vbox to \titlebox {%
+    \let\footnote\thanks\relax%
+    \setcounter{footnote}{0}%
+    \def\equalcontrib{%
+      \ifnum\value{eqfn}=0%
+        \footnote{These authors contributed equally.}%
+        \setcounter{eqfn}{\value{footnote}}%
+      \else%
+        \footnotemark[\value{eqfn}]%
+      \fi%
+    }%
+    \hsize\textwidth%
+    \linewidth\hsize%
+    \vskip 0.625in minus 0.125in%
+    \centering%
+    {\LARGE\bf \@title \par}%
+    \vskip 0.1in plus 0.5fil minus 0.05in%
+    {\Large{\textbf{\theauthors\ifhmode\\\fi}}}%
+    \vskip .2em plus 0.25fil%
+    {\normalsize \affiliations_\ifhmode\\\fi}%
+    \vskip .5em plus 2fil%
+  }%
+}
+
+\renewenvironment{abstract}{%
+  \centerline{\bf Abstract}%
+  \vspace{0.5ex}%
+  \setlength{\leftmargini}{10pt}%
+  \begin{quote}%
+    \small%
+}{%
+  \par%
+  \end{quote}%
+  \vskip 1ex%
+}
+
+\def\pubnote#1{
+  \thispagestyle{myheadings}%
+  \pagestyle{myheadings}%
+  \markboth{#1}{#1}%
+  \setlength\headheight{10pt}%
+  \setlength\headsep{10pt}%
+}
+
+\def\section{\@startsection{section}{1}{\z@}
+{-2.0ex plus -0.5ex minus -.2ex}
+{3pt plus 2pt minus 1pt}{\Large\bf\centering}}
+\def\subsection{\@startsection{subsection}{2}{\z@}
+{-2.0ex plus -0.5ex minus -.2ex}
+{3pt plus 2pt minus 1pt}{\large\bf\raggedright}}
+\def\subsubsection{\@startsection{subparagraph}{3}{\z@}
+{-6pt plus -2pt minus -1pt}{-1em}{\normalsize\bf}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}
+{-6pt plus -2pt minus -1pt}{-1em}{\normalsize\bf}}
+\setcounter{secnumdepth}{0}
+
+\footnotesep 6.65pt
+\skip\footins 9pt plus 4pt minus 2pt
+\def\footnoterule{\kern-3pt \hrule width 5pc \kern 2.6pt}
+\setcounter{footnote}{0}
+\parindent 10pt
+\topsep 4pt plus 1pt minus 2pt
+\partopsep 1pt plus 0.5pt minus 0.5pt
+\itemsep 0.5pt plus 1pt minus 0.5pt
+\parsep 2pt plus 1pt minus 0.5pt
+\leftmargin 10pt
+\leftmargini 13pt
+\leftmarginii 10pt
+\leftmarginiii 5pt
+\leftmarginiv 5pt
+\leftmarginv 5pt
+\leftmarginvi 5pt
+\labelwidth\leftmargini
+\advance\labelwidth-\labelsep
+\labelsep 5pt
+
+\def\@listi{\leftmargin\leftmargini}
+\def\@listii{\leftmargin\leftmarginii
+\labelwidth\leftmarginii\advance\labelwidth-\labelsep
+\topsep 2pt plus 1pt minus 0.5pt
+\parsep 1pt plus 0.5pt minus 0.5pt
+\itemsep \parsep}
+\def\@listiii{\leftmargin\leftmarginiii
+\labelwidth\leftmarginiii\advance\labelwidth-\labelsep
+\topsep 1pt plus 0.5pt minus 0.5pt
+\parsep \z@
+\partopsep 0.5pt plus 0pt minus 0.5pt
+\itemsep \topsep}
+\def\@listiv{\leftmargin\leftmarginiv
+\labelwidth\leftmarginiv\advance\labelwidth-\labelsep}
+\def\@listv{\leftmargin\leftmarginv
+\labelwidth\leftmarginv\advance\labelwidth-\labelsep}
+\def\@listvi{\leftmargin\leftmarginvi
+\labelwidth\leftmarginvi\advance\labelwidth-\labelsep}
+
+\abovedisplayskip 7pt plus2pt minus5pt
+\belowdisplayskip \abovedisplayskip
+\abovedisplayshortskip 0pt plus3pt
+\belowdisplayshortskip 4pt plus3pt minus3pt
+
+\def\normalsize{\@setfontsize\normalsize\@xpt{11}}
+\def\small{\@setfontsize\small\@ixpt{10}}
+\def\footnotesize{\@setfontsize\footnotesize\@ixpt{10}}
+\def\scriptsize{\@setfontsize\scriptsize\@viipt{10}}
+\def\tiny{\@setfontsize\tiny\@vipt{7}}
+\def\large{\@setfontsize\large\@xipt{12}}
+\def\Large{\@setfontsize\Large\@xiipt{14}}
+\def\LARGE{\@setfontsize\LARGE\@xivpt{16}}
+\def\huge{\@setfontsize\huge\@xviipt{20}}
+\def\Huge{\@setfontsize\Huge\@xxpt{23}}
+
+\AtBeginDocument{%
+  \@ifpackageloaded{natbib}{%
+    \let\cite\citep
+    \let\shortcite\citeyearpar
+    \setcitestyle{aysep={}}
+    \setlength\bibhang{0pt}
+    \bibliographystyle{aaai24}
+  }{}%
+  \@ifpackageloaded{hyperref}{%
+    \PackageError{aaai}{You must not use hyperref in AAAI papers.}
+    {Remove the hyperref package.}
+  }{}%
+  \@ifpackageloaded{bbm}{%
+    \PackageError{aaai}{You must not use bbm in AAAI papers.}
+    {Remove the bbm package.}
+  }{}%
+  \@ifpackageloaded{authblk}{%
+    \PackageError{aaai}{Package authblk is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{balance}{%
+    \PackageError{aaai}{Package balance is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{CJK}{%
+    \PackageError{aaai}{Package CJK is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{flushend}{%
+    \PackageError{aaai}{Package flushend is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{fontenc}{%
+    \PackageError{aaai}{Package fontenc is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{fullpage}{%
+    \PackageError{aaai}{Package fullpage is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{geometry}{%
+    \PackageError{aaai}{Package geometry is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{grffile}{%
+    \PackageError{aaai}{Package grffile is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{navigator}{%
+    \PackageError{aaai}{Package navigator is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{savetrees}{%
+    \PackageError{aaai}{Package savetrees is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{setspace}{%
+    \PackageError{aaai}{Package setspace is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{stfloats}{%
+    \PackageError{aaai}{Package stfloats is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{tabu}{%
+    \PackageError{aaai}{Package tabu is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{titlesec}{%
+    \PackageError{aaai}{Package titlesec is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{tocbibind}{%
+    \PackageError{aaai}{Package tocbibind is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{ulem}{%
+    \PackageError{aaai}{Package ulem is forbidden.}{Remove it.}
+  }{}%
+  \@ifpackageloaded{wrapfig}{%
+    \PackageError{aaai}{Package wrapfig is forbidden.}{Remove it.}
+  }{}%
+}
+\let\endthebibliography=\endlist
+\end{filecontents*}
+
+\documentclass[letterpaper]{article}
+\usepackage{aaai24embedded}
+
+\ifdefined\XeTeXversion
+  \def\encodingdefault{OT1}
+\fi
+
+\usepackage{times,helvet,courier}
+\usepackage[hyphens]{url}
+\usepackage{graphicx,natbib,caption}
+\usepackage{amsmath,amssymb,booktabs,tikz}
+\usetikzlibrary{arrows.meta,positioning}
+
+\urlstyle{rm}
+\def\UrlFont{\rm}
+\nocopyright
+
+\title{Paired Relighting and Routed Consistency\\
+for Industrial Anomaly Detection}
+
+\author{}
+
+\affiliations{
+Nanyang Technological University\\
+AI6103 Deep Learning and Applications\\[0.5em]
+\begin{tabular}{@{}p{6.6cm}ll@{}}
+Name & Matriculation number & NTU email\\
+Maiti Shrijeet & G2609039F & shrijeet001@e.ntu.edu.sg\\
+Anand Aryaman & G2607658L & aryaman006@e.ntu.edu.sg\\
+Boban Athul Krishna & G2609955K & ATHULKRI001@e.ntu.edu.sg\\
+Gantasala Janardhanarao Harinath Umesh
+& G2602604G & UMESH001@e.ntu.edu.sg\\
+Harsh Saand & G2503201D & harsh011@e.ntu.edu.sg
+\end{tabular}
+}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+Lighting changes can cause an inspection model to flag an
+undamaged product as defective. We investigate whether training
+on aligned original and relit images reduces these false alarms
+while preserving detection of real defects. We measure both
+false-positive rate and defect recall because a reduction in
+score variation alone does not establish better detection.
+
+We build on SimpleNet \citep{liu2023simplenet}, which uses a
+frozen visual backbone, a trainable feature adapter and a
+discriminator trained with synthetic feature anomalies. We keep
+the backbone fixed and apply the additional training objective
+to its adapter and discriminator. We first compare identity
+pairs, relighting alone and relighting with patch-score
+consistency. The original proposal focused on this paired
+consistency objective. The later extension adds local and
+global synthetic anomalies and investigates whether restricting
+the consistency gradient to the adapter changes the trade-off
+between false alarms and missed defects.
+
+Our contribution is the paired training implementation and a
+consistency loss whose gradient updates only the adapter,
+combined with local and global synthetic anomalies. The
+underlying augmentation, consistency and synthesis techniques
+are established. We compare against augmentation-only,
+synthesis-only and ordinary-consistency controls to determine
+whether the integration helps and which component accounts for
+any change.
+
+
+\section{Background and Baseline}
+
+Industrial anomaly detection identifies defective products using
+normal training images, reducing the need for labelled defect
+examples. SimpleNet \citep{liu2023simplenet} extracts patch features
+with a pretrained visual backbone, adapts them, and trains a
+discriminator to distinguish normal features from synthetic
+anomalies.
+
+Our baseline uses a frozen WideResNet-50-2 backbone and features
+from layers 2 and 3. The concatenated features are mapped to
+1536-dimensional patch representations by a trainable adapter.
+A discriminator with hidden dimension 1024 is trained using a
+hinge objective. Synthetic feature anomalies are generated by
+adding Gaussian noise with standard deviation 0.015. At inference,
+the negative discriminator output gives the patch anomaly score,
+and the image score is the maximum over patches.
+
+For the paired study, we use a fixed-final checkpoint and raw
+prediction scores. We do not select checkpoints using test AUROC
+or rescale scores using test-set statistics. The three baseline
+conditions are B0 (identity pair), B1 (relit second view without
+consistency), and B2 (relit pair with patch-score consistency).
+They are intended to separate the effect of relighting from the
+additional consistency objective.
+
+The later local/global and routed-consistency work is a separate
+follow-up, not part of the baseline implementation. PR \#37 adds
+loss functions for local/global synthetic anomalies and
+adapter-only score consistency, but does not include an image
+synthesis pipeline or a training command. The PR \#39 launcher
+loads its trainer and related modules from a separately pinned
+execution archive. The inspected Git changes do not establish
+that this trainer calls the functions introduced in PR \#37.
+We therefore distinguish the paired baseline from the follow-up
+implementation and do not treat matching arm names as proof
+that the same loss code was used.
+
+\section{Experimental Setup}
+
+The baseline implementation is evaluated on MVTec AD and
+MVTec AD 2. MVTec AD provides an implementation check across
+15 object and texture categories. Images are resized to 329 pixels
+and centre-cropped to 288 pixels. We use batch size 8, seeds
+0, 1, and 2, and a fixed-final schedule of 40 meta-epochs with
+four discriminator passes. Normal training images are split
+using an 80/20 training and validation holdout. Identical RGB
+images are grouped to avoid duplicates crossing the split.
+
+The paired lighting study uses the eight public MVTec AD 2
+categories: can, fabric, fruit\_jelly, rice, sheet\_metal, vial,
+wallplugs, and walnuts. The committed manifests contain 2,528
+normal training images and 302 normal validation images. The
+public test set contains 1,084 images: 379 normal and 705
+defective. Images are resized to $256\times256$ using full-frame
+bilinear interpolation, without a centre crop. The baseline
+study uses batch size 8 and seeds 0, 1, and 2. Relighting samples
+brightness and gamma independently from $[0.8,1.2]$.
+
+For the paired comparison, B0 uses an identity pair, B1 uses
+relighting without consistency, and B2 adds patch-score
+consistency. The earlier B2 sweep considered
+$\lambda\in\{0.01,0.1,1.0\}$; these settings are distinct from
+the later local/global follow-up. The primary AD 2 baseline
+runs used Python 3.12, PyTorch 2.6.0 with CUDA 12.4, and an
+NVIDIA A40 GPU.
+
+The follow-up launchers in PR \#39 describe seven AD 2 arms
+(B0, B1, B2, L0, L1, L2, and R0) across three seeds and eight
+categories. However, the trainer, optimizer configuration,
+and loss implementation are loaded from an external archive,
+not supplied in the PR. The launcher records the archive hash
+and guards the staged data and completed checkpoints, but the
+Git checkout alone is insufficient to reproduce training.
+The inspected PRs also do not connect the archive's trainer
+to the loss functions in PR \#37. Accordingly, details that
+depend on the external trainer, including the exact follow-up
+loss weights and their implementation, are not assumed here
+unless they are explicitly available in the released source.
+
+The blade follow-up uses a second external execution archive.
+Its launcher separates fit, calibration, and development data
+from optional test packets and accepts a case for packing only
+when it reaches 5,120 updates. The documentation states that
+a fresh full-budget run through this wrapper had not been
+completed; historical results used the original workers.
+The five additional blade arms (L3, R1, R2, P0, and P1) are
+not defined by the loss code in PR \#37. Their behaviour
+therefore requires confirmation from the archived trainer
+rather than inference from their names.
+
+\section{Evaluation Protocol}
+
+For the paired baseline, one image-level threshold is calibrated
+per model, category, and seed using regular-light normal
+validation scores. It is the higher empirical 95th percentile.
+An image is classified as anomalous only when its score is
+strictly greater than this threshold. The same threshold is
+applied to the other lighting conditions. Test labels are not
+used to select the checkpoint, threshold, or consistency weight.
+
+We report image-level false-positive rate (FPR), defect recall,
+and image AUROC. FPR is the proportion of normal images
+classified as anomalous; recall is the proportion of defective
+images correctly detected. AUROC measures the ranking of
+normal and defective image scores. Category-macro results give
+each category equal weight. Pixel AUROC and AU-PRO are
+localisation metrics for the paired study; AU-PRO is integrated
+up to a false-positive rate of 0.05.
+
+For MVTec AD 2, regular-light results are reported separately
+from the non-regular group, which includes underexposure,
+overexposure, and additional-light conditions identified by
+the \texttt{shift\_*} suffixes. The non-regular aggregate combines
+different lighting changes and should not be interpreted as
+one uniform unseen condition. The paired-study recall criterion
+requires the macro recall drop relative to the relevant reference
+arm to be no greater than five percentage points. A reduction
+in false alarms alone is not considered sufficient if recall
+falls beyond this limit.
+
+The follow-up launchers retain the same broad calibration rule:
+the higher empirical 0.95 quantile of normal calibration scores,
+with strict score exceedance. The AD 2 launcher scores an image
+using the maximum of the negative discriminator output over
+patches. Its runtime imports the evaluation modules from the
+external archive, so the checkout's evaluation code is not
+necessarily the code used to produce the archived runs.
+The blade launcher similarly checks calibration replay and
+uses a shared threshold across the blade domains.
+
+The results described in PR \#40 are aggregate results from an
+external release. Its verifier checks file hashes, row keys,
+counts, rates derived from supplied confusion counts, and
+agreement between CSV aggregates and summary JSON. It does
+not replay model inference, recompute AUROC from raw scores,
+or recompute the published confidence intervals. The release
+archive was not available during the PR inspection, so the
+verifier and reported intervals were not independently run.
+The reported AD 2 R0 result reduces changed-light FPR relative
+to B0, but also reduces changed-light recall by 27.30 percentage
+points. It therefore fails the stated five-point recall
+preservation criterion. The blade results show favourable
+reported mean values, but seed-level failures and an interval
+including zero remain unresolved. These follow-up results are
+thus treated as reported, not independently verified evidence.
+No pixel AUROC or AU-PRO results are supplied for these new
+runs.
+
+\section{Method}
+
+For the extension below, $E$ denotes the frozen feature
+extractor, $A_\theta$ the adapter and $D_\phi$ the
+discriminator, whose output represents normality. The baseline
+architecture and scoring procedure are described in the
+baseline section of the full report.
+
+\subsection{Aligned Relighting}
+
+After shared full-frame spatial preprocessing, RGB pixels
+$x\in[0,1]$ form the pair $(x,T(x))$, with
+\begin{equation}
+T(x)=\operatorname{clip}(b x^\gamma,0,1),
+\qquad
+b,\gamma\sim\mathcal U(0.8,1.2)
+\end{equation}
+independently.
+
+Relighting occurs before ImageNet normalization. Both views
+have the same spatial coordinates, allowing patch-by-patch
+comparison. We record clipping because saturation can erase
+information. This simple photometric family cannot simulate
+every reflection, shadow or physical light-source change.
+
+\subsection{Initial Paired Objective}
+
+For view $v\in\{x,T(x)\}$, let
+$z_v=A_\theta(E(v))$ and
+$\widetilde z_v=z_v+\epsilon_v$, with independent Gaussian
+noise $\epsilon_v\sim\mathcal N(0,0.015^2I)$. With hinge
+margin $m=0.5$, the paired discrimination objective is
+\begin{align}
+L_{\rm hinge}
+=\tfrac12\sum_v\big[
+&\operatorname{mean}_u(m-D_\phi(z_{v,u}))_+
+\notag\\
+&+\operatorname{mean}_u
+(m+D_\phi(\widetilde z_{v,u}))_+
+\big].
+\end{align}
+
+Here $(a)_+=\max(a,0)$. Normal-score consistency compares raw
+patch outputs:
+\begin{equation}
+L_{\rm pair}
+=
+\operatorname{mean}_u
+\big[
+D_\phi(z_{x,u})-D_\phi(z_{T(x),u})
+\big]^2.
+\end{equation}
+
+The initial extension uses
+$L_{\rm hinge}+\lambda L_{\rm pair}$.
+Both adapter and discriminator receive consistency gradients.
+One joint discriminator batch contains normal original,
+normal relit, synthetic original and synthetic relit features,
+in that order. The four groups share one discriminator forward
+pass, so batch normalization uses their combined statistics
+rather than separate statistics for each view.
+
+\subsection{Local and Global Synthetic Anomalies}
+
+The follow-up retains the same backbone and adapts local and
+global synthesis from GLASS \citep{chen2024glass}. Global
+perturbations begin with Gaussian offsets. For 20 steps, a
+normalized feature gradient ascends the fake-class binary
+cross-entropy with step size $0.001$. Every five steps, offsets
+are projected to an annulus with radii $0.5$ and $1.0$. Only
+the synthetic feature offsets are optimized during mining;
+model parameters and normalization buffers are not updated by
+that inner operation.
+
+Local synthesis blends a texture donor into a normal image
+inside a Perlin-noise region. The implementation combines two
+masks by intersection, union or selection; donor rotation,
+optional flipping and photometric changes increase appearance
+variation. The normal-image blending weight is drawn from
+$\mathcal N(0.5,0.1^2)$ and clipped to $[0.2,0.8]$. A fixed
+subset of 256 DTD texture donors supplies the inputs
+\citep{cimpoi2014dtd}. Four deterministic local variants per
+image cycle over source passes.
+
+Normal and local images receive identical relighting draws.
+A pixel receives a synthetic-defect label if any channel
+differs from the corresponding normal image by more than
+$1/255$ after relighting. A feature-grid location is labelled
+anomalous if its $8\times8$ pixel block contains at least one
+such pixel, producing a $32\times32$ label grid. These are
+synthetic labels, not real-defect annotations.
+
+Using anomaly logits $a=-D_\phi(z)$, normal targets are zero
+and synthetic global targets are one. Define $L_{\rm global}$
+as the sum of the normal and synthetic mean binary
+cross-entropies, averaged over the two views. For local labels
+$y_i$, $p_i=\sigma(a_i)$ and
+$p_{t,i}=y_ip_i+(1-y_i)(1-p_i)$. Local focal supervision is
+\begin{equation}
+L_{\rm local}
+=
+\operatorname{mean}_{i\in H}
+(1-p_{t,i})^2\operatorname{BCE}(a_i,y_i),
+\end{equation}
+where $H$ retains squared probability errors at or above their
+empirical median, including ties. The ordinary-consistency
+control L2 uses
+\begin{equation}
+L=L_{\rm global}+L_{\rm local}+0.1L_{\rm pair}.
+\end{equation}
+
+The global discrimination forward updates the discriminator's
+batch-normalization statistics once. Mining and auxiliary
+forwards use running statistics; module modes are restored
+afterwards.
+
+\subsection{Routing the Consistency Gradient}
+
+In R0, consistency is evaluated through the current
+discriminator with detached parameters and cloned buffers,
+denoted $D_{\bar\phi}$:
+\begin{equation}
+L_{\rm route}
+=
+\operatorname{mean}_u
+\big[
+D_{\bar\phi}(z_{x,u})-
+D_{\bar\phi}(z_{T(x),u})
+\big]^2.
+\end{equation}
+
+R0 replaces $L_{\rm pair}$ in the preceding objective with
+$L_{\rm route}$. The derivative through the discriminator
+with respect to its input remains active. Thus
+$\nabla_\theta L_{\rm route}$ can change the adapter while
+$\nabla_\phi L_{\rm route}=0$. The classification losses
+still update both modules. This prevents the consistency term
+from directly changing the discriminator parameters. Changes
+to the shared adapter can still affect defect scores, so
+recall must be checked experimentally.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+box/.style={
+draw,
+align=center,
+font=\small,
+text width=29mm,
+minimum height=8mm
+},
+arr/.style={-{Latex[length=1.5mm]}}
+]
+
+\node[box] (data)
+{normal image and\\aligned relit image};
+
+\node[box,below=4mm of data] (feat)
+{frozen features $E$\\trainable adapter $A_\theta$};
+
+\node[box,below left=6mm and -12mm of feat] (disc)
+{live $D_\phi$\\classification losses};
+
+\node[box,below right=6mm and -12mm of feat] (aux)
+{detached $D_{\bar\phi}$\\consistency loss};
+
+\draw[arr] (data)--(feat);
+\draw[arr] (feat)--(disc);
+\draw[arr] (feat)--(aux);
+
+\node[font=\small,align=center,below=3mm of disc]
+{updates $A_\theta,D_\phi$};
+
+\node[font=\small,align=center,below=3mm of aux]
+{updates $A_\theta$ only};
+
+\end{tikzpicture}
+
+\caption{
+R0 changes the gradient route of the auxiliary consistency
+term. Both branches use the current discriminator values.
+Local and global synthetic inputs also feed the classification
+losses; they are omitted here to emphasize routing.
+}
+\label{fig:route}
+\end{figure}
+
+\subsection{Matched Controls}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{llll}
+\toprule
+Arm & Synthesis/loss & Pair & Consistency\\
+\midrule
+B0 & Gaussian/hinge & Identity & None\\
+B1 & Gaussian/hinge & Relit & None\\
+B2 & Gaussian/hinge & Relit & Full, $0.1$\\
+L0 & Local+global & Identity & None\\
+L1 & Local+global & Relit & None\\
+L2 & Local+global & Relit & Full, $0.1$\\
+R0 & Local+global & Relit & Adapter, $0.1$\\
+\bottomrule
+\end{tabular}
+\caption{
+The pending seven-arm comparison. B2 here is fixed at $0.1$;
+the earlier three-weight B2 sweep is a separate completed study.
+}
+\label{tab:arms}
+\end{table}
+
+B1 versus B0 tests augmentation. L1 versus L0 tests
+augmentation with local and global synthesis. L1 versus B1
+changes synthesis and the discrimination objective, so it does
+not isolate routing. R0 versus L1 tests adding routed
+consistency; R0 versus L2 tests routing against full classifier
+gradients under otherwise matched synthesis. R0 versus B0
+measures the combined recipe, not the contribution of routing
+alone.
+
+\section{Inspection Demo}
+
+The existing SimpleNet inspection interface displays model
+scores, anomaly maps and a lighting sweep for a supplied image.
+It uses each model's normal-validation threshold and a fixed
+map scale across the sweep. A threshold-relative score is not
+a calibrated probability. For an upload without a known label,
+a flag cannot be counted as a false alarm.
+
+The recorded blade gallery and the interactive interface are
+separate demonstrations. Recorded predictions must be
+identified as such. These demonstrations do not establish
+that the routed R0 model has been integrated into live
+inference, or that the method improves detection across all
+categories.
+
+\section{Method Limitations}
+
+Synthetic brightness/gamma changes do not cover all physical
+lighting effects, and synthetic anomaly supports do not
+establish real-defect sensitivity. Normal validation cannot
+certify recall. Auxiliary routing prevents a direct
+discriminator consistency gradient, but not indirect changes
+through the shared adapter.
+
+\begin{thebibliography}{}
+
+\bibitem[Chen et~al.(2024)]{chen2024glass}
+Chen, Q.; Luo, H.; Lv, C.; and Zhang, Z. 2024.
+A Unified Anomaly Synthesis Strategy with Gradient Ascent
+for Industrial Anomaly Detection and Localization.
+In \textit{European Conference on Computer Vision}.
+
+\bibitem[Cimpoi et~al.(2014)]{cimpoi2014dtd}
+Cimpoi, M.; Maji, S.; Kokkinos, I.; Mohamed, S.;
+and Vedaldi, A. 2014.
+Describing Textures in the Wild.
+In \textit{Proceedings of the IEEE Conference on Computer
+Vision and Pattern Recognition}.
+
+\bibitem[Liu et~al.(2023)]{liu2023simplenet}
+Liu, Z.; Zhou, Y.; Xu, Y.; and Wang, Z. 2023.
+SimpleNet: A Simple Network for Image Anomaly Detection
+and Localization.
+In \textit{Proceedings of the IEEE/CVF Conference on
+Computer Vision and Pattern Recognition}, 20402--20411.
+
+\end{thebibliography}
+
+\end{document}
