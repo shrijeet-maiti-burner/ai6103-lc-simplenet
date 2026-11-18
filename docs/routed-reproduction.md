@@ -1,6 +1,6 @@
 # frozen routed-simplenet reproduction
 
-this launcher exposes the implementation used by the ongoing original ad2
+this launcher exposes the implementation used by the completed original ad2
 comparison: b0, b1, b2, l0, l1, l2 and r0, three seeds and eight categories.
 it prepares normal inputs, trains/resumes a fixed case and scores public images
 with frozen normal-calibrated thresholds. it does not select a successful method.

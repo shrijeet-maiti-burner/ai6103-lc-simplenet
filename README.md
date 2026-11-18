@@ -2,9 +2,7 @@
 
 AI6103 group project: test whether paired relighting and patch-score consistency reduce lighting-induced false alarms without reducing defect recall.
 
-**Original study: training and public-subset evaluation complete; official private-server evaluation remains open.** The [45-run AD reproduction](docs/ad-reproduction-results.md) and [120-run paired AD 2 study](docs/ad2-study-results.md) are recorded. AD 2 evidence covers normal-validation diagnostics and separately labelled public image/native-localization results. Relighting improves localization but reduces nonregular-light defect recall; that study establishes no overall detection improvement. A [local inspection demo](docs/demo.md) and [report draft](report/README.md) use the released evidence. Datasets and model weights are excluded from Git. The selected source is [the revised proposal](references/proposal.pdf); older chat suggestions do not override it.
-
-**18 november follow-up:** all 168 original AD 2 heads, scoring and the independent audit are complete; the original recall-preservation target fails. the [completed evidence](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-results-2026-11-18) separately records the limited blade-lighting mean-level result and its seed/background failures. the [AD 2 launcher](docs/routed-reproduction.md) and [blade execution source](docs/routed-blade-reproduction.md) cover both recorded recipes without the private ssh operator. the [team report/video drafts](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/review-drafts-2026-11-16) still need the completed outcomes integrated. a fresh full-budget run through each portable wrapper remains a separate verification task.
+**Status: training and public-subset evaluation complete; official private-server evaluation remains open.** The [45-run AD reproduction](docs/ad-reproduction-results.md) and [120-run paired AD 2 study](docs/ad2-study-results.md) are recorded. AD 2 evidence covers normal-validation diagnostics and separately labelled public image/native-localization results. Relighting improves localization but reduces nonregular-light defect recall; the study establishes no overall detection improvement. A [local inspection demo](docs/demo.md) and [report draft](report/README.md) use the released evidence. Datasets and model weights are excluded from Git. The selected source is [the revised proposal](references/proposal.pdf); older chat suggestions do not override it.
 
 ## Start
 
@@ -21,10 +19,10 @@ Python 3.12.15 and uv 0.13.0 are the setup baseline. If `uv` is installed only a
 
 ## Read
 
-- [blade execution source](docs/routed-blade-reproduction.md): all three training families, source calibration/replay, four-domain scoring and audit.
 - [coding freeze](docs/code-freeze.md): 16 november source checks, evidence boundaries and final handoff.
 - [simplenet recovery plan](docs/simplenet-recovery-plan.md): the proposed teacher-anchored follow-up, matched controls and acceptance gates.
 - [source zip](docs/source-package.md): build and run a complete package without git history.
+- [AD 2 launcher](docs/routed-reproduction.md) and [blade execution source](docs/routed-blade-reproduction.md): input preparation, fixed-budget training/resume, scoring and audit for both routed experiments.
 
 - [Project and method](docs/project.md): scope, objective, controls, first feasibility gate.
 - [Evaluation protocol](docs/protocol.md): splits, thresholds, seeds, metrics, evidence.
