@@ -1,4 +1,4 @@
-"""Score AD 2 `test_public` images with a frozen trained head, for role D's evaluation.
+"""Score AD 2 `test_public` images with a frozen trained head.
 
 Only `<category>/test_public/{good,bad}` is read; private folders are never listed. Labels come
 from the official folder names. Image scores use the same rule as validation scoring: the maximum

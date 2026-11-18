@@ -4,7 +4,7 @@
 
 ## Run
 
-Initialize the submodule and select the CUDA environment in [setup](setup.md). Build an AD [normal manifest](../manifests/README.md), preserving the fixed 20% validation holdout. Replace the hash below with the manifest SHA-256 from its audit file:
+Initialize the submodule and select the CUDA environment in [setup](setup.md). Build an AD [normal manifest](data.md), preserving the fixed 20% validation holdout. Replace the hash below with the manifest SHA-256 from its audit file:
 
 ```bash
 uv run --frozen --extra cuda python scripts/train_baseline.py \
@@ -47,4 +47,4 @@ The published three-seed bottle development archive predates schema 2 and contai
 
 Scores are unnormalized anomaly scores, not probabilities. Maps observe only the center crop. Evaluation must resize and crop masks with the same geometry; stretching these maps to the native image would invent the missing field of view. No defect labels, test metrics or operating threshold are produced by this command.
 
-[`tests/test_baseline.py`](../tests/test_baseline.py) checks upstream input parity, rejection of rectangular sources, and synthetic training/reload parity. Passing those checks establishes implementation behavior, not detector accuracy. See the [development results and artifact handoff](baseline-results.md). D handles evaluation at the evaluation stage, using fixed checkpoints and the [evaluation protocol](protocol.md).
+[`tests/test_baseline.py`](../tests/test_baseline.py) checks upstream input parity, rejection of rectangular sources, and synthetic training/reload parity. Passing those checks establishes implementation behavior, not detector accuracy. See the [development results and artifact handoff](baseline-results.md). Follow the [evaluation protocol](protocol.md) with fixed checkpoints.

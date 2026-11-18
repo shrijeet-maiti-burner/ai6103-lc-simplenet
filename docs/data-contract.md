@@ -1,10 +1,10 @@
 # Normal data and score-map geometry
 
-status: normal-image loading, full-frame restoration and the [paired pilot](pilot-training.md) are implemented. b/c/d must agree on the input/map contract before the main experiments. this document does not freeze categories, resolution, padding or augmentation settings.
+The loader enforces normal-image split membership and records geometry explicitly. AD 2 study inputs are full-frame 256×256; the separate AD reference uses resize 329 and crop 288.
 
 ## Build and pin the normal data
 
-Follow [the manifest commands](../manifests/README.md) after acquiring the datasets from [MVTec](https://www.mvtec.com/research-teaching/datasets). Keep the archives, images, generated manifests and audits under ignored `data/`. Preserve source/version/checksum and available acquisition-group metadata.
+Follow [the manifest commands](data.md) after acquiring the datasets from [MVTec](https://www.mvtec.com/research-teaching/datasets). Keep the archives, images, generated manifests and audits under ignored `data/`. Preserve source/version/checksum and available acquisition-group metadata.
 
 `NormalManifestDataset` reads one category and split from a manifest pinned by SHA-256. It rejects non-normal labels/masks, unsafe/test paths, duplicate IDs, declared cross-split RGB content and AD 2 folder/split disagreement. Each loaded image must match its frozen file hash, dimensions, source mode and frame/orientation assumptions.
 
@@ -60,10 +60,10 @@ native_scores = restore_score_map(
 
 It upsamples the score grid to model-input dimensions, removes bottom/right padding, then resizes the valid map to native dimensions. Interpolation is PIL bilinear in float32. Scores retain their sign and scale; there is no test-dependent normalization or clipping.
 
-This helper does not reverse crops, rotations or arbitrary spatial augmentations. Padding must have been added only at the bottom/right, with the original valid image at the top-left. Map restoration cannot undo changes to model features caused by padding. Future discrete ground-truth masks need separate verified handling; do not interpolate them with this continuous-score helper.
+This helper does not reverse crops, rotations or arbitrary spatial augmentations. Padding must have been added only at the bottom/right, with the original valid image at the top-left. Map restoration cannot undo changes to model features caused by padding. The native evaluator reads binary masks separately; do not interpolate them with this continuous-score helper.
 
-the upstream ad reference uses resize 329 followed by center crop 288. its maps and ground-truth masks must use the same crop coordinates. stretching a cropped map to native size does not restore its missing field of view. the full-frame helper above makes no claim of crop support; ad 2 geometry remains a separate decision.
+the upstream ad reference uses resize 329 followed by center crop 288. its maps and ground-truth masks must use the same crop coordinates. stretching a cropped map to native size does not restore its missing field of view. the full-frame helper above makes no claim of crop support; AD 2 uses the documented full-frame 256×256 resize.
 
 ## Integration checks
 
-tests cover split isolation, byte/manifest drift, paths/labels, grayscale and batch layout, resize metadata, padding removal before native resizing, border signals and invalid maps. the runner adds explicit crop coordinates, deterministic paired rng, fixed final checkpoints and normal-only calibration. the [native evaluator](localization.md) passed numerical checks against the official utility; this is implementation parity, not private-server certification. the frozen public study is reported in the [evidence ledger](report-evidence.md). keep the [protocol](protocol.md) and [upstream audit](source-review.md#upstream-code) in force.
+tests cover split isolation, byte/manifest drift, paths/labels, grayscale and batch layout, resize metadata, padding removal before native resizing, border signals and invalid maps. the runner adds explicit crop coordinates, deterministic paired rng, fixed final checkpoints and normal-only calibration. the [native evaluator](localization.md) passed numerical checks against the official utility; this is implementation parity, not private-server certification. the frozen public study is reported in the [evidence ledger](report-evidence.md). keep the [protocol](protocol.md) and [upstream audit](upstream.md) in force.

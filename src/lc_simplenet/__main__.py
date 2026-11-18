@@ -1,4 +1,4 @@
-"""Inspect the scaffold without downloading datasets or pretrained weights."""
+"""Check the Python runtime, source identity and optional GPU."""
 
 import argparse
 import importlib.util
@@ -45,25 +45,13 @@ def doctor(require_cuda: bool) -> int:
     return 0 if ok else 1
 
 
-def plan(path: Path) -> int:
-    study = json.loads(path.read_text(encoding="utf-8"))
-    print(json.dumps(study, indent=2))
-    jobs = sum(len(cats) for cats in study["datasets"].values())
-    jobs *= len(study["seeds"]) * len(study["variants"])
-    print(f"Planned method/category/seed runs: {jobs}")
-    print("draft configuration preview; see documented training commands and study policies.")
-    return 0
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     diagnostics = commands.add_parser("doctor")
     diagnostics.add_argument("--require-cuda", action="store_true")
-    planning = commands.add_parser("plan")
-    planning.add_argument("--config", type=Path, default=ROOT / "configs/study.json")
     args = parser.parse_args()
-    return doctor(args.require_cuda) if args.command == "doctor" else plan(args.config)
+    return doctor(args.require_cuda)
 
 
 if __name__ == "__main__":

@@ -122,7 +122,8 @@ def run(evidence_dir, destination):
     }
     output = Path(destination)
     output.mkdir(parents=True, exist_ok=False)
-    template = (ROOT / "demo/blade-gallery.html").read_text(encoding="utf-8")
+    template_path = ROOT / "demo/blade-gallery.template.html"
+    template = template_path.read_text(encoding="utf-8")
     if template.count("__EVIDENCE_JSON__") != 1:
         raise ValueError("gallery template differs")
     serialized = json.dumps(data, separators=(",", ":"), allow_nan=False).replace("<", "\\u003c")
@@ -136,7 +137,7 @@ def run(evidence_dir, destination):
         "thumbnail_format": "256x256 jpeg presentation copies; not used for inference",
         "selection": "all test cases; original sorted order within all four frozen domains",
         "script_sha256": sha(Path(__file__)),
-        "template_sha256": sha(ROOT / "demo/blade-gallery.html"),
+        "template_sha256": sha(template_path),
         "audit_sha256": sha(HERE / "real-test-decision.json"),
         "files": {p.name: sha(p) for p in output.iterdir()},
     }

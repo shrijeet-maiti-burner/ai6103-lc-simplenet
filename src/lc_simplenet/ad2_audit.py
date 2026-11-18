@@ -164,9 +164,9 @@ def _inspect_image(path: Path, root: Path) -> dict:
 
 def audit_mvtec_ad2(root: Path) -> dict:
     """Count files on disk and compare them with Table IV expected values."""
-    root = root.resolve(strict=True)
     if root.is_symlink():
         raise AuditError(f"Refusing symlink dataset root: {root}")
+    root = root.resolve(strict=True)
     symlinks = _symlink_entries(root)
     if symlinks:
         preview = "; ".join(symlinks[:8])

@@ -1,4 +1,4 @@
-"""Check C's helper against the actual paired runner without changing trained-run source."""
+"""Compare the reference objective with the paired runner's complete update."""
 
 import pytest
 

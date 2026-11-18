@@ -13,11 +13,7 @@ model weights, credentials or private experiment results are included.
 
 ## setup and inputs
 
-use the combined `main` source or the
-[code delivery](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/code-submission-2026-11-18).
-[pr39](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/39)
-was reviewed and merged on 18 november. the delivery includes both required
-execution-source archives alongside `code/`.
+Use the repository or complete submission ZIP. Both required archives are included under `execution-sources/`.
 
 use the [locked environment](setup.md): python 3.12, torch 2.6.0,
 torchvision 0.21.0, numpy 1.26.4 and pillow 11.3.0. full training uses the
@@ -26,13 +22,11 @@ checkpoints. the experiment runs on an l40s with 48 gb; smaller hardware has not
 been validated for the complete matrix. the mechanics check uses one fit image
 and two normal validation images and carries a separate protocol identity.
 
-download the execution source from the
-[source prerelease](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-reproduction-source-2026-11-16):
+Verify the included execution snapshot:
 
 ```powershell
 uv sync --frozen --extra cuda
-gh release download routed-reproduction-source-2026-11-16 --repo shrijeet-maiti-burner/ai6103-lc-simplenet --pattern routed-ad2-execution-source-20261116.zip --dir results/routed-source
-uv run --frozen --extra cuda python scripts/reproduce_routed_ad2.py --source-archive results/routed-source/routed-ad2-execution-source-20261116.zip verify
+uv run --frozen --extra cuda python scripts/reproduce_routed_ad2.py --source-archive execution-sources/routed-ad2-execution-source-20261116.zip verify
 ```
 
 archive sha256:
@@ -50,7 +44,7 @@ torchvision obtains the pinned imagenet-v1 wrn50 weights through its normal
 cache; the complete weight hash is checked before training.
 
 ```powershell
-uv run --frozen --extra cuda python scripts/reproduce_routed_ad2.py --source-archive results/routed-source/routed-ad2-execution-source-20261116.zip prepare --data-root data/mvtec_ad2 --textures-root data/dtd --category sheet_metal --out results/routed-inputs
+uv run --frozen --extra cuda python scripts/reproduce_routed_ad2.py --source-archive execution-sources/routed-ad2-execution-source-20261116.zip prepare --data-root data/mvtec_ad2 --textures-root data/dtd --category sheet_metal --out results/routed-inputs
 ```
 
 preparation reads only the pinned normal train/validation paths and dtd donors.
@@ -61,7 +55,7 @@ output directory; an existing identical texture archive is retained.
 ## mechanics check and full training
 
 ```powershell
-uv run --frozen --extra cuda python scripts/reproduce_routed_ad2.py --source-archive results/routed-source/routed-ad2-execution-source-20261116.zip train --inputs results/routed-inputs --category sheet_metal --seed 0 --mechanics-only --stop-after 2 --out results/routed-mechanics
+uv run --frozen --extra cuda python scripts/reproduce_routed_ad2.py --source-archive execution-sources/routed-ad2-execution-source-20261116.zip train --inputs results/routed-inputs --category sheet_metal --seed 0 --mechanics-only --stop-after 2 --out results/routed-mechanics
 ```
 
 this executes the seven real objectives and checkpoint machinery on a small
@@ -72,7 +66,7 @@ production run; partial checkpoints cannot be scored as final models.
 for a full case:
 
 ```powershell
-uv run --frozen --extra cuda python scripts/reproduce_routed_ad2.py --source-archive results/routed-source/routed-ad2-execution-source-20261116.zip train --inputs results/routed-inputs --category sheet_metal --seed 0 --out results/routed-runs/sheet_metal/seed0
+uv run --frozen --extra cuda python scripts/reproduce_routed_ad2.py --source-archive execution-sources/routed-ad2-execution-source-20261116.zip train --inputs results/routed-inputs --category sheet_metal --seed 0 --out results/routed-runs/sheet_metal/seed0
 ```
 
 repeat preparation/training for all eight named categories and seeds 0, 1, 2
@@ -103,7 +97,7 @@ on the new hardware. no genuine target was opened for these checks.
 ## fixed-threshold public scoring
 
 ```powershell
-uv run --frozen --extra cuda python scripts/reproduce_routed_ad2.py --source-archive results/routed-source/routed-ad2-execution-source-20261116.zip score --inputs results/routed-inputs --run results/routed-runs/sheet_metal/seed0 --data-root data/evaluation-ad2 --out results/routed-scores/sheet_metal/seed0
+uv run --frozen --extra cuda python scripts/reproduce_routed_ad2.py --source-archive execution-sources/routed-ad2-execution-source-20261116.zip score --inputs results/routed-inputs --run results/routed-runs/sheet_metal/seed0 --data-root data/evaluation-ad2 --out results/routed-scores/sheet_metal/seed0
 ```
 
 scoring first cold-replays the complete saved normal calibration bit for bit.
@@ -114,7 +108,7 @@ higher empirical q95 on regular normal validation, then strict `score > threshol
 no model, threshold, epoch, category or seed is selected using those results.
 
 this exports individual-case evidence. the original all8 claim still requires
-the complete independent matrix audit, both the newly matched and previous
+the complete separate matrix audit, both the newly matched and previous
 frozen paired b0 anchors, and the prespecified recall/false-alarm limits.
 seven categories without sheet_metal are a sensitivity analysis, not a
 replacement primary scope. exposed public results are not private-server results.

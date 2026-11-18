@@ -30,7 +30,7 @@ uv run --frozen --extra cuda python scripts/train_pilot.py --config results/loca
 
 Choose CPU with `--extra cpu --device cpu`; omit the CUDA memory limit. The default pretrained backbone may download the official torchvision V1 checkpoint. `weights=random` explicitly permits a synthetic architecture check; it is not a pretrained baseline. The output directory must be new and below this checkout's ignored `results/`. Dataset paths, configurations and outputs stay local.
 
-for square ad images, add `"ad_resize": 329` to use the upstream resize 329 / center crop 288 geometry with `"image_size": [288, 288]`. the default `ad_resize=null` keeps full-frame resizing. choose the same geometry for all paired controls before running them. this option rejects rectangular sources and ad 2; it does not freeze the ad 2 preprocessing decision.
+for square ad images, add `"ad_resize": 329` to use the upstream resize 329 / center crop 288 geometry with `"image_size": [288, 288]`. the default `ad_resize=null` keeps full-frame resizing. choose the same geometry for all paired controls before running them. this option rejects rectangular sources and ad 2; AD 2 uses the study's full-frame 256×256 resize.
 
 ## Training contract
 
@@ -44,15 +44,13 @@ for square ad images, add `"ad_resize": 329` to use the upstream resize 329 / ce
 
 the optional ad crop can match the upstream input tensors; it does not make this runner an exact single-view reproduction. the remaining differences include paired discriminator batch composition, source batch size, sampling/noise streams and the fixed update horizon. use b2 minus b1 to isolate consistency under one shared configuration. matched steps do not imply equal compute.
 
-there is also a backbone batch-norm difference. upstream constructs the backbone in training mode and probes its shape with a ones image, updating running statistics once before freezing. the paired runner puts the backbone in evaluation mode before that probe and preserves the pretrained buffers. all paired controls share this behavior. b's faithful upstream reference retains the original probe; record that distinction when comparing it with the paired controls, rather than attributing every difference to relighting or consistency.
-
-the allocation remains b for baseline/training, c for the extension, and shrijeet for data, report/demo and overall review. this runner supplies shared integration and replay checks. agree the maintenance hand-off between b and c in the meeting; the implementation does not change anyone's allocation.
+there is also a backbone batch-norm difference. upstream constructs the backbone in training mode and probes its shape with a ones image, updating running statistics once before freezing. the paired runner puts the backbone in evaluation mode before that probe and preserves the pretrained buffers. all paired controls share this behavior. the faithful upstream reference retains the original probe; record that distinction when comparing it with the paired controls, rather than attributing every difference to relighting or consistency.
 
 ## Checkpoints and outputs
 
 `run.json` records configuration, source/upstream revisions, source fingerprints, lock/manifest/weight hashes, runtime, device and split counts. `train.jsonl` records source-image IDs, component losses, raw score spread, clipping and synchronized step time including loading. Failed runs retain `failure.json` and completed logs.
 
-`final.pt` contains the adapter/discriminator, optimizers, sampler position, all RNG states, configuration and frozen-backbone fingerprint. It omits frozen weights; reconstruct the same backbone when loading. Files are written atomically and never overwritten. For a cold continuation, use the identical configuration/runtime and `--resume results/old-run/final.pt --steps 16 --output results/new-run`. The step count is the total horizon, not the number of additional updates. Continue only within an exploratory pilot; changing a frozen final horizon defines a new study.
+`final.pt` contains the adapter/discriminator, optimizers, sampler position, all RNG states, configuration and frozen-backbone fingerprint. It omits frozen weights; reconstruct the same backbone when loading. Files are written atomically and never overwritten. For a cold continuation, use the identical configuration/runtime and `--resume results/old-run/final.pt --steps 16 --output results/old-run`. The step count is the total horizon, not the number of additional updates. Continue only within an exploratory pilot; changing a frozen final horizon defines a new study.
 
 `--verify-replay` runs one diagnostic update beyond the fixed horizon, reloads the final checkpoint, and requires exact equality of that update's metrics, heads, BatchNorm buffers, optimizers, sampler and RNGs. It then restores the final checkpoint before validation. The extra update is excluded from training timing; total runtime and memory include the diagnostic. This is same-process replay; the tests additionally check cold reconstruction. Exact equality across different devices, libraries or machines is not claimed. Loading rejects changed configuration, training sources, runtime, device type or backbone.
 

@@ -185,7 +185,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--native", type=Path, required=True)
     parser.add_argument("--scoring", type=Path, required=True)
-    parser.add_argument("--out", type=Path, default=Path("report/build/evidence"))
+    parser.add_argument("--out", type=Path, default=Path("results/report-evidence"))
     args = parser.parse_args()
     evidence = build(args.native, args.scoring, args.out)
     print(f"built native tables from {evidence['runs']} verified outputs")

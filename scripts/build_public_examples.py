@@ -161,7 +161,7 @@ def main():
     parser.add_argument("--runs", type=Path, required=True)
     parser.add_argument("--root", type=Path, required=True)
     parser.add_argument("--protocol", type=Path, required=True)
-    parser.add_argument("--out", type=Path, default=Path("report/build/evidence"))
+    parser.add_argument("--out", type=Path, default=Path("results/report-evidence"))
     args = parser.parse_args()
     build(args.runs, args.root, args.protocol, args.out)
 

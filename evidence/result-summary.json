@@ -1,0 +1,1720 @@
+{
+  "schema": "lc-simplenet-aggregate-results-v1",
+  "published_date": "2026-11-18",
+  "primary": "R0",
+  "rates": "fractions; documentation tables display percentages; all means are across three seeds, not ensembles",
+  "fixed_point_targets": {
+    "lighting_fpr_drop_at_least": 0.05,
+    "lighting_recall_loss_at_most": 0.05,
+    "regular_fpr_rise_at_most": 0.02,
+    "regular_recall_loss_at_most": 0.05
+  },
+  "ad2": {
+    "dataset": "MVTec AD 2 exposed public set, all eight categories",
+    "images": 1084,
+    "new_heads": 168,
+    "new_image_decisions": 22764,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "means": {
+      "all8": {
+        "B0": {
+          "regular": {
+            "fpr": 0.040295815295815295,
+            "recall": 0.27777777777777785,
+            "auroc": 0.7056403318903319
+          },
+          "nonregular": {
+            "fpr": 0.4665999278499278,
+            "recall": 0.6691666666666666,
+            "auroc": 0.6321320827320827
+          }
+        },
+        "B1": {
+          "regular": {
+            "fpr": 0.07781385281385282,
+            "recall": 0.26666666666666666,
+            "auroc": 0.6670677008177007
+          },
+          "nonregular": {
+            "fpr": 0.45446608946608946,
+            "recall": 0.6167592592592592,
+            "auroc": 0.6179975789642457
+          }
+        },
+        "B2": {
+          "regular": {
+            "fpr": 0.06507936507936507,
+            "recall": 0.2611111111111111,
+            "auroc": 0.6857768157768157
+          },
+          "nonregular": {
+            "fpr": 0.4268578643578644,
+            "recall": 0.6093518518518518,
+            "auroc": 0.6321523969857302
+          }
+        },
+        "L0": {
+          "regular": {
+            "fpr": 0.05650252525252525,
+            "recall": 0.24166666666666667,
+            "auroc": 0.710254329004329
+          },
+          "nonregular": {
+            "fpr": 0.20018398268398271,
+            "recall": 0.37620370370370365,
+            "auroc": 0.6785019560686227
+          }
+        },
+        "L1": {
+          "regular": {
+            "fpr": 0.05928030303030304,
+            "recall": 0.23888888888888893,
+            "auroc": 0.6972540885040885
+          },
+          "nonregular": {
+            "fpr": 0.21529220779220778,
+            "recall": 0.3855555555555556,
+            "auroc": 0.6764481561648227
+          }
+        },
+        "L2": {
+          "regular": {
+            "fpr": 0.05997474747474748,
+            "recall": 0.25277777777777777,
+            "auroc": 0.7098208273208274
+          },
+          "nonregular": {
+            "fpr": 0.2107521645021645,
+            "recall": 0.3886111111111112,
+            "auroc": 0.6818932740099407
+          }
+        },
+        "R0": {
+          "regular": {
+            "fpr": 0.06691919191919192,
+            "recall": 0.2611111111111111,
+            "auroc": 0.704306758056758
+          },
+          "nonregular": {
+            "fpr": 0.2142839105339105,
+            "recall": 0.39620370370370367,
+            "auroc": 0.6832608625941959
+          }
+        },
+        "previous_B0": {
+          "regular": {
+            "fpr": 0.06011904761904762,
+            "recall": 0.2916666666666667,
+            "auroc": 0.7027242664742666
+          },
+          "nonregular": {
+            "fpr": 0.49508297258297257,
+            "recall": 0.6816666666666666,
+            "auroc": 0.6314797498797499
+          }
+        }
+      },
+      "without_sheet_metal": {
+        "B0": {
+          "regular": {
+            "fpr": 0.04605236033807462,
+            "recall": 0.2825396825396825,
+            "auroc": 0.712795299938157
+          },
+          "nonregular": {
+            "fpr": 0.4499237270665843,
+            "recall": 0.6638095238095237,
+            "auroc": 0.6305319040747613
+          }
+        },
+        "B1": {
+          "regular": {
+            "fpr": 0.08893011750154607,
+            "recall": 0.26349206349206356,
+            "auroc": 0.6552202295059437
+          },
+          "nonregular": {
+            "fpr": 0.4384374355802927,
+            "recall": 0.6007407407407407,
+            "auroc": 0.6117115188162806
+          }
+        },
+        "B2": {
+          "regular": {
+            "fpr": 0.07437641723356009,
+            "recall": 0.2634920634920635,
+            "auroc": 0.6686655672369958
+          },
+          "nonregular": {
+            "fpr": 0.4187899402185117,
+            "recall": 0.6005291005291006,
+            "auroc": 0.6272217870313107
+          }
+        },
+        "L0": {
+          "regular": {
+            "fpr": 0.06457431457431458,
+            "recall": 0.24761904761904757,
+            "auroc": 0.6863224077509792
+          },
+          "nonregular": {
+            "fpr": 0.21449598021026592,
+            "recall": 0.3880423280423281,
+            "auroc": 0.6668911243958863
+          }
+        },
+        "L1": {
+          "regular": {
+            "fpr": 0.06774891774891775,
+            "recall": 0.24444444444444446,
+            "auroc": 0.6770205455919742
+          },
+          "nonregular": {
+            "fpr": 0.23414347557204698,
+            "recall": 0.4152380952380953,
+            "auroc": 0.6640042419661467
+          }
+        },
+        "L2": {
+          "regular": {
+            "fpr": 0.06854256854256854,
+            "recall": 0.26031746031746034,
+            "auroc": 0.692176183604755
+          },
+          "nonregular": {
+            "fpr": 0.23133580705009274,
+            "recall": 0.4193650793650794,
+            "auroc": 0.6703224718843765
+          }
+        },
+        "R0": {
+          "regular": {
+            "fpr": 0.07647907647907648,
+            "recall": 0.2698412698412698,
+            "auroc": 0.6866680409537552
+          },
+          "nonregular": {
+            "fpr": 0.23299113584827866,
+            "recall": 0.42423280423280424,
+            "auroc": 0.6711552715362239
+          }
+        },
+        "previous_B0": {
+          "regular": {
+            "fpr": 0.06870748299319727,
+            "recall": 0.3015873015873017,
+            "auroc": 0.7007324950182093
+          },
+          "nonregular": {
+            "fpr": 0.4872376829519688,
+            "recall": 0.6812698412698412,
+            "auroc": 0.6304213014498729
+          }
+        }
+      }
+    },
+    "comparisons": {
+      "all8": {
+        "B0": {
+          "differences": {
+            "lighting_fpr_drop": 0.2523160173160173,
+            "lighting_recall_change": -0.2729629629629629,
+            "regular_fpr_change": 0.026623376623376625,
+            "regular_recall_change": -0.01666666666666672
+          },
+          "gates": {
+            "lighting_fpr": true,
+            "lighting_recall": false,
+            "regular_fpr": false,
+            "regular_recall": true
+          },
+          "point_targets_passed": false,
+          "paired_rgb_cluster_ci95": {
+            "regular": {
+              "fpr": [
+                -0.01761566558441558,
+                0.07441580988455986
+              ],
+              "recall": [
+                -0.08333333333333333,
+                0.049999999999999996
+              ]
+            },
+            "nonregular": {
+              "fpr": [
+                -0.3016981872294372,
+                -0.20318506493506494
+              ],
+              "recall": [
+                -0.3113888888888888,
+                -0.23564814814814816
+              ]
+            }
+          },
+          "recall_preservation_supported_95percent": false
+        },
+        "previous_B0": {
+          "differences": {
+            "lighting_fpr_drop": 0.2807990620490621,
+            "lighting_recall_change": -0.285462962962963,
+            "regular_fpr_change": 0.006800144300144299,
+            "regular_recall_change": -0.030555555555555558
+          },
+          "gates": {
+            "lighting_fpr": true,
+            "lighting_recall": false,
+            "regular_fpr": true,
+            "regular_recall": true
+          },
+          "point_targets_passed": false,
+          "paired_rgb_cluster_ci95": {
+            "regular": {
+              "fpr": [
+                -0.0363997113997114,
+                0.05175076659451657
+              ],
+              "recall": [
+                -0.09444444444444444,
+                0.03333333333333333
+              ]
+            },
+            "nonregular": {
+              "fpr": [
+                -0.3311909271284271,
+                -0.2315390963203463
+              ],
+              "recall": [
+                -0.32407407407407407,
+                -0.24731481481481482
+              ]
+            }
+          },
+          "recall_preservation_supported_95percent": false
+        },
+        "B1": {
+          "differences": {
+            "lighting_fpr_drop": 0.24018217893217897,
+            "lighting_recall_change": -0.22055555555555556,
+            "regular_fpr_change": -0.010894660894660901,
+            "regular_recall_change": -0.005555555555555536
+          },
+          "gates": {
+            "lighting_fpr": true,
+            "lighting_recall": false,
+            "regular_fpr": true,
+            "regular_recall": true
+          },
+          "point_targets_passed": false,
+          "paired_rgb_cluster_ci95": {
+            "regular": {
+              "fpr": [
+                -0.06521487193362194,
+                0.04249729437229435
+              ],
+              "recall": [
+                -0.07222222222222222,
+                0.05833333333333334
+              ]
+            },
+            "nonregular": {
+              "fpr": [
+                -0.2899664953102453,
+                -0.19051361832611832
+              ],
+              "recall": [
+                -0.2577777777777777,
+                -0.1828703703703704
+              ]
+            }
+          },
+          "recall_preservation_supported_95percent": false
+        },
+        "L1": {
+          "differences": {
+            "lighting_fpr_drop": 0.0010082972582972916,
+            "lighting_recall_change": 0.010648148148148073,
+            "regular_fpr_change": 0.007638888888888883,
+            "regular_recall_change": 0.0222222222222222
+          },
+          "gates": {
+            "lighting_fpr": false,
+            "lighting_recall": true,
+            "regular_fpr": true,
+            "regular_recall": true
+          },
+          "point_targets_passed": false,
+          "paired_rgb_cluster_ci95": {
+            "regular": {
+              "fpr": [
+                0.0,
+                0.019444444444444445
+              ],
+              "recall": [
+                0.005555555555555553,
+                0.041666666666666664
+              ]
+            },
+            "nonregular": {
+              "fpr": [
+                -0.015674603174603174,
+                0.012758116883116878
+              ],
+              "recall": [
+                -0.0016666666666666685,
+                0.02351851851851852
+              ]
+            }
+          },
+          "recall_preservation_supported_95percent": true
+        }
+      },
+      "without_sheet_metal": {
+        "B0": {
+          "differences": {
+            "lighting_fpr_drop": 0.21693259121830563,
+            "lighting_recall_change": -0.2395767195767195,
+            "regular_fpr_change": 0.030426716141001862,
+            "regular_recall_change": -0.012698412698412653
+          },
+          "gates": {
+            "lighting_fpr": true,
+            "lighting_recall": false,
+            "regular_fpr": false,
+            "regular_recall": true
+          },
+          "point_targets_passed": false,
+          "paired_rgb_cluster_ci95": {
+            "regular": {
+              "fpr": [
+                -0.019618377654091936,
+                0.0867967944753659
+              ],
+              "recall": [
+                -0.08253968253968254,
+                0.05714285714285714
+              ]
+            },
+            "nonregular": {
+              "fpr": [
+                -0.26743310657596375,
+                -0.16827793238507524
+              ],
+              "recall": [
+                -0.28084656084656084,
+                -0.19957671957671957
+              ]
+            }
+          },
+          "recall_preservation_supported_95percent": false
+        },
+        "previous_B0": {
+          "differences": {
+            "lighting_fpr_drop": 0.2542465471036901,
+            "lighting_recall_change": -0.257037037037037,
+            "regular_fpr_change": 0.007771593485879205,
+            "regular_recall_change": -0.031746031746031855
+          },
+          "gates": {
+            "lighting_fpr": true,
+            "lighting_recall": false,
+            "regular_fpr": true,
+            "regular_recall": true
+          },
+          "point_targets_passed": false,
+          "paired_rgb_cluster_ci95": {
+            "regular": {
+              "fpr": [
+                -0.04172335600907029,
+                0.060442949907235595
+              ],
+              "recall": [
+                -0.09841269841269841,
+                0.03809523809523809
+              ]
+            },
+            "nonregular": {
+              "fpr": [
+                -0.303725468975469,
+                -0.2045630797773655
+              ],
+              "recall": [
+                -0.2966137566137566,
+                -0.21639947089947092
+              ]
+            }
+          },
+          "recall_preservation_supported_95percent": false
+        },
+        "B1": {
+          "differences": {
+            "lighting_fpr_drop": 0.20544629973201403,
+            "lighting_recall_change": -0.17650793650793645,
+            "regular_fpr_change": -0.012451041022469592,
+            "regular_recall_change": 0.006349206349206271
+          },
+          "gates": {
+            "lighting_fpr": true,
+            "lighting_recall": false,
+            "regular_fpr": true,
+            "regular_recall": true
+          },
+          "point_targets_passed": false,
+          "paired_rgb_cluster_ci95": {
+            "regular": {
+              "fpr": [
+                -0.07619279529993815,
+                0.04894867037724181
+              ],
+              "recall": [
+                -0.06031746031746032,
+                0.07619047619047618
+              ]
+            },
+            "nonregular": {
+              "fpr": [
+                -0.2556430117501546,
+                -0.15499350649350652
+              ],
+              "recall": [
+                -0.21619047619047618,
+                -0.13724867724867723
+              ]
+            }
+          },
+          "recall_preservation_supported_95percent": false
+        },
+        "L1": {
+          "differences": {
+            "lighting_fpr_drop": 0.0011523397237683253,
+            "lighting_recall_change": 0.008994708994708944,
+            "regular_fpr_change": 0.008730158730158727,
+            "regular_recall_change": 0.025396825396825362
+          },
+          "gates": {
+            "lighting_fpr": false,
+            "lighting_recall": true,
+            "regular_fpr": true,
+            "regular_recall": true
+          },
+          "point_targets_passed": false,
+          "paired_rgb_cluster_ci95": {
+            "regular": {
+              "fpr": [
+                0.0,
+                0.022222222222222223
+              ],
+              "recall": [
+                0.0031746031746031763,
+                0.047619047619047616
+              ]
+            },
+            "nonregular": {
+              "fpr": [
+                -0.01746067821067821,
+                0.014199237270665839
+              ],
+              "recall": [
+                -0.004976190476190476,
+                0.022857142857142854
+              ]
+            }
+          },
+          "recall_preservation_supported_95percent": true
+        }
+      }
+    },
+    "original_target_point_qualified": false,
+    "protocol_sha256": "751098d10d402f10b10f61d6e5b39a768a74dad04e59af0c9df917063dd57c08",
+    "score_prepared_sha256": "507cc7e887b77c38a0312116788eac17259bfa3467189628b62335b912adbc2e",
+    "decision_sha256": "39a9d5a932438f02d87657415f18bd0343aae34e85b60b3d46e78946cb9c7be6",
+    "calibration": "higher q95 of regular normal validation; strict score > threshold; no target refit; exhaustive normal patch replay passed",
+    "primary_scope": "all8",
+    "sensitivity_only": "without_sheet_metal",
+    "normal_hygiene_passed": true
+  },
+  "blade": {
+    "dataset": "AeBAD_S, one blade family",
+    "images": 1639,
+    "heads": 36,
+    "image_decisions": 59004,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "means": {
+      "illumination": {
+        "B0": {
+          "fpr": 0.5555555555555556,
+          "recall": 0.4646464646464647,
+          "image_auroc": 0.4214814814814815
+        },
+        "B1": {
+          "fpr": 0.3377777777777778,
+          "recall": 0.372053872053872,
+          "image_auroc": 0.5674971941638608
+        },
+        "B2": {
+          "fpr": 0.17777777777777778,
+          "recall": 0.3181818181818182,
+          "image_auroc": 0.6006060606060606
+        },
+        "L0": {
+          "fpr": 0.2888888888888889,
+          "recall": 0.6161616161616162,
+          "image_auroc": 0.712682379349046
+        },
+        "L1": {
+          "fpr": 0.24,
+          "recall": 0.5218855218855218,
+          "image_auroc": 0.705432098765432
+        },
+        "L2": {
+          "fpr": 0.2622222222222222,
+          "recall": 0.5488215488215488,
+          "image_auroc": 0.7094500561167227
+        },
+        "L3": {
+          "fpr": 0.17333333333333334,
+          "recall": 0.30976430976430974,
+          "image_auroc": 0.6674971941638609
+        },
+        "R0": {
+          "fpr": 0.22666666666666668,
+          "recall": 0.5235690235690236,
+          "image_auroc": 0.707699214365881
+        },
+        "R1": {
+          "fpr": 0.2622222222222222,
+          "recall": 0.5505050505050505,
+          "image_auroc": 0.7028731762065096
+        },
+        "R2": {
+          "fpr": 0.22666666666666666,
+          "recall": 0.5303030303030303,
+          "image_auroc": 0.7095622895622896
+        },
+        "P0": {
+          "fpr": 0.2888888888888889,
+          "recall": 0.38552188552188554,
+          "image_auroc": 0.5536700336700336
+        },
+        "P1": {
+          "fpr": 0.24444444444444446,
+          "recall": 0.34680134680134683,
+          "image_auroc": 0.5970370370370371
+        }
+      },
+      "same": {
+        "B0": {
+          "fpr": 0.14782608695652175,
+          "recall": 0.2352941176470588,
+          "image_auroc": 0.5517634428972877
+        },
+        "B1": {
+          "fpr": 0.10724637681159421,
+          "recall": 0.2737835875090777,
+          "image_auroc": 0.6482839190426574
+        },
+        "B2": {
+          "fpr": 0.06521739130434782,
+          "recall": 0.2534495279593319,
+          "image_auroc": 0.6852925389157273
+        },
+        "L0": {
+          "fpr": 0.13623188405797101,
+          "recall": 0.42483660130718953,
+          "image_auroc": 0.7633513308705124
+        },
+        "L1": {
+          "fpr": 0.0927536231884058,
+          "recall": 0.32461873638344224,
+          "image_auroc": 0.7674718196457327
+        },
+        "L2": {
+          "fpr": 0.09130434782608694,
+          "recall": 0.3514887436456064,
+          "image_auroc": 0.7778693441950049
+        },
+        "L3": {
+          "fpr": 0.050724637681159424,
+          "recall": 0.16702977487291215,
+          "image_auroc": 0.7586088219506805
+        },
+        "R0": {
+          "fpr": 0.10434782608695652,
+          "recall": 0.32171387073347857,
+          "image_auroc": 0.7622051719238421
+        },
+        "R1": {
+          "fpr": 0.1101449275362319,
+          "recall": 0.37835875090777055,
+          "image_auroc": 0.7753370591392758
+        },
+        "R2": {
+          "fpr": 0.11159420289855072,
+          "recall": 0.33623819898329704,
+          "image_auroc": 0.7609848126045909
+        },
+        "P0": {
+          "fpr": 0.10869565217391304,
+          "recall": 0.2912127814088598,
+          "image_auroc": 0.6510814309620789
+        },
+        "P1": {
+          "fpr": 0.057971014492753624,
+          "recall": 0.18082788671023967,
+          "image_auroc": 0.5874743456158631
+        }
+      },
+      "background": {
+        "B0": {
+          "fpr": 0.7562724014336917,
+          "recall": 0.6761006289308176,
+          "image_auroc": 0.4949956042469737
+        },
+        "B1": {
+          "fpr": 0.6200716845878137,
+          "recall": 0.690251572327044,
+          "image_auroc": 0.5735950497058226
+        },
+        "B2": {
+          "fpr": 0.39784946236559143,
+          "recall": 0.5676100628930817,
+          "image_auroc": 0.6584499898559546
+        },
+        "L0": {
+          "fpr": 0.25448028673835127,
+          "recall": 0.46855345911949686,
+          "image_auroc": 0.656657875160614
+        },
+        "L1": {
+          "fpr": 0.17562724014336917,
+          "recall": 0.3867924528301887,
+          "image_auroc": 0.6674950970447014
+        },
+        "L2": {
+          "fpr": 0.17562724014336917,
+          "recall": 0.4213836477987421,
+          "image_auroc": 0.6749509704470142
+        },
+        "L3": {
+          "fpr": 0.10752688172043011,
+          "recall": 0.2751572327044025,
+          "image_auroc": 0.7170318523026983
+        },
+        "R0": {
+          "fpr": 0.15053763440860216,
+          "recall": 0.3962264150943396,
+          "image_auroc": 0.6715189017380131
+        },
+        "R1": {
+          "fpr": 0.18996415770609318,
+          "recall": 0.43396226415094336,
+          "image_auroc": 0.6691350510583621
+        },
+        "R2": {
+          "fpr": 0.17204301075268816,
+          "recall": 0.39937106918238996,
+          "image_auroc": 0.672736187191452
+        },
+        "P0": {
+          "fpr": 0.5913978494623656,
+          "recall": 0.7059748427672955,
+          "image_auroc": 0.6213904104957056
+        },
+        "P1": {
+          "fpr": 0.4014336917562724,
+          "recall": 0.36163522012578614,
+          "image_auroc": 0.5183607222560357
+        }
+      },
+      "view": {
+        "B0": {
+          "fpr": 0.2318840579710145,
+          "recall": 0.2785714285714286,
+          "image_auroc": 0.5193581780538302
+        },
+        "B1": {
+          "fpr": 0.32608695652173914,
+          "recall": 0.405952380952381,
+          "image_auroc": 0.5867883022774327
+        },
+        "B2": {
+          "fpr": 0.2536231884057971,
+          "recall": 0.3238095238095238,
+          "image_auroc": 0.5455486542443064
+        },
+        "L0": {
+          "fpr": 0.19202898550724637,
+          "recall": 0.5095238095238095,
+          "image_auroc": 0.7250905797101449
+        },
+        "L1": {
+          "fpr": 0.14492753623188406,
+          "recall": 0.3952380952380952,
+          "image_auroc": 0.7310688405797102
+        },
+        "L2": {
+          "fpr": 0.12681159420289856,
+          "recall": 0.40952380952380957,
+          "image_auroc": 0.7374999999999999
+        },
+        "L3": {
+          "fpr": 0.03985507246376812,
+          "recall": 0.21666666666666665,
+          "image_auroc": 0.7423266045548654
+        },
+        "R0": {
+          "fpr": 0.13043478260869565,
+          "recall": 0.3976190476190476,
+          "image_auroc": 0.733889751552795
+        },
+        "R1": {
+          "fpr": 0.15579710144927536,
+          "recall": 0.4595238095238095,
+          "image_auroc": 0.7403467908902691
+        },
+        "R2": {
+          "fpr": 0.13043478260869565,
+          "recall": 0.4071428571428572,
+          "image_auroc": 0.7341873706004142
+        },
+        "P0": {
+          "fpr": 0.29347826086956524,
+          "recall": 0.38095238095238093,
+          "image_auroc": 0.5825181159420291
+        },
+        "P1": {
+          "fpr": 0.19565217391304346,
+          "recall": 0.26666666666666666,
+          "image_auroc": 0.5739648033126294
+        }
+      }
+    },
+    "comparisons": {
+      "illumination": {
+        "B0": {
+          "fpr": {
+            "difference": -0.32888888888888884,
+            "ci95": [
+              -0.4622222222222222,
+              -0.19111111111111112
+            ],
+            "image_count": 75,
+            "exact_RGB_cluster_count": 75
+          },
+          "recall": {
+            "difference": 0.05892255892255888,
+            "ci95": [
+              -0.026936026936026935,
+              0.1414141414141414
+            ],
+            "image_count": 198,
+            "exact_RGB_cluster_count": 198
+          }
+        },
+        "B1": {
+          "fpr": {
+            "difference": -0.11111111111111112,
+            "ci95": [
+              -0.21333333333333335,
+              0.004444444444444439
+            ],
+            "image_count": 75,
+            "exact_RGB_cluster_count": 75
+          },
+          "recall": {
+            "difference": 0.1515151515151515,
+            "ci95": [
+              0.0824915824915825,
+              0.22053872053872056
+            ],
+            "image_count": 198,
+            "exact_RGB_cluster_count": 198
+          }
+        },
+        "B2": {
+          "fpr": {
+            "difference": 0.048888888888888885,
+            "ci95": [
+              -0.05333333333333333,
+              0.15555555555555556
+            ],
+            "image_count": 75,
+            "exact_RGB_cluster_count": 75
+          },
+          "recall": {
+            "difference": 0.20538720538720542,
+            "ci95": [
+              0.1414141414141414,
+              0.26936026936026936
+            ],
+            "image_count": 198,
+            "exact_RGB_cluster_count": 198
+          }
+        },
+        "L0": {
+          "fpr": {
+            "difference": -0.062222222222222213,
+            "ci95": [
+              -0.10222222222222221,
+              -0.026666666666666665
+            ],
+            "image_count": 75,
+            "exact_RGB_cluster_count": 75
+          },
+          "recall": {
+            "difference": -0.09259259259259259,
+            "ci95": [
+              -0.11952861952861951,
+              -0.06734006734006734
+            ],
+            "image_count": 198,
+            "exact_RGB_cluster_count": 198
+          }
+        },
+        "L1": {
+          "fpr": {
+            "difference": -0.013333333333333334,
+            "ci95": [
+              -0.04,
+              0.013333333333333334
+            ],
+            "image_count": 75,
+            "exact_RGB_cluster_count": 75
+          },
+          "recall": {
+            "difference": 0.0016835016835016834,
+            "ci95": [
+              -0.016835016835016835,
+              0.021885521885521883
+            ],
+            "image_count": 198,
+            "exact_RGB_cluster_count": 198
+          }
+        },
+        "L2": {
+          "fpr": {
+            "difference": -0.035555555555555556,
+            "ci95": [
+              -0.06666666666666665,
+              -0.008888888888888889
+            ],
+            "image_count": 75,
+            "exact_RGB_cluster_count": 75
+          },
+          "recall": {
+            "difference": -0.025252525252525252,
+            "ci95": [
+              -0.04882154882154882,
+              -0.0016835016835016845
+            ],
+            "image_count": 198,
+            "exact_RGB_cluster_count": 198
+          }
+        },
+        "L3": {
+          "fpr": {
+            "difference": 0.05333333333333334,
+            "ci95": [
+              -0.008888888888888885,
+              0.11555555555555555
+            ],
+            "image_count": 75,
+            "exact_RGB_cluster_count": 75
+          },
+          "recall": {
+            "difference": 0.21380471380471378,
+            "ci95": [
+              0.16666666666666666,
+              0.260942760942761
+            ],
+            "image_count": 198,
+            "exact_RGB_cluster_count": 198
+          }
+        },
+        "R1": {
+          "fpr": {
+            "difference": -0.035555555555555556,
+            "ci95": [
+              -0.062222222222222213,
+              -0.013333333333333334
+            ],
+            "image_count": 75,
+            "exact_RGB_cluster_count": 75
+          },
+          "recall": {
+            "difference": -0.026936026936026935,
+            "ci95": [
+              -0.043771043771043766,
+              -0.011784511784511783
+            ],
+            "image_count": 198,
+            "exact_RGB_cluster_count": 198
+          }
+        },
+        "R2": {
+          "fpr": {
+            "difference": 0.0,
+            "ci95": [
+              -0.02666666666666667,
+              0.02666666666666667
+            ],
+            "image_count": 75,
+            "exact_RGB_cluster_count": 75
+          },
+          "recall": {
+            "difference": -0.006734006734006734,
+            "ci95": [
+              -0.021885521885521883,
+              0.008417508417508417
+            ],
+            "image_count": 198,
+            "exact_RGB_cluster_count": 198
+          }
+        },
+        "P0": {
+          "fpr": {
+            "difference": -0.062222222222222213,
+            "ci95": [
+              -0.17777777777777773,
+              0.05333333333333334
+            ],
+            "image_count": 75,
+            "exact_RGB_cluster_count": 75
+          },
+          "recall": {
+            "difference": 0.13804713804713803,
+            "ci95": [
+              0.06902356902356901,
+              0.20538720538720542
+            ],
+            "image_count": 198,
+            "exact_RGB_cluster_count": 198
+          }
+        },
+        "P1": {
+          "fpr": {
+            "difference": -0.017777777777777764,
+            "ci95": [
+              -0.11555555555555558,
+              0.08000000000000002
+            ],
+            "image_count": 75,
+            "exact_RGB_cluster_count": 75
+          },
+          "recall": {
+            "difference": 0.17676767676767677,
+            "ci95": [
+              0.10942760942760942,
+              0.24410774410774416
+            ],
+            "image_count": 198,
+            "exact_RGB_cluster_count": 198
+          }
+        }
+      },
+      "same": {
+        "B0": {
+          "fpr": {
+            "difference": -0.043478260869565216,
+            "ci95": [
+              -0.08405797101449275,
+              -0.0014492753623188412
+            ],
+            "image_count": 230,
+            "exact_RGB_cluster_count": 230
+          },
+          "recall": {
+            "difference": 0.08641975308641976,
+            "ci95": [
+              0.0457516339869281,
+              0.12636165577342048
+            ],
+            "image_count": 459,
+            "exact_RGB_cluster_count": 459
+          }
+        },
+        "B1": {
+          "fpr": {
+            "difference": -0.0028985507246376825,
+            "ci95": [
+              -0.04492753623188405,
+              0.04057971014492753
+            ],
+            "image_count": 230,
+            "exact_RGB_cluster_count": 230
+          },
+          "recall": {
+            "difference": 0.04793028322440087,
+            "ci95": [
+              0.008714596949891074,
+              0.08714596949891068
+            ],
+            "image_count": 459,
+            "exact_RGB_cluster_count": 459
+          }
+        },
+        "B2": {
+          "fpr": {
+            "difference": 0.0391304347826087,
+            "ci95": [
+              0.004347826086956523,
+              0.07536231884057971
+            ],
+            "image_count": 230,
+            "exact_RGB_cluster_count": 230
+          },
+          "recall": {
+            "difference": 0.0682643427741467,
+            "ci95": [
+              0.029774872912127808,
+              0.10820624546114743
+            ],
+            "image_count": 459,
+            "exact_RGB_cluster_count": 459
+          }
+        },
+        "L0": {
+          "fpr": {
+            "difference": -0.03188405797101449,
+            "ci95": [
+              -0.049275362318840575,
+              -0.015942028985507246
+            ],
+            "image_count": 230,
+            "exact_RGB_cluster_count": 230
+          },
+          "recall": {
+            "difference": -0.10312273057371095,
+            "ci95": [
+              -0.12345679012345678,
+              -0.08278867102396514
+            ],
+            "image_count": 459,
+            "exact_RGB_cluster_count": 459
+          }
+        },
+        "L1": {
+          "fpr": {
+            "difference": 0.011594202898550725,
+            "ci95": [
+              -0.0014492753623188408,
+              0.024637681159420288
+            ],
+            "image_count": 230,
+            "exact_RGB_cluster_count": 230
+          },
+          "recall": {
+            "difference": -0.0029048656499636887,
+            "ci95": [
+              -0.018881626724763984,
+              0.013071895424836602
+            ],
+            "image_count": 459,
+            "exact_RGB_cluster_count": 459
+          }
+        },
+        "L2": {
+          "fpr": {
+            "difference": 0.013043478260869565,
+            "ci95": [
+              0.0,
+              0.02753623188405797
+            ],
+            "image_count": 230,
+            "exact_RGB_cluster_count": 230
+          },
+          "recall": {
+            "difference": -0.02977487291212781,
+            "ci95": [
+              -0.047204066811909945,
+              -0.013071895424836602
+            ],
+            "image_count": 459,
+            "exact_RGB_cluster_count": 459
+          }
+        },
+        "L3": {
+          "fpr": {
+            "difference": 0.053623188405797106,
+            "ci95": [
+              0.024637681159420288,
+              0.08550724637681158
+            ],
+            "image_count": 230,
+            "exact_RGB_cluster_count": 230
+          },
+          "recall": {
+            "difference": 0.15468409586056645,
+            "ci95": [
+              0.12273057371096585,
+              0.18665577342047904
+            ],
+            "image_count": 459,
+            "exact_RGB_cluster_count": 459
+          }
+        },
+        "R1": {
+          "fpr": {
+            "difference": -0.005797101449275362,
+            "ci95": [
+              -0.017391304347826087,
+              0.005797101449275362
+            ],
+            "image_count": 230,
+            "exact_RGB_cluster_count": 230
+          },
+          "recall": {
+            "difference": -0.05664488017429194,
+            "ci95": [
+              -0.0718954248366013,
+              -0.04212055192447349
+            ],
+            "image_count": 459,
+            "exact_RGB_cluster_count": 459
+          }
+        },
+        "R2": {
+          "fpr": {
+            "difference": -0.007246376811594202,
+            "ci95": [
+              -0.018840579710144925,
+              0.0028985507246376816
+            ],
+            "image_count": 230,
+            "exact_RGB_cluster_count": 230
+          },
+          "recall": {
+            "difference": -0.014524328249818445,
+            "ci95": [
+              -0.02977487291212781,
+              0.0007262164124909222
+            ],
+            "image_count": 459,
+            "exact_RGB_cluster_count": 459
+          }
+        },
+        "P0": {
+          "fpr": {
+            "difference": -0.004347826086956522,
+            "ci95": [
+              -0.043478260869565216,
+              0.034782608695652174
+            ],
+            "image_count": 230,
+            "exact_RGB_cluster_count": 230
+          },
+          "recall": {
+            "difference": 0.03050108932461874,
+            "ci95": [
+              -0.010167029774872912,
+              0.07116920842411038
+            ],
+            "image_count": 459,
+            "exact_RGB_cluster_count": 459
+          }
+        },
+        "P1": {
+          "fpr": {
+            "difference": 0.0463768115942029,
+            "ci95": [
+              0.010144927536231883,
+              0.08405797101449275
+            ],
+            "image_count": 230,
+            "exact_RGB_cluster_count": 230
+          },
+          "recall": {
+            "difference": 0.1408859840232389,
+            "ci95": [
+              0.1009440813362382,
+              0.18082788671023964
+            ],
+            "image_count": 459,
+            "exact_RGB_cluster_count": 459
+          }
+        }
+      },
+      "background": {
+        "B0": {
+          "fpr": {
+            "difference": -0.6057347670250897,
+            "ci95": [
+              -0.6845878136200717,
+              -0.5232974910394265
+            ],
+            "image_count": 93,
+            "exact_RGB_cluster_count": 93
+          },
+          "recall": {
+            "difference": -0.2798742138364779,
+            "ci95": [
+              -0.3443396226415094,
+              -0.2154088050314465
+            ],
+            "image_count": 212,
+            "exact_RGB_cluster_count": 212
+          }
+        },
+        "B1": {
+          "fpr": {
+            "difference": -0.46953405017921146,
+            "ci95": [
+              -0.5340501792114696,
+              -0.40143369175627236
+            ],
+            "image_count": 93,
+            "exact_RGB_cluster_count": 93
+          },
+          "recall": {
+            "difference": -0.29402515723270434,
+            "ci95": [
+              -0.3537735849056603,
+              -0.23270440251572327
+            ],
+            "image_count": 212,
+            "exact_RGB_cluster_count": 212
+          }
+        },
+        "B2": {
+          "fpr": {
+            "difference": -0.24731182795698922,
+            "ci95": [
+              -0.3297491039426523,
+              -0.16487455197132614
+            ],
+            "image_count": 93,
+            "exact_RGB_cluster_count": 93
+          },
+          "recall": {
+            "difference": -0.17138364779874216,
+            "ci95": [
+              -0.2311320754716981,
+              -0.110062893081761
+            ],
+            "image_count": 212,
+            "exact_RGB_cluster_count": 212
+          }
+        },
+        "L0": {
+          "fpr": {
+            "difference": -0.1039426523297491,
+            "ci95": [
+              -0.15053763440860216,
+              -0.06093189964157705
+            ],
+            "image_count": 93,
+            "exact_RGB_cluster_count": 93
+          },
+          "recall": {
+            "difference": -0.07232704402515723,
+            "ci95": [
+              -0.09748427672955974,
+              -0.04874213836477987
+            ],
+            "image_count": 212,
+            "exact_RGB_cluster_count": 212
+          }
+        },
+        "L1": {
+          "fpr": {
+            "difference": -0.025089605734767026,
+            "ci95": [
+              -0.05734767025089606,
+              0.0035842293906810044
+            ],
+            "image_count": 93,
+            "exact_RGB_cluster_count": 93
+          },
+          "recall": {
+            "difference": 0.009433962264150943,
+            "ci95": [
+              -0.006289308176100628,
+              0.02672955974842767
+            ],
+            "image_count": 212,
+            "exact_RGB_cluster_count": 212
+          }
+        },
+        "L2": {
+          "fpr": {
+            "difference": -0.025089605734767022,
+            "ci95": [
+              -0.06451612903225806,
+              0.010752688172043012
+            ],
+            "image_count": 93,
+            "exact_RGB_cluster_count": 93
+          },
+          "recall": {
+            "difference": -0.025157232704402514,
+            "ci95": [
+              -0.0440251572327044,
+              -0.007861635220125786
+            ],
+            "image_count": 212,
+            "exact_RGB_cluster_count": 212
+          }
+        },
+        "L3": {
+          "fpr": {
+            "difference": 0.04301075268817204,
+            "ci95": [
+              -1.2087105510031811e-18,
+              0.08960573476702507
+            ],
+            "image_count": 93,
+            "exact_RGB_cluster_count": 93
+          },
+          "recall": {
+            "difference": 0.12106918238993711,
+            "ci95": [
+              0.07861635220125784,
+              0.16509433962264147
+            ],
+            "image_count": 212,
+            "exact_RGB_cluster_count": 212
+          }
+        },
+        "R1": {
+          "fpr": {
+            "difference": -0.03942652329749104,
+            "ci95": [
+              -0.07168458781362007,
+              -0.010752688172043012
+            ],
+            "image_count": 93,
+            "exact_RGB_cluster_count": 93
+          },
+          "recall": {
+            "difference": -0.03773584905660377,
+            "ci95": [
+              -0.0550314465408805,
+              -0.020440251572327046
+            ],
+            "image_count": 212,
+            "exact_RGB_cluster_count": 212
+          }
+        },
+        "R2": {
+          "fpr": {
+            "difference": -0.021505376344086023,
+            "ci95": [
+              -0.050179211469534045,
+              0.0035842293906810036
+            ],
+            "image_count": 93,
+            "exact_RGB_cluster_count": 93
+          },
+          "recall": {
+            "difference": -0.0031446540880503138,
+            "ci95": [
+              -0.017295597484276733,
+              0.0110062893081761
+            ],
+            "image_count": 212,
+            "exact_RGB_cluster_count": 212
+          }
+        },
+        "P0": {
+          "fpr": {
+            "difference": -0.44086021505376344,
+            "ci95": [
+              -0.5304659498207884,
+              -0.34767025089605735
+            ],
+            "image_count": 93,
+            "exact_RGB_cluster_count": 93
+          },
+          "recall": {
+            "difference": -0.309748427672956,
+            "ci95": [
+              -0.37264150943396224,
+              -0.24685534591194966
+            ],
+            "image_count": 212,
+            "exact_RGB_cluster_count": 212
+          }
+        },
+        "P1": {
+          "fpr": {
+            "difference": -0.25089605734767023,
+            "ci95": [
+              -0.3297491039426523,
+              -0.17204301075268816
+            ],
+            "image_count": 93,
+            "exact_RGB_cluster_count": 93
+          },
+          "recall": {
+            "difference": 0.034591194968553465,
+            "ci95": [
+              -0.02358490566037736,
+              0.09433962264150944
+            ],
+            "image_count": 212,
+            "exact_RGB_cluster_count": 212
+          }
+        }
+      },
+      "view": {
+        "B0": {
+          "fpr": {
+            "difference": -0.10144927536231885,
+            "ci95": [
+              -0.17391304347826084,
+              -0.02898550724637681
+            ],
+            "image_count": 92,
+            "exact_RGB_cluster_count": 92
+          },
+          "recall": {
+            "difference": 0.11904761904761905,
+            "ci95": [
+              0.07023809523809522,
+              0.16785714285714284
+            ],
+            "image_count": 280,
+            "exact_RGB_cluster_count": 280
+          }
+        },
+        "B1": {
+          "fpr": {
+            "difference": -0.1956521739130435,
+            "ci95": [
+              -0.2681159420289855,
+              -0.12318840579710144
+            ],
+            "image_count": 92,
+            "exact_RGB_cluster_count": 92
+          },
+          "recall": {
+            "difference": -0.00833333333333333,
+            "ci95": [
+              -0.053601190476190455,
+              0.03809523809523809
+            ],
+            "image_count": 280,
+            "exact_RGB_cluster_count": 280
+          }
+        },
+        "B2": {
+          "fpr": {
+            "difference": -0.12318840579710144,
+            "ci95": [
+              -0.19565217391304343,
+              -0.04710144927536231
+            ],
+            "image_count": 92,
+            "exact_RGB_cluster_count": 92
+          },
+          "recall": {
+            "difference": 0.0738095238095238,
+            "ci95": [
+              0.027380952380952384,
+              0.11904761904761903
+            ],
+            "image_count": 280,
+            "exact_RGB_cluster_count": 280
+          }
+        },
+        "L0": {
+          "fpr": {
+            "difference": -0.06159420289855072,
+            "ci95": [
+              -0.10144927536231883,
+              -0.02536231884057971
+            ],
+            "image_count": 92,
+            "exact_RGB_cluster_count": 92
+          },
+          "recall": {
+            "difference": -0.1119047619047619,
+            "ci95": [
+              -0.14047619047619045,
+              -0.08452380952380951
+            ],
+            "image_count": 280,
+            "exact_RGB_cluster_count": 280
+          }
+        },
+        "L1": {
+          "fpr": {
+            "difference": -0.014492753623188404,
+            "ci95": [
+              -0.03985507246376811,
+              0.007246376811594204
+            ],
+            "image_count": 92,
+            "exact_RGB_cluster_count": 92
+          },
+          "recall": {
+            "difference": 0.002380952380952381,
+            "ci95": [
+              -0.013095238095238096,
+              0.017857142857142856
+            ],
+            "image_count": 280,
+            "exact_RGB_cluster_count": 280
+          }
+        },
+        "L2": {
+          "fpr": {
+            "difference": 0.0036231884057971006,
+            "ci95": [
+              -0.02536231884057971,
+              0.03260869565217391
+            ],
+            "image_count": 92,
+            "exact_RGB_cluster_count": 92
+          },
+          "recall": {
+            "difference": -0.011904761904761906,
+            "ci95": [
+              -0.03095238095238095,
+              0.007142857142857142
+            ],
+            "image_count": 280,
+            "exact_RGB_cluster_count": 280
+          }
+        },
+        "L3": {
+          "fpr": {
+            "difference": 0.09057971014492752,
+            "ci95": [
+              0.03260869565217391,
+              0.15217391304347824
+            ],
+            "image_count": 92,
+            "exact_RGB_cluster_count": 92
+          },
+          "recall": {
+            "difference": 0.18095238095238095,
+            "ci95": [
+              0.14642857142857144,
+              0.21669642857142815
+            ],
+            "image_count": 280,
+            "exact_RGB_cluster_count": 280
+          }
+        },
+        "R1": {
+          "fpr": {
+            "difference": -0.02536231884057971,
+            "ci95": [
+              -0.050724637681159424,
+              -0.003623188405797101
+            ],
+            "image_count": 92,
+            "exact_RGB_cluster_count": 92
+          },
+          "recall": {
+            "difference": -0.0619047619047619,
+            "ci95": [
+              -0.08333333333333331,
+              -0.04285714285714286
+            ],
+            "image_count": 280,
+            "exact_RGB_cluster_count": 280
+          }
+        },
+        "R2": {
+          "fpr": {
+            "difference": 0.0,
+            "ci95": [
+              -0.025362318840579712,
+              0.02536231884057971
+            ],
+            "image_count": 92,
+            "exact_RGB_cluster_count": 92
+          },
+          "recall": {
+            "difference": -0.009523809523809523,
+            "ci95": [
+              -0.025,
+              0.004761904761904762
+            ],
+            "image_count": 280,
+            "exact_RGB_cluster_count": 280
+          }
+        },
+        "P0": {
+          "fpr": {
+            "difference": -0.1630434782608696,
+            "ci95": [
+              -0.23550724637681156,
+              -0.08695652173913042
+            ],
+            "image_count": 92,
+            "exact_RGB_cluster_count": 92
+          },
+          "recall": {
+            "difference": 0.016666666666666666,
+            "ci95": [
+              -0.027380952380952377,
+              0.05955357142857101
+            ],
+            "image_count": 280,
+            "exact_RGB_cluster_count": 280
+          }
+        },
+        "P1": {
+          "fpr": {
+            "difference": -0.06521739130434782,
+            "ci95": [
+              -0.13768115942028986,
+              0.010869565217391304
+            ],
+            "image_count": 92,
+            "exact_RGB_cluster_count": 92
+          },
+          "recall": {
+            "difference": 0.13095238095238096,
+            "ci95": [
+              0.08452380952380951,
+              0.17738095238095236
+            ],
+            "image_count": 280,
+            "exact_RGB_cluster_count": 280
+          }
+        }
+      }
+    },
+    "lighting_and_regular_mean_targets_met": true,
+    "mean_gates": {
+      "lighting_fpr": true,
+      "lighting_recall": true,
+      "regular_fpr": true,
+      "regular_recall": true
+    },
+    "recall_margin_supported_by_paired95_interval": true,
+    "protocol_sha256": "75c262274d9fa4295a7416ee306ef66106e83b18c2b689c0efd36c98bda45af6",
+    "decision_sha256": "29430423067cabc302e8d9690ba74ec05cc60ff7f90f5f48a94b20a920bc9a16",
+    "calibration": "64 clean normal source images, higher q95 and strict exceedance; no target refit",
+    "original_source_screen_passed": false,
+    "source_confirmation_all_gates_passed": false,
+    "admission": "unqualified exploratory; R0 fixed before genuine-defect feedback; both source failures retained",
+    "limits": [
+      "not all individual seeds pass",
+      "background recall falls substantially",
+      "L0 retains higher illumination recall",
+      "routing benefit over matched L1 is small and uncertain",
+      "whole B0-to-R0 gain includes borrowed GLASS-inspired synthesis and supervision",
+      "intervals condition on the three trained seeds; no new-seed or physical-specimen guarantee"
+    ]
+  },
+  "scope": "published aggregate evidence; no private-server result, general SimpleNet improvement or SOTA claim",
+  "verification": "raw patch/image decisions independently recounted locally; included verifier checks published aggregate counts, means, gates and file hashes only",
+  "code": {
+    "feature_objective_pr": "https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/37",
+    "reproduction_pr": "https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/39",
+    "ad2_execution_source": "https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-reproduction-source-2026-11-16",
+    "unchanged_upstream_pin": "351a2b8d4e8cfc944dbccbf9bc6ceda930c6f26b"
+  }
+}

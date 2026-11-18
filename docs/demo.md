@@ -1,4 +1,4 @@
-# illumination lab
+# Lighting inspection
 
 a local inspection demo for the released ad 2 study. it compares b0, b1 and a labelled b2 ablation on one normal-validation or locally supplied image under a controlled lighting change. it does not select a model or estimate held-out defect recall.
 
@@ -23,7 +23,7 @@ open `http://127.0.0.1:18763`. `--device cpu` works with the cpu environment. th
 - maps use per-model second/98th percentiles of saved validation patch scores as fixed display limits. map colors cannot be compared as equal raw scores across independently trained models. changing overlay opacity changes visualization only.
 - a nine-point sweep uses brightness/gamma values `{0.8,1.0,1.2}`. every tile is measured. its purpose is to inspect synthetic-light sensitivity on one image. a flag is a false alarm only for a known normal-validation input; an upload has no verified defect label.
 - prediction exports contain image/checkpoint/backbone hashes, transform, score, threshold, calibration counts and replay error. newly computed, cached and recorded outputs are explicitly distinguished. timing is the original measured view computation, including one or two shared encoder passes, three heads and map rendering. decoding, lazy model loading and the separate upload guard are excluded; it is not benchmark latency.
-- b2 weights are labelled ablations because no tested weight passed the study's normal-only safeguards. the analytic constant-score example explains why zero drift is insufficient; it is not an extra measured detector.
+- b2 weights are labelled ablations because no tested weight passed the study's normal-only safeguards.
 
 ## offline presentation fallback
 
@@ -36,7 +36,17 @@ uv run --frozen --extra cpu python scripts/serve_demo.py --recording results/dem
 
 the recording contains genuine measured images/maps and provenance. the interface says `recorded predictions`; sliders snap to the recorded three-point grid. unrecorded settings fail instead of being interpolated into fabricated inference. keep the recording and dataset-derived images outside git. the offline mode needs the cpu runtime but no gpu, network or model download.
 
-## verification boundary
+## Recorded blade comparison
+
+The separate blade gallery retains all 1,639 real test images, 12 methods and three seeds. It filters recorded decisions, including recovered and missed defects; it performs no live inference or uploads. Build it from the retained audited recording, native test packets and score files:
+
+```bash
+uv run --frozen --extra cpu python scripts/build_blade_gallery.py --evidence-dir results/blade-evidence --out results/blade-gallery
+```
+
+Open the generated index.html locally. The code ZIP contains the template and renderer; aggregate CSVs alone cannot reconstruct image cards. Generated thumbnails remain local under the AeBAD licence. The [complete result](routed-results.md) retains stronger controls, seed failures and the background regression.
+
+## Checks
 
 tests cover frozen calibration, fixed map scales, invalid requests, exact reference replay, cached/recorded labels and rejection of missing recorded settings. real released-head checks additionally cover the local gpu. isolated headless chromium checks cover controls, exports, all 27 sweep tiles, fixed thresholds/scales and desktop/mobile layouts. screenshots were inspected at 390, 760, 1280 and 1600 pixels. this verifies the tested browser, not every browser or operating system.
 

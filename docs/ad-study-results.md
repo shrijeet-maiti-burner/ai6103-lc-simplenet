@@ -1,6 +1,6 @@
 # AD study results, 27 October
 
-Development results for the provisional AD study in [the plan](ad-study-plan.md). All settings were fixed before any test image was scored. The test scores below are B's quick check (image and pixel AUROC inside the 288 crop), not D's evaluation. MVTec AD test images share one lighting setup, so they cannot show a lighting benefit; that needs AD 2.
+Development results for the provisional AD study in [the recorded configuration](../configs/ad-study-policy.json). All settings were fixed before any test image was scored. The test scores below are development check (image and pixel AUROC inside the 288 crop). MVTec AD test images share one lighting setup, so they cannot show a lighting benefit; that needs AD 2.
 
 ## Setup
 

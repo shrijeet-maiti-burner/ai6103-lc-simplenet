@@ -1,6 +1,6 @@
 # native public localization
 
-`scripts/evaluate_public_localization.py` evaluates d's saved, input-size smoothed maps against unchanged native masks. it uses pil bilinear interpolation to restore continuous maps, rejects cropped coordinates, and checks image ids, label folders, dimensions and binary masks. it applies no test-fitted normalization, morphology or pixel threshold.
+`scripts/evaluate_public_localization.py` evaluates saved input-size smoothed maps against unchanged native masks. it uses pil bilinear interpolation to restore continuous maps, rejects cropped coordinates, and checks image ids, label folders, dimensions and binary masks. it applies no test-fitted normalization, morphology or pixel threshold.
 
 ```powershell
 uv run --frozen --extra cpu python scripts/evaluate_public_localization.py --run-dir results/public-evaluation/runs/can-B0-seed0 --root data/evaluation-ad2 --out results/public-evaluation/native/can-B0-seed0.json --fpr-limit 0.05

@@ -67,11 +67,20 @@ def build_bundle(root: Path, output: Path) -> dict:
     )
     if BUNDLE_NAME in files:
         raise ValueError("SOURCE_BUNDLE.json is generated and must not be tracked")
+    omitted = sorted(
+        name
+        for name in files
+        if "__pycache__" in Path(name).parts or name.endswith((".pyc", ".pyo"))
+    )
+    for name in omitted:
+        del files[name]
     manifest = {
         "schema": 1,
+        "repository": "https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet",
         "git_commit": identity["git_commit"],
         "upstream_path": UPSTREAM_PATH,
         "upstream_commit": UPSTREAM_SHA,
+        "omitted_bytecode": omitted,
         "files": {name: hashlib.sha256(data).hexdigest() for name, data in sorted(files.items())},
     }
     files[BUNDLE_NAME] = (json.dumps(manifest, indent=2, sort_keys=True) + "\n").encode()

@@ -58,6 +58,15 @@ def test_unexpected_entries_and_duplicate_bytes_are_reported(tmp_path):
     assert report["duplicate_sha256_groups"]
 
 
+def test_symlink_dataset_root_is_rejected_before_resolution(tmp_path):
+    root = tmp_path / "dataset"
+    _fabric_tree(root)
+    link = tmp_path / "linked-dataset"
+    link.symlink_to(root, target_is_directory=True)
+    with pytest.raises(AuditError, match="symlink dataset root"):
+        audit_mvtec_ad2(link)
+
+
 @pytest.mark.parametrize(
     "kind",
     ["file_outside", "file_inside", "directory_outside"],

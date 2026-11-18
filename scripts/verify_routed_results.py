@@ -56,16 +56,18 @@ def gates(candidate, baseline):
 
 def verify(folder):
     manifest = json.loads((folder / "manifest.json").read_text(encoding="utf-8"))
+    required = {
+        "ad2-category-seed-metrics.csv",
+        "blade-domain-seed-metrics.csv",
+        "result-summary.json",
+    }
+    legacy_release = required | {
+        "read-me-first.md",
+        "routed-results.md",
+        "verify_results.py",
+    }
     require(
-        set(manifest["files"])
-        == {
-            "ad2-category-seed-metrics.csv",
-            "blade-domain-seed-metrics.csv",
-            "read-me-first.md",
-            "result-summary.json",
-            "routed-results.md",
-            "verify_results.py",
-        },
+        set(manifest["files"]) in (required, legacy_release),
         "incomplete manifest",
     )
     for name, descriptor in manifest["files"].items():

@@ -109,7 +109,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--evaluation", type=Path, required=True)
     parser.add_argument("--protocol", type=Path, required=True)
-    parser.add_argument("--out", type=Path, default=Path("report/build/evidence"))
+    parser.add_argument("--out", type=Path, default=Path("results/report-evidence"))
     args = parser.parse_args()
     build(args.evaluation, args.protocol, args.out)
     print("built complete public-subset image tables with input hashes")

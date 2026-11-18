@@ -1,4 +1,4 @@
-"""Build report tables/figures from released records; do not invent pending test results."""
+"""Build tables and figures from released AD records and normal-validation diagnostics."""
 
 import argparse
 import hashlib
@@ -14,7 +14,7 @@ def main():
     parser.add_argument("--runs", required=True, type=Path)
     parser.add_argument("--ad-release", required=True, type=Path)
     parser.add_argument("--ad-checksum", type=Path, help="default: <ad-release>.sha256")
-    parser.add_argument("--out", type=Path, default=Path("report/build/evidence"))
+    parser.add_argument("--out", type=Path, default=Path("results/report-evidence"))
     args = parser.parse_args()
     checksum = args.ad_checksum or args.ad_release.with_suffix(args.ad_release.suffix + ".sha256")
     expected = checksum.read_text().split()[0].lower()

@@ -1,9 +1,9 @@
-"""Role D evaluation core: frozen-threshold counts, image AUROC and seed summaries.
+"""Frozen-threshold counts, image AUROC and seed summaries.
 
 Scores follow the repository convention: higher means more anomalous and an image is flagged
 when `score > threshold`. Thresholds come from normal regular-light validation scores only and
 are reused unchanged for every test condition. Missing denominators give None, never zero.
-These are image-level metrics; AD 2's official AU-PRO is a separate, pending implementation.
+Native pixel AUROC and AU-PRO are implemented in localization.py.
 """
 
 import json

@@ -1,0 +1,17 @@
+{
+  "source_release": "routed-results-2026-11-18",
+  "files": {
+    "ad2-category-seed-metrics.csv": {
+      "bytes": 28131,
+      "sha256": "fdf6ac0bb7c9e95a1c9370573a828f2563486e9083bdf75b3eda7ac4ac74bab2"
+    },
+    "blade-domain-seed-metrics.csv": {
+      "bytes": 14865,
+      "sha256": "edaece1d3eab1372edfadc08fec3d14c868457c5f2b0a32298fca5e2d6b1e792"
+    },
+    "result-summary.json": {
+      "bytes": 49891,
+      "sha256": "a381257c3a9d858f1523e4d199db3fa0501ce26d18b24f97dc2de2cea616e97f"
+    }
+  }
+}

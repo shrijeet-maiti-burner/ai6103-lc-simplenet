@@ -11,7 +11,9 @@ BUNDLE_NAME = "SOURCE_BUNDLE.json"
 
 
 def git(root: Path, *args: str) -> str:
-    return subprocess.check_output(["git", "-C", str(root), *args], text=True).strip()
+    return subprocess.check_output(
+        ["git", "-C", str(root), *args], text=True, encoding="utf-8"
+    ).strip()
 
 
 def source_record(root: Path) -> dict:

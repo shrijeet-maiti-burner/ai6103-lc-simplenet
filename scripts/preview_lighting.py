@@ -28,7 +28,7 @@ def main():
     parser.add_argument(
         "--image", type=Path, help="Training image only; omit for synthetic texture"
     )
-    parser.add_argument("--output-dir", type=Path, default=Path("results/role-c/preview"))
+    parser.add_argument("--output-dir", type=Path, default=Path("results/lighting-preview"))
     args = parser.parse_args()
     if args.image:
         image = load_training_preview(args.image)

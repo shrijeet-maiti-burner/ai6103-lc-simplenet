@@ -1,6 +1,6 @@
 # AD 2 public-test evaluation, 3 November
 
-D's evaluation of the 120 released runs (`dev-ad2-study-2026-10-31`) on the AD 2 public test sets. These are public-subset results, not private-benchmark results. No threshold, weight, checkpoint or category was chosen from them.
+Evaluation of the 120 released runs (`dev-ad2-study-2026-10-31`) on the AD 2 public test sets. These are public-subset results, not private-benchmark results. No threshold, weight, checkpoint or category was chosen from them.
 
 ## Protocol
 
@@ -92,7 +92,7 @@ Names for the other comparisons are in `category_recall_checks` in `aggregate.js
 
 ## Artifacts
 
-Stored outside Git in the [private evaluation release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/ad2-eval-outputs-2026-11-03). ZIP SHA-256: `1c3df9cf83ad5494295b029c907dff695b447ef06b872e1baf68875a24eb318f`. Individual file SHA-256:
+Stored outside Git in the [evaluation release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/ad2-eval-outputs-2026-11-03). ZIP SHA-256: `1c3df9cf83ad5494295b029c907dff695b447ef06b872e1baf68875a24eb318f`. Individual file SHA-256:
 
 | File | SHA-256 |
 |---|---|
