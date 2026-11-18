@@ -2,10 +2,12 @@
 
 working due date: **23 november 2026**, confirmed by shrijeet on 4 november. the exact portal cutoff is not in the supplied announcement. use the [current requirements](requirements.md); earlier 8/15 november targets are superseded.
 
-the final-submission screenshot supplied on 16 november confirms the rules below. it supplies no new deadline or report page limit. the [shared review drafts](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/review-drafts-2026-11-16) are for team review; the report and earlier video do not yet include the new blade follow-up.
+the final-submission screenshot supplied on 16 november confirms the rules below. it supplies no new deadline or report page limit. the [shared review drafts](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/review-drafts-2026-11-16) are for team review; the report and earlier video do not yet include the [completed routed follow-ups](routed-results.md).
 
 ## report: 30 points
 
+- [x] original eight-category R0 training, scoring and independent audit complete; original target failure and the separate blade mean-level result retained in [the results handoff](routed-results.md).
+- [ ] incorporate both completed outcomes, stronger controls, per-seed failures and test-exposure limits into the final report.
 - [ ] one designated member submits the report; the others do not submit duplicates.
 - [ ] first page contains all five official names, matriculation numbers and ntu email addresses.
 - [ ] original simplenet, our changes, matched controls and protocol deviations are explained precisely.
@@ -30,9 +32,10 @@ the final-submission screenshot supplied on 16 november confirms the rules below
 - [ ] submit a source zip or an instructor-accessible repository link.
 - [ ] a zip includes the pinned simplenet submodule files, environment specification, licences and documented entry points. `git archive` alone omits submodule contents.
 - [ ] a fresh extraction passes setup, the documented smoke run and artifact checks. state external dataset/weight acquisition steps honestly.
-- [ ] our reproducibility check: the submitted implementation includes the method described in the final report. [pr37](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/37) currently provides r0 feature losses and gradient routing; the running experiment's image synthesis, training and evaluation still need a portable shared handoff. passing the older baseline smoke run does not close this gap.
+- [ ] our reproducibility check: review [pr37](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/37) and [pr39](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/39), then verify the submitted implementation against the final report. the [AD 2 source snapshot](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-reproduction-source-2026-11-16) supplies its frozen synthesis/training/scoring path; its bounded mechanics checks do not certify a new full-budget execution. the exact blade pipeline handoff and final clean-package checks remain open.
 - [ ] exclude credentials, signed download urls, personal research, datasets, weights and generated run outputs from the source package.
-- [ ] reviewers can retrieve the small score/provenance artifacts used in the report; private links work for the intended reviewer.
+- [x] the [complete aggregate results and provenance](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-results-2026-11-18) have a downloadable verifier and full category/domain/seed rows. this checks aggregates, not model inference or raw-score replay.
+- [ ] verify private repository/release access for the instructor and include the final report's exact evidence references.
 - [ ] gallery selection handles missing false positives/negatives explicitly, retains repeated-object identities and has retrievable rendering code and source hashes.
 - [ ] all members review their recorded contributions; complete peer evaluation when it opens.
 - [ ] check the portal's date/time and upload receipts for the three required deliverables before the cutoff.

@@ -1,5 +1,7 @@
 # report draft
 
+the [shared review PDF and video](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/review-drafts-2026-11-16) predate the [completed routed results](../docs/routed-results.md). the final revision must incorporate both the eight-category target failure and the separate blade-lighting mean-level benefit, with the stronger controls and seed/background limitations. publishing the results handoff does not update the PDF or recording.
+
 `main.tex` uses the supplied, unchanged `aaai24.sty` and `aaai24.bst`. the current draft reports measured ad reproduction, ad 2 normal-validation evidence and complete, separately labelled rtx3060 public image/native-localization matrices. the [primary a40 image-output audit](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/18#issuecomment-6605059690) is complete: all 120 score-file hashes reconstruct and six evaluation outputs replay. the draft reflects that audit; a40 native maps remain outside its scope. author details and the team's final claim review remain open.
 
 the five official names are confirmed. matriculation numbers and ntu email addresses must be added on the first page. the course limit is six body pages, excluding references; retain the original layout and readable figures. the current project due date is 23 november 2026; follow the [submission checklist](../docs/submission.md).

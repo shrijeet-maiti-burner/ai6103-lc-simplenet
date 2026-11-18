@@ -1,6 +1,6 @@
 # report evidence ledger
 
-checked against released records and the complete local public matrix on 3 november 2026. this ledger separates measured findings from pending endpoints. generated outputs, raw runs and personal research stay outside git.
+the original-study entries were checked on 3 november 2026; completed routed follow-ups were added on 18 november. this ledger separates measured findings from pending endpoints. generated outputs, raw runs and personal research stay outside git; curated aggregate evidence is shared separately through releases.
 
 | report claim | evidence | boundary |
 |---|---|---|
@@ -17,6 +17,8 @@ checked against released records and the complete local public matrix on 3 novem
 | native pixel auroc/au-pro: b1 au-pro-0.05 rises from 11.94 to 13.02% | [complete native result](ad2-native-public-results.md); all 120 hashed outputs and frozen scorer bindings; `scripts/build_native_report.py` | all public lights pooled within category; augmentation gain in all three seeds; image-recall criterion still fails; no weight selected or private-server claim |
 | released dinov2 reference image metrics independently recounted | [reference audit](dino-reference-audit.md); 18,428 predictions, 1,343 condition rows and 310 internal file hashes | exposed public reference; no saved trained heads; simplenet calibration quantiles not independently reconstructed; float16 native maps and different geometry; not an improvement claim for our consistency loss |
 | original single-view reference: nonregular fpr 46.48%, recall 61.15% | [separate original-reference audit](original-single-view-public-results.md); all 24 heads, 3,252 public predictions, complete exact a40 normal replay | different backbone initialization/batch/training budget from paired b0/b1/b2; context only, not a causal consistency comparison |
+| completed R0 transfer: AD 2 changed-light FPR 46.66 to 21.43%, recall 66.92 to 39.62% versus matched B0 | [completed results](routed-results.md), all 168 new heads and 22,764 independently recounted image decisions; downloadable full aggregate matrix | all eight categories primary, exposed public target, original recall and regular-FPR gates fail; both B0 anchors and all controls retained |
+| separate blade-lighting means: FPR 55.56 to 22.67%, recall 46.46 to 52.36% versus B0 | [completed results and aggregate release](routed-results.md); 59,004 independently recounted decisions across 12 methods and three seeds | original source screens failed; exploratory one-family result; per-seed/background failures; L0 has higher recall; incremental routing benefit over L1 uncertain; not a broad SimpleNet improvement |
 
 the evidence builder emits `report/build/evidence/evidence.json` with diagnostic and archive hashes. retain it alongside the final pdf. source code and a rendered report are separate artifacts; neither establishes that an experiment ran.
 

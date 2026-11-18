@@ -8,6 +8,14 @@ the original study is complete. relighting improves public localization, but its
 
 no new coefficient, checkpoint, category, threshold or readout may be chosen from test outcomes. a working demo, successful replay and passing software tests do not establish detector improvement.
 
+## completed follow-up, 18 november
+
+the already-fixed R0 matrix has finished: all 168 original AD 2 heads, all eight categories, all three seeds and the independent raw-score audit. the [complete result](routed-results.md) retains both baseline anchors and all controls. the original recall-preservation target fails. the separate blade-lighting result meets B0 point targets on three-seed averages, with per-seed and background failures and uncertain gain over the stronger matched control.
+
+the [aggregate evidence release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-results-2026-11-18) is separate from the reviewed code freeze. [PR #37](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/37) and [PR #39](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/39) still need teammate review; publishing results does not merge them or replace the reviewed source snapshot.
+
+the report and video drafts still need these outcomes integrated. no new training recipe is introduced by this results update.
+
 ## source checks
 
 from the selected clean commit with its pinned submodule:
