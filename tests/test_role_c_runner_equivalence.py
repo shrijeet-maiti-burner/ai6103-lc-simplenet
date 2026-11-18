@@ -1,4 +1,4 @@
-"""Compare the Role C helper with the actual released-runner train_step."""
+"""Compare the paired helper with the released runner's train_step."""
 
 import copy
 

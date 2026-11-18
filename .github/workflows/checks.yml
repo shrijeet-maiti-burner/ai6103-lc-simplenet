@@ -3,7 +3,7 @@ on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
 jobs:
-  scaffold:
+  test:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
@@ -22,18 +22,9 @@ jobs:
       - run: uv run --frozen --extra cpu pytest
       - run: uv run --frozen --extra cpu python -m lc_simplenet doctor
       - run: uv run --frozen --extra cpu python scripts/check_repository.py
-      - run: git diff --check
-  scientific-contracts:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - uses: astral-sh/setup-uv@v6
-        with:
-          version: "0.13.0"
-          enable-cache: true
-      - run: uv sync --frozen --extra cpu
-      - run: uv run --frozen --extra cpu pytest
+      - run: uv run --frozen --extra cpu python scripts/verify_routed_results.py evidence
+      - run: uv run --frozen --extra cpu python scripts/reproduce_routed_ad2.py --source-archive execution-sources/routed-ad2-execution-source-20261116.zip verify
+      - run: uv run --frozen --extra cpu python scripts/reproduce_routed_blade.py --source-archive execution-sources/routed-blade-execution-source-20261118.zip verify
       - run: uv run --frozen --extra cpu python scripts/smoke_upstream.py
       - run: uv run --frozen --extra cpu python scripts/smoke_paired.py
+      - run: git diff --check

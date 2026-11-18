@@ -3,5 +3,3 @@
 *.png binary
 *.jpg binary
 *.zip binary
-report/aaai24.sty -text -whitespace
-report/aaai24.bst -text -whitespace

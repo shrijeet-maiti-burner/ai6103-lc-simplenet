@@ -132,7 +132,7 @@ Normal validation at 288, mean over the three seeds:
 
 ## Limits
 
-- No test image has been scored for this study.
+- This page reports normal-validation diagnostics. The completed public [image evaluation](ad2-test-evaluation.md) and [native localization](ad2-native-public-results.md) are separate.
 - The full-run rule was written after the seed-3 search failed and after the 1.0 runs were known. It keeps the original safeguards, and its outcome selects no weight.
 - sheet_metal has 19 normal-validation images, so its threshold and diagnostics rest on 19 images. Reporting gives macro averages over all eight categories and over the seven without sheet_metal.
 - The 288 runs are in a separate release.

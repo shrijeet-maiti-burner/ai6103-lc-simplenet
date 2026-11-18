@@ -1,66 +1,48 @@
 # Setup
 
-Use Git, Python 3.12 and uv 0.13.0. `.python-version` selects Python 3.12.15. The committed `uv.lock` fixes transitive dependencies and wheel sources. Python 3.10's global PyTorch installation was not used or changed.
+Use Python 3.12.15 and uv 0.13.0. The exact uv version is required by `pyproject.toml`; `.python-version` selects the Python version. Install uv from its [versioned release](https://github.com/astral-sh/uv/releases/tag/0.13.0), or use `py -3.12 -m pip install --user uv==0.13.0` on Windows. If another project needs a different uv version, keep a separate executable rather than replacing it.
 
-## uv 0.13.0 pin
-
-`[tool.uv] required-version = "==0.13.0"` in `pyproject.toml` is exact. A newer PATH binary (for example 0.13.5) refuses `uv sync`. Do not loosen the pin and do not run `uv self update 0.13.0` if other projects need the newer binary.
-
-Keep a 0.13.0 executable beside PATH and call it explicitly:
+From a Git clone, initialize the pinned submodule:
 
 ```bash
-# one-time install of the 0.13.0 binary into a local directory, then:
-export UV="$HOME/.local/uv-0.13.0/uv"
-"$UV" --version    # must print 0.13.0
-"$UV" sync --frozen --extra cpu
-```
-
-Leave the global `uv` on PATH unchanged.
-
-```powershell
 git submodule update --init --recursive
-uv sync --frozen
-uv run python -m lc_simplenet doctor
-uv run python -m lc_simplenet plan
 ```
 
-On this Windows machine uv is available as `py -3.12 -m uv`; substitute that for `uv` if needed. For example: `py -3.12 -m uv sync --frozen`.
+The complete submission ZIP already includes that source. Extract into an empty folder and run commands from the root.
 
-## Model runtime
+## CPU
 
-For an NVIDIA GPU on Windows or Linux, the pinned option is PyTorch 2.6.0 / torchvision 0.21.0, CUDA 12.4 wheels. These versions are selected for reproducibility, not as a claim about the latest release. The driver must support that runtime. macOS uses the CPU option.
+```bash
+uv sync --frozen --extra cpu
+uv run --frozen --extra cpu python -m lc_simplenet doctor
+uv run --frozen --extra cpu pytest -q
+uv run --frozen --extra cpu python scripts/smoke_upstream.py --device cpu
+uv run --frozen --extra cpu python scripts/smoke_paired.py
+uv run --frozen --extra cpu python scripts/check_repository.py
+```
 
-```powershell
+The smoke checks use random weights and synthetic inputs. Installing packages needs network access or a populated cache; these checks download no dataset or pretrained model.
+
+On Windows, `py -3.12 -m uv` can replace `uv`. After syncing, the environment's interpreter is `.venv/Scripts/python.exe` on Windows and `.venv/bin/python` on Linux/macOS.
+
+## CUDA
+
+On Windows/Linux with a compatible NVIDIA driver:
+
+```bash
 uv sync --frozen --extra cuda
 uv run --frozen --extra cuda python -m lc_simplenet doctor --require-cuda
 uv run --frozen --extra cuda python scripts/smoke_upstream.py --device cuda
-uv run --frozen --extra cuda pytest
 ```
 
-CPU alternative (mutually exclusive with `cuda`):
+The lock fixes torch 2.6.0 and torchvision 0.21.0 with CUDA 12.4 wheels. CPU and CUDA extras are mutually exclusive. Keep the selected extra in subsequent `uv run` commands; omitting it can remove optional packages.
 
-```powershell
-uv sync --frozen --extra cpu
-uv run --frozen --extra cpu python scripts/smoke_upstream.py --device cpu
-uv run --frozen --extra cpu pytest
-```
+Full routed runs have stricter requirements: [AD 2](routed-reproduction.md) records L40S execution and exact calibration replay; [blade](routed-blade-reproduction.md) requires Linux, an NVIDIA L40S and sufficient host/shared memory. CPU checks do not certify those full GPU runs.
 
-Use the selected extra in subsequent `uv run` commands. Running without it can remove optional runtime packages. Alternatively, after syncing, call `.venv\Scripts\python.exe` directly on Windows or `.venv/bin/python` on Linux/macOS. No activation or global package edits are required.
+## Data and editor
 
-The upstream README describes Python 3.8 / torch 1.12.1 / torchvision 0.13.1. Our modern environment is a porting baseline, not an exact reproduction of that historical environment. Imports and the random-weight smoke check do not validate original benchmark performance. The legacy PRO path also needs documented changes for removed NumPy/pandas APIs; do not enable compatibility by silently monkeypatching them.
+Acquire datasets and weights separately using the [data instructions](data.md). Setup does not download them. Local datasets and outputs belong under ignored `data/` and `results/`.
 
-Official version pairing: [PyTorch previous versions](https://docs.pytorch.org/get-started/previous-versions/). Exact pins and package indexes are in `pyproject.toml` and `uv.lock`.
+The optional `ai6103-lc-simplenet.code-workspace` configures pytest and Ruff. On Linux/macOS select `.venv/bin/python`. CI runs the CPU suite on Windows and Linux.
 
-## Editor and checks
-
-Open `ai6103-lc-simplenet.code-workspace`. It selects `.venv/Scripts/python.exe` on Windows, pytest, Ruff and excludes datasets/results from search. On Linux/macOS select `.venv/bin/python` once.
-
-```powershell
-uv run ruff check .
-uv run ruff format --check .
-uv run pytest
-uv run python scripts/check_repository.py
-git diff --check
-```
-
-CI runs lightweight checks on Windows and Linux and the optional CPU scientific checks on Linux. No CI job downloads a dataset or pretrained model. The [single-view baseline](baseline-training.md), [paired study](ad2-study-results.md), [public image evaluation](ad2-public-rtx-results.md) and [native localization evaluation](ad2-native-public-results.md) are available. Official private-server evaluation remains open. See the [evaluation handoff](evaluation-handoff.md) for frozen cohorts and artifact requirements.
+The pinned upstream README describes its historical Python 3.8 / torch 1.12.1 environment. Our integration uses the committed modern lock; its [protocol changes](upstream.md) remain explicit.

@@ -1,54 +1,56 @@
-# source package
+# Code package
 
-the submission zip contains the committed project and pinned simplenet source, including licences and the environment lock. it excludes git history and untracked files: datasets, weights, personal research and generated results stay outside it. this is a source package; report figures and trained-model evidence still require the documented artifacts.
+The submission ZIP contains runnable source, the pinned SimpleNet implementation, both frozen execution archives, dependency lock, tests, demo source and aggregate evidence. Report and presentation files are submitted separately. Git history is available at the [repository](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet); `SOURCE_BUNDLE.json` identifies the ZIP's exact commit.
 
-## build
+## Build
 
-from a checkout with committed tracked changes and the initialized submodule:
+From a clean committed checkout with its initialized submodule:
 
-```powershell
-uv run --frozen python scripts/build_source_bundle.py --out results/submission/source.zip
+```bash
+uv run --frozen --extra cpu python scripts/build_source_bundle.py --out results/submission/ai6103-code.zip
 ```
 
-the builder refuses an existing output, tracked changes or a different simplenet pin. it reads committed git objects, fixes zip timestamps, preserves committed executable flags and writes `SOURCE_BUNDLE.json` with both commits and every included file's sha-256. repeating the build from the same commits produces identical bytes with the same python/zlib runtime. fingerprints detect changed files; they do not authenticate the publisher. unix permissions also depend on the unzip tool; python's `ZipFile.extractall` does not restore executable bits.
+The builder reads committed Git objects, rejects tracked changes, a wrong submodule pin or an existing output, and excludes untracked files. It fixes timestamps and preserves committed executable flags. Only author-tracked bytecode caches are omitted from upstream; their paths are recorded in the manifest. Repeated builds are byte-identical with the same Python/zlib runtime.
 
-## final routed handoff
+The archive includes:
 
-the three changes below were reviewed and merged into `main` on 18 november. checking out one of their original branches does not combine them:
-
-| review | contents |
+| Path | Purpose |
 |---|---|
-| [#37](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/37) | integrated feature losses, gradient routing and attribution |
-| [#39](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/39) | AD 2 and blade input preparation, training/resume, scoring/audit launchers and source instructions |
-| [#40](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/40) | completed results, aggregate verifier, recorded blade-gallery source and final handoff status |
+| `src/`, `scripts/`, `tests/`, `configs/` | Implementation, commands, checks and frozen settings |
+| `third_party/` | Original SimpleNet source and retained licences |
+| `execution-sources/` | Exact source snapshots required by both routed launchers |
+| `evidence/` | Complete aggregate matrices, summary and checksums |
+| `demo/`, `docs/`, `references/` | UI source, reproduction/results guides, proposal and input manifests |
 
-build from a clean combined commit containing all three changes. the overlapping README edits have been resolved and the completed-results wording retained. the [code delivery release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/code-submission-2026-11-18) identifies the packaged commit, both execution snapshots, checksums and extraction checks; a later `main` may contain different files.
+Datasets, weights, generated galleries, run outputs, report/video files and personal notes are excluded. ZIP permission restoration depends on the extractor; Python's `extractall` does not restore executable bits. The documented Python entry points do not need those bits.
 
-the generic builder includes committed Git objects, not release assets. the routed launchers also require these code-only execution snapshots:
+## Verify and run
 
-| archive | source release | sha256 |
-|---|---|---|
-| `routed-ad2-execution-source-20261116.zip` | [AD 2 source](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-reproduction-source-2026-11-16) | `74f2c9adb729e432237a6879ae82373a3dcee032e5517e7daabb515b5096cb8a` |
-| `routed-blade-execution-source-20261118.zip` | [blade source](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-blade-source-2026-11-18) | `023a644655348d1a0b610e2e7406cced3cae4fbe997ff0e5055573722a047436` |
+Extract into an empty directory. From its root:
 
-include both archives and their checksums in the final delivery, without adding images or weights. one layout is a `code/` directory extracted from the builder's source zip, a sibling `execution-sources/` directory containing both snapshots, and a short top-level README with commands using `--source-archive ../execution-sources/<archive>`. preserve the inner source manifest and upstream files; do not silently rewrite a published snapshot or its checksum.
-
-from a fresh extraction, verify both archive hashes and each launcher's `verify` command, then run the documented environment, smoke and guard checks. GPU training/scoring requires the documented locked runtime and L40S hardware. a fresh full-budget run through the new portable wrappers remains unverified; report that separately from the completed original experiments and passing mechanics checks.
-
-report/video authors should use [the completed results](routed-results.md) and [aggregate evidence release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-results-2026-11-18). the older PDF/video are review drafts, not updated final deliverables. the exact portal cutoff, sole report submitter, member identifiers, instructor access and final upload receipts remain handoff tasks.
-
-## run after extraction
-
-extract into an empty folder. git is unnecessary for execution; do not initialize another repository to make the code work. install the pinned [environment](setup.md), selecting one runtime extra:
-
-```powershell
+```bash
+python scripts/check_repository.py
+python scripts/verify_routed_results.py evidence
+python scripts/reproduce_routed_ad2.py --source-archive execution-sources/routed-ad2-execution-source-20261116.zip verify
+python scripts/reproduce_routed_blade.py --source-archive execution-sources/routed-blade-execution-source-20261118.zip verify
 uv sync --frozen --extra cpu
 uv run --frozen --extra cpu python -m lc_simplenet doctor
-uv run --frozen --extra cpu python scripts/check_repository.py
+uv run --frozen --extra cpu pytest -q
 uv run --frozen --extra cpu python scripts/smoke_upstream.py --device cpu
-uv run --frozen --extra cpu pytest
+uv run --frozen --extra cpu python scripts/smoke_paired.py
 ```
 
-the smoke run uses random weights and generated inputs; it downloads neither a dataset nor pretrained weights and establishes no benchmark result. environment installation needs network access or a populated package cache. choose `cuda` instead of `cpu` for gpu runs. obtain datasets and pretrained weights separately as described in the training/data instructions.
+The first four commands use only Python's standard library. The source check hashes every listed bundle file; missing or changed bytes fail. Fingerprints detect changes but do not authenticate the publisher. Compare the outer ZIP checksum with the release as well.
 
-training and scoring records label this source as `source_archive`, retain both commits and record its manifest hash and changed/missing files. an archive never inherits an enclosing repository's identity. modifications are recorded as dirty; keep the original zip for comparison. bundle-construction tests need git; running the extracted package does not.
+Running needs no Git repository. Bundle-construction tests use Git when available and skip when it is absent. Package installation needs network access or a populated cache. Use the CUDA environment and separately acquired data/weights for real training; see [setup](setup.md).
+
+## Execution snapshots
+
+| Archive | SHA-256 |
+|---|---|
+| `routed-ad2-execution-source-20261116.zip` | `74f2c9adb729e432237a6879ae82373a3dcee032e5517e7daabb515b5096cb8a` |
+| `routed-blade-execution-source-20261118.zip` | `023a644655348d1a0b610e2e7406cced3cae4fbe997ff0e5055573722a047436` |
+
+Their numerical workers and licences retain their original bytes. They are distinct from the newer portable launchers. Original GPU experiments completed; a fresh full-budget run through those launchers remains unverified. Source checks, input-staging parity and mechanics checks do not replace that run.
+
+The [results](routed-results.md) and included aggregate matrices are the evidence for report/demo authors. The aggregate verifier checks counts, means and fixed gates; it does not rerun inference or recompute bootstrap intervals.

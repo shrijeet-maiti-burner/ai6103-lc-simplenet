@@ -43,6 +43,9 @@ def checkout(tmp_path, monkeypatch):
     git(upstream, "init", "-q")
     (upstream / "simplenet.py").write_bytes(b"# upstream fixture\n")
     (upstream / "LICENSE").write_bytes(b"fixture licence\n")
+    cache = upstream / "__pycache__/simplenet.cpython-38.pyc"
+    cache.parent.mkdir()
+    cache.write_bytes(b"obsolete author-tracked bytecode")
     git(upstream, "add", ".")
     commit(upstream)
     pin = git(upstream, "rev-parse", "HEAD")
@@ -78,7 +81,9 @@ def test_deterministic_zip_includes_upstream_and_excludes_untracked(checkout, tm
     assert (extracted / UPSTREAM_PATH / "LICENSE").is_file()
     assert not (extracted / "private-secret.txt").exists()
     assert not list(extracted.rglob(".git"))
+    assert not list(extracted.rglob("*.pyc"))
     manifest = json.loads((extracted / BUNDLE_NAME).read_text())
+    assert manifest["omitted_bytecode"] == [UPSTREAM_PATH + "/__pycache__/simplenet.cpython-38.pyc"]
     assert manifest["files"]["main.py"] == hashlib.sha256(b"print('source')\n").hexdigest()
     assert source_record(extracted)["git_dirty"] is False
 
@@ -114,6 +119,13 @@ def test_missing_manifest_cannot_use_an_enclosing_repository(checkout):
     child.mkdir()
     with pytest.raises(ValueError, match="this project's Git checkout"):
         source_record(child)
+
+
+def test_non_ascii_git_diff_has_a_portable_source_identity(checkout):
+    (checkout / "main.py").write_text("# gamma: γ → γ²\n", encoding="utf-8")
+    record = source_record(checkout)
+    assert record["git_dirty"] is True
+    assert len(record["git_diff_sha256"]) == 64
 
 
 def test_dirty_source_or_wrong_pin_cannot_be_packaged(checkout, tmp_path, monkeypatch):

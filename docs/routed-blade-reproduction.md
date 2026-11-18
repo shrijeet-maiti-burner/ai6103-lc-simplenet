@@ -6,16 +6,16 @@ this is a source handoff, not another trained result. it does not reverse the fa
 
 ## requirements
 
-- use the combined `main` source or [code delivery](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/code-submission-2026-11-18); the launcher was reviewed and merged on 18 november.
+- use the repository or complete submission ZIP; the execution archive is included under `execution-sources/`.
 - use the locked Python 3.12 / torch 2.6.0+cu124 / torchvision 0.21.0+cu124 / numpy 1.26.4 / Pillow 11.3.0 environment (`uv sync --frozen --extra cuda`).
 - training and scoring use the recorded workers' strict **NVIDIA L40S** guard and Linux `/dev/shm` workspace. their feature cache needs substantially more than a 6 GB laptop GPU. allocate one GPU and enough host/shared memory; the recorded training allocation used 30 GB host memory.
 - acquire AeBAD and DTD separately. the manifests identify the exact native PNGs and 256 texture files. `--textures-root` is the folder containing their manifest-relative `images/...` paths.
 - provide ImageNet `wide_resnet50_2-95faca4d.pth` separately, sha256 `95faca4d11227dddf8633dbb5ff6c8a9003c1aa5b8945c73834b8007b10950b8`.
 
-verify the downloaded archive before executing it:
+verify the included archive before executing it:
 
 ```bash
-python scripts/reproduce_routed_blade.py --source-archive routed-blade-execution-source-20261118.zip verify
+python scripts/reproduce_routed_blade.py --source-archive execution-sources/routed-blade-execution-source-20261118.zip verify
 ```
 
 the launcher verifies the pinned archive and every member before extraction. the worker files are byte-identical to the recorded numerical workers. the dependency export retains the original synthesis, prediction and decoding functions; operator/selection scripts and historical prose policies are omitted. the replacement manifest guard checks the exported runtime itself.
@@ -25,7 +25,7 @@ the launcher verifies the pinned archive and every member before extraction. the
 ## stage inputs
 
 ```bash
-python scripts/reproduce_routed_blade.py --source-archive routed-blade-execution-source-20261118.zip prepare --aebad-archive data/AeBAD.zip --textures-root data/dtd --include-tests --out results/blade-inputs
+python scripts/reproduce_routed_blade.py --source-archive execution-sources/routed-blade-execution-source-20261118.zip prepare --aebad-archive data/AeBAD.zip --textures-root data/dtd --include-tests --out results/blade-inputs
 ```
 
 preparation hashes and copies native bytes without decoding target PNGs or masks. without `--include-tests`, it stages source/replay inputs only. training receives only the 128 fit, 64 calibration and 64 procedural-development normal images plus the texture donors. test data never enters a training packet.
@@ -35,7 +35,7 @@ preparation hashes and copies native bytes without decoding target PNGs or masks
 run each family (`base`, `routed`, `pure`) for each seed (`0`, `1`, `2`):
 
 ```bash
-python scripts/reproduce_routed_blade.py --source-archive routed-blade-execution-source-20261118.zip train --family routed --seed 0 --inputs results/blade-inputs --weights weights/wide_resnet50_2-95faca4d.pth --out results/blade-training/routed/seed-0/attempt-1
+python scripts/reproduce_routed_blade.py --source-archive execution-sources/routed-blade-execution-source-20261118.zip train --family routed --seed 0 --inputs results/blade-inputs --weights weights/wide_resnet50_2-95faca4d.pth --out results/blade-training/routed/seed-0/attempt-1
 ```
 
 the family controls are fixed:
@@ -51,7 +51,7 @@ every full case uses 128 fit normals, batch 4 and 5,120 updates (160 source pass
 resume a partial case into a new attempt directory, retaining its seed/family:
 
 ```bash
-python scripts/reproduce_routed_blade.py --source-archive routed-blade-execution-source-20261118.zip train --family routed --seed 0 --inputs results/blade-inputs --weights weights/wide_resnet50_2-95faca4d.pth --resume results/blade-training/routed/seed-0/attempt-1/checkpoint-01024.pt --out results/blade-training/routed/seed-0/attempt-2
+python scripts/reproduce_routed_blade.py --source-archive execution-sources/routed-blade-execution-source-20261118.zip train --family routed --seed 0 --inputs results/blade-inputs --weights weights/wide_resnet50_2-95faca4d.pth --resume results/blade-training/routed/seed-0/attempt-1/checkpoint-01024.pt --out results/blade-training/routed/seed-0/attempt-2
 ```
 
 replace the example checkpoint with the actual last saved file. `--end-step` permits a bounded, multiple-of-32 partial execution; it cannot become a final scoring pack. keep only one completed final case per family/seed under the `--runs` tree; duplicate complete cases are rejected.
@@ -59,8 +59,8 @@ replace the example checkpoint with the actual last saved file. `--end-step` per
 ## pack, replay and score
 
 ```bash
-python scripts/reproduce_routed_blade.py --source-archive routed-blade-execution-source-20261118.zip pack --runs results/blade-training --out results/blade-heads
-python scripts/reproduce_routed_blade.py --source-archive routed-blade-execution-source-20261118.zip score --pack results/blade-heads --inputs results/blade-inputs --weights weights/wide_resnet50_2-95faca4d.pth --out results/blade-scoring
+python scripts/reproduce_routed_blade.py --source-archive execution-sources/routed-blade-execution-source-20261118.zip pack --runs results/blade-training --out results/blade-heads
+python scripts/reproduce_routed_blade.py --source-archive execution-sources/routed-blade-execution-source-20261118.zip score --pack results/blade-heads --inputs results/blade-inputs --weights weights/wide_resnet50_2-95faca4d.pth --out results/blade-scoring
 ```
 
 packing requires all nine full-budget cases and validates artifact hashes, encoder/feature identity and normal-only higher-q95 thresholds. it exports 36 heads and their procedural-development reference patches, without optimizers. no method or checkpoint is chosen from target performance; R0 stays fixed.
@@ -73,4 +73,4 @@ each packet writes an immutable launch, event stream, checksummed artifacts and 
 
 the release records source/worker identity, input-staging parity and subprocess/failure-guard checks. **a fresh nine-case full-budget training and real-image scoring run through this new local wrapper has not been completed.** the historical experiments ran through the original framed workers and private transport, whose results are reported separately. passing source/mechanics checks is not a new accuracy result or universal hardware certification.
 
-the [AD 2 launcher](routed-reproduction.md), this blade handoff and the feature-loss PR were reviewed and merged on 18 november. the code delivery records the selected source and extraction checks separately from a full GPU reproduction. datasets and pretrained/trained weights remain external. the [results release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-results-2026-11-18) contains the completed original results and limits.
+Datasets and pretrained/trained weights remain external. the [results release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-results-2026-11-18) contains the completed original results and limits.

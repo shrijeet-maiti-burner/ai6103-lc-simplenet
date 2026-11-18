@@ -1,66 +1,50 @@
 # LC-SimpleNet
 
-AI6103 group project: test whether paired relighting and patch-score consistency reduce lighting-induced false alarms without reducing defect recall.
+Paired relighting and patch-score consistency for industrial anomaly detection, based on [SimpleNet](https://arxiv.org/abs/2303.15140) (CVPR 2023).
 
-**status, 18 november: the routed follow-up is complete, including all 168 AD 2 heads, scoring and a separate raw-score recount.** the [completed results](docs/routed-results.md) show a blade-lighting benefit against our B0 on three-seed averages, with seed and background limitations. the original eight-category AD 2 target does not pass: lighting false alarms fall, but defect recall falls too far. this is not an overall SimpleNet improvement.
+We compare the original Gaussian/hinge objective, lighting augmentation, score consistency and a follow-up that routes the consistency gradient through the adapter. Training, calibration and evaluation remain separate.
 
-the earlier [45-run AD reproduction](docs/ad-reproduction-results.md), [120-run paired AD 2 study](docs/ad2-study-results.md) and separate public image/native-localization results remain recorded. official private-server evaluation is unverified. the [shared report/video drafts](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/review-drafts-2026-11-16) predate the completed follow-ups and still need updating. datasets, weights and personal research are excluded from Git. the selected scope is [the revised proposal](references/proposal.pdf).
+The [completed results](docs/routed-results.md) include all controls and seeds. On the eight-category MVTec AD 2 public subset, R0 reduces lighting false alarms but loses too much defect recall. On the separate AeBAD blade experiment, the three-seed averages improve against our B0 under illumination and same conditions, with seed and background failures. The incremental gain over the stronger synthesis controls is uncertain.
 
-## Start
+## Run
 
-```powershell
+Install Python 3.12.15 and [uv 0.13.0](https://github.com/astral-sh/uv/releases/tag/0.13.0). From a clone:
+
+```bash
 git clone --recurse-submodules https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet.git
 cd ai6103-lc-simplenet
-uv sync --frozen
-uv run python -m lc_simplenet doctor
-uv run python -m lc_simplenet plan
-uv run pytest
+uv sync --frozen --extra cpu
+uv run --frozen --extra cpu python -m lc_simplenet doctor
+uv run --frozen --extra cpu pytest -q
+uv run --frozen --extra cpu python scripts/smoke_paired.py
 ```
 
-Python 3.12.15 and uv 0.13.0 are the setup baseline. If `uv` is installed only as a Python module, use `py -3.12 -m uv` in place of `uv`. Open [the workspace](ai6103-lc-simplenet.code-workspace) in VS Code. See [setup](docs/setup.md) for CUDA and CPU environments.
+For the submission ZIP, extract it and run the same commands from its root, starting at `uv sync`. It includes the pinned upstream source; Git is not needed to run it. Use `--extra cuda` instead of `--extra cpu` for the CUDA 12.4 environment. See [setup](docs/setup.md).
 
-## Read
+Check the included aggregate results without installing dependencies:
 
-- [completed routed results](docs/routed-results.md): both datasets, all controls, fixed gates, limitations and the downloadable aggregate evidence.
-- [coding freeze](docs/code-freeze.md): 16 november source checks, evidence boundaries and final handoff.
-- [simplenet recovery plan](docs/simplenet-recovery-plan.md): the proposed teacher-anchored follow-up, matched controls and acceptance gates.
-- [source zip](docs/source-package.md): build and run a complete package without git history.
-- [code delivery](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/code-submission-2026-11-18): selected source commit, both execution snapshots, checksums and extraction checks.
-- [AD 2 launcher](docs/routed-reproduction.md) and [blade execution source](docs/routed-blade-reproduction.md): input preparation, fixed-budget training/resume and scoring for both routed experiments; the blade launcher also runs the audit.
-
-- [Project and method](docs/project.md): scope, objective, controls, first feasibility gate.
-- [Evaluation protocol](docs/protocol.md): splits, thresholds, seeds, metrics, evidence.
-- [Course requirements](docs/requirements.md): rubric and deliverables.
-- [Team allocation and notes](docs/research/README.md): current workstreams and research templates.
-- [Normal data and map contract](docs/data-contract.md): split enforcement, batch layout and native-coordinate scores.
-- [Pilot training](docs/pilot-training.md): matched controls, local run command, checkpoints and evidence limits.
-- [Manifest commands](manifests/README.md): normal-data inventory and holdouts.
-- [Single-view baseline](docs/baseline-training.md): fixed-final AD training, outputs and reload limits.
-- [Baseline results](docs/baseline-results.md): measured training cost, artifact checks and evaluation handoff.
-- [Source review](docs/source-review.md): supplied materials and discrepancies.
-- [Decisions](docs/decisions.md): what is fixed and what remains open.
-- [Verification](docs/verification.md): actual setup checks and limits.
-- [AD 2 data audit](docs/ad2-data-audit.md): archive extract, Table IV expected counts, and the formal study's 256×256 full-frame resize, separate from the fabric smoke check.
-- [Score-field validation](docs/score-field-validation-results.md): low-frequency residual on frozen B0/B1 anomaly maps. Validation-only; k=4 is the only eligible grid and the relight result is negative.
-- [local inspection demo](docs/demo.md): released-head comparison, frozen calibration and recorded fallback.
-- [evaluation hand-off](docs/evaluation-handoff.md): staged public data, lighting groups and complete macro/recall reporting.
-
-## Structure
-
-```text
-configs/             draft study configuration
-docs/research/       individual research notes
-references/          selected proposal and source checksums
-report/              course-supplied AAAI style and evidence-backed draft
-demo/dist/           local inspection interface; generated records remain ignored
-src/lc_simplenet/    normal data, geometry, relighting, loss, metrics, diagnostics
-manifests/           manifest commands; generated data remains ignored
-tests/               checks for the implemented scientific contracts
-third_party/SimpleNet/  original code, pinned as a Git submodule
-data/                local dataset instructions; images ignored
-results/             evidence convention; run outputs ignored
+```bash
+python scripts/verify_routed_results.py evidence
 ```
 
-The complete, separately labelled RTX public [image](docs/ad2-public-rtx-results.md) and [native localization](docs/ad2-native-public-results.md) matrices are available. The [primary A40 image-output/source audit](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/18#issuecomment-6605059690) also passed; official private-server evaluation remains pending. The pinned upstream training entry point selects checkpoints using test labels and must not be used unchanged for this study. The single-view runner calls only its discriminator-training loop; the paired runner reuses its components with a fixed-step loop. See [the audit](docs/source-review.md#upstream-code).
+## Reproduce
 
-The working project due date is **23 November 2026**. The [submission checklist](docs/submission.md) records the current report, video and code requirements.
+| Task | Instructions |
+|---|---|
+| Original method and paired objective | [method](docs/project.md), [paired implementation](docs/paired-lighting.md) |
+| Normal data and image geometry | [data contract](docs/data-contract.md), [acquisition and manifests](docs/data.md) |
+| Original single-view baseline | [training](docs/baseline-training.md), [AD reproduction](docs/ad-reproduction-results.md) |
+| Paired B0/B1/B2 training | [runner](docs/pilot-training.md), [AD 2 study](docs/ad2-study-results.md) |
+| Routed follow-up | [objective](docs/routed-consistency.md), [AD 2 launcher](docs/routed-reproduction.md), [blade launcher](docs/routed-blade-reproduction.md) |
+| Image and native localization metrics | [protocol](docs/protocol.md), [localization](docs/localization.md) |
+| Interactive inspection and recorded gallery | [demo](docs/demo.md) |
+| Results for the report | [evidence index](docs/report-evidence.md), [completed follow-up](docs/routed-results.md) |
+| Build the submission ZIP | [source package](docs/source-package.md) |
+
+Datasets and pretrained/trained weights are external. The two `execution-sources/` archives preserve the numerical workers used by the follow-up experiments. Full routed training requires the documented Linux/L40S environment. The original GPU experiments completed; a fresh full-budget run through the portable launchers has not been completed.
+
+## Source
+
+`src/lc_simplenet/` contains our integration and objectives; `scripts/` contains runnable commands; `tests/` checks numerical and data contracts. The original SimpleNet submodule remains at `351a2b8d4e8cfc944dbccbf9bc6ceda930c6f26b`. See [upstream integration](docs/upstream.md) and [attribution](THIRD_PARTY.md).
+
+Repository and commit history: [github.com/shrijeet-maiti-burner/ai6103-lc-simplenet](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet). The ZIP's `SOURCE_BUNDLE.json` identifies its exact commit and file hashes. The report and presentation video are separate submissions.

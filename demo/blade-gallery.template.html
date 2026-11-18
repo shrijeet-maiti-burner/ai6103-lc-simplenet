@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'"
+  />
+  <title>lighting and defect recall</title>
+  <style>
+    :root {
+      font:
+        15px/1.55 system-ui,
+        sans-serif;
+      color: #20262d;
+      background: #f4f5f6;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+    }
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 36px 24px;
+    }
+    h1 {
+      font-size: 32px;
+      letter-spacing: -1px;
+      margin: 8px 0;
+    }
+    h2 {
+      font-size: 20px;
+      margin: 28px 0 12px;
+    }
+    p {
+      max-width: 900px;
+    }
+    .dataset-note,
+    .muted {
+      color: #58616b;
+    }
+    .dataset-note {
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .notice {
+      padding: 14px 18px;
+      border-left: 3px solid #9a651f;
+      background: #fff7e9;
+      margin: 20px 0;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .stat,
+    .card {
+      background: white;
+      border: 1px solid #dce0e4;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .stat {
+      padding: 16px;
+    }
+    .stat strong {
+      display: block;
+      font-size: 24px;
+    }
+    .stat small {
+      color: #58616b;
+    }
+    .table-scroll {
+      overflow: auto;
+      background: white;
+      border: 1px solid #dce0e4;
+      border-radius: 8px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 14px;
+    }
+    td,
+    th {
+      padding: 10px 14px;
+      text-align: right;
+      white-space: nowrap;
+      border-bottom: 1px solid #e4e7ea;
+    }
+    td:first-child,
+    th:first-child {
+      text-align: left;
+    }
+    tr.primary {
+      background: #edf5fc;
+    }
+    caption {
+      text-align: left;
+      padding: 12px 14px;
+      color: #58616b;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 16px 0;
+      align-items: end;
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      font-size: 13px;
+      gap: 4px;
+    }
+    select,
+    button {
+      font: inherit;
+      border: 1px solid #adb5be;
+      border-radius: 5px;
+      background: white;
+      padding: 8px;
+      color: inherit;
+    }
+    button {
+      cursor: pointer;
+    }
+    button:disabled {
+      cursor: default;
+      opacity: 0.4;
+    }
+    .cases {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: contain;
+      background: #eef0f1;
+      display: block;
+    }
+    .card-body {
+      padding: 14px;
+    }
+    .card p {
+      margin: 4px 0;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+    .outcome {
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 12px;
+      display: inline-block;
+    }
+    .correct {
+      color: #1c644c;
+      background: #e6f4ed;
+    }
+    .wrong {
+      color: #9e3131;
+      background: #fae9e9;
+    }
+    .score {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13px;
+      border-top: 1px solid #eceef0;
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+    .score b {
+      font-weight: 650;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .empty {
+      padding: 30px;
+      background: white;
+      border: 1px solid #dce0e4;
+      border-radius: 8px;
+    }
+    details {
+      margin: 22px 0;
+    }
+    summary {
+      cursor: pointer;
+    }
+    code {
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+    footer {
+      margin-top: 32px;
+      font-size: 12px;
+      color: #58616b;
+    }
+    @media (max-width: 800px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .cases {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 520px) {
+      main {
+        padding: 24px 14px;
+      }
+      h1 {
+        font-size: 27px;
+      }
+      .cases {
+        grid-template-columns: 1fr;
+      }
+      .stat {
+        padding: 12px;
+      }
+      .stat strong {
+        font-size: 21px;
+      }
+    }
+  </style>
+  <main>
+    <div class="dataset-note">recorded predictions / AeBAD_S</div>
+    <h1>lighting and defect recall</h1>
+    <p>
+      compare frozen model outputs across every test image. each model keeps its threshold from
+      normal calibration images. scores are raw detector outputs, not probabilities.
+    </p>
+    <div class="notice" id="status"></div>
+    <h2>the complete comparison</h2>
+    <label>
+      test condition
+      <select id="domain">
+        <option value="illumination">changed lighting</option>
+        <option value="same">regular lighting</option>
+        <option value="background">background change</option>
+        <option value="view">view change</option>
+      </select>
+    </label>
+    <p id="population" class="muted"></p>
+    <div class="stats" id="stats"></div>
+    <p id="intervals" class="muted"></p>
+    <div class="table-scroll">
+      <table>
+        <caption>
+          all methods; three-seed averages. these are separate runs, not an ensemble.
+        </caption>
+        <thead>
+          <tr>
+            <th>method</th>
+            <th>false alarms (%)</th>
+            <th>defect recall (%)</th>
+            <th>image auroc (%)</th>
+          </tr>
+        </thead>
+        <tbody id="table"></tbody>
+      </table>
+    </div>
+    <h2>inspect the decisions</h2>
+    <p class="muted">
+      the averages pass, but individual seeds do not all pass: seed 1 loses 8.59 points of lighting
+      recall; seed 2 raises regular-light false alarms by 3.91 points. cards show one seed at a
+      time. the full result above retains all cases, regardless of the filters below. image order
+      follows the dataset paths.
+    </p>
+    <div class="controls">
+      <label>
+        seed
+        <select id="seed">
+          <option>0</option>
+          <option>1</option>
+          <option>2</option>
+        </select>
+      </label>
+      <label>
+        compare r0 with
+        <select id="control"></select>
+      </label>
+      <label>
+        ground truth
+        <select id="label">
+          <option value="all">all images</option>
+          <option value="0">normal</option>
+          <option value="1">defective</option>
+        </select>
+      </label>
+      <label>
+        decision change
+        <select id="change">
+          <option value="all">all decisions</option>
+          <option value="corrected_fp">false alarm removed</option>
+          <option value="new_fp">new false alarm</option>
+          <option value="recovered">defect recovered</option>
+          <option value="lost">defect newly missed</option>
+          <option value="both_miss">both miss the defect</option>
+        </select>
+      </label>
+    </div>
+    <div id="count" class="muted" role="status" aria-live="polite"></div>
+    <div class="nav">
+      <button id="prev">previous</button>
+      <span id="page"></span>
+      <button id="next">next</button>
+    </div>
+    <div id="cases" class="cases"></div>
+    <details>
+      <summary>method and data</summary>
+      <p>
+        B0 uses Gaussian feature noise. B1 adds relighting; B2 adds coupled score consistency. L0
+        adds local/global synthesis; L1 adds relighting; L2 adds coupled normal consistency. R0
+        routes normal consistency through the adapter. L3/R1/R2 also use defect-lift variants; P0/P1
+        omit local/global synthesis.
+      </p>
+      <p>
+        Global ascent and local focal supervision are adapted from GLASS (Chen et al., ECCV 2024).
+        Compare R0 with L1 to assess routing; the whole B0-to-R0 gain also includes the borrowed
+        synthesis and supervision.
+      </p>
+      <p>
+        This exploratory study uses one blade family, 128 fit normals and 64 normal calibration
+        images. The source screen and synthetic confirmation did not qualify. R0's pre-test
+        selection is self-recorded. Background recall falls, and the stronger L0 control retains
+        higher lighting recall.
+      </p>
+      <p>
+        Paired intervals resample exact-RGB image clusters across the three recorded seeds. They do
+        not establish generalization to new seeds or physical specimens.
+      </p>
+      <p>
+        All 1,639 test images, 12 methods and three seeds remain in the recorded comparison. This
+        view performs no inference or network requests. Dataset: AeBAD, Zhang et al., CC BY 4.0; see
+        <a href="DATASET-LICENSE.txt">the dataset licence</a>
+        .
+      </p>
+      <div id="provenance"></div>
+    </details>
+  </main>
+  <script type="application/json" id="data">
+    __EVIDENCE_JSON__
+  </script>
+  <script>
+    "use strict";
+    const data = JSON.parse(document.getElementById("data").textContent);
+    const el = (id) => document.getElementById(id);
+    const percent = (x) => (100 * x).toFixed(2);
+    const signed = (x) => (x >= 0 ? "+" : "") + percent(x);
+    let page = 0;
+    for (const arm of data.arms.filter((a) => a !== "R0")) {
+      const o = document.createElement("option");
+      o.value = arm;
+      o.textContent = arm;
+      el("control").append(o);
+    }
+    el("status").textContent =
+      (data.qualified
+        ? "lighting and same-condition means meet the specified tolerances against B0. "
+        : "the recorded audit did not qualify this result. ") +
+      "the original AD2 recall target fails. inspect the stronger controls and missed defects too.";
+    for (const [name, value] of Object.entries(data.provenance)) {
+      const p = document.createElement("p");
+      const label = document.createElement("b");
+      label.textContent = name + ": ";
+      const code = document.createElement("code");
+      code.textContent = value;
+      p.append(label, code);
+      el("provenance").append(p);
+    }
+    function selection() {
+      const domain = el("domain").value,
+        seed = Number(el("seed").value),
+        control = el("control").value;
+      return data.images.filter((r) => {
+        if (
+          r.domain !== domain ||
+          (el("label").value !== "all" && r.label !== Number(el("label").value))
+        )
+          return false;
+        const old = r.outputs[control][seed][2],
+          now = r.outputs.R0[seed][2];
+        switch (el("change").value) {
+          case "corrected_fp":
+            return !r.label && old && !now;
+          case "new_fp":
+            return !r.label && !old && now;
+          case "recovered":
+            return r.label && !old && now;
+          case "lost":
+            return r.label && old && !now;
+          case "both_miss":
+            return r.label && !old && !now;
+          default:
+            return true;
+        }
+      });
+    }
+    function renderCases() {
+      const rows = selection(),
+        seed = Number(el("seed").value),
+        control = el("control").value,
+        total = Math.max(1, Math.ceil(rows.length / 9));
+      page = Math.max(0, Math.min(page, total - 1));
+      el("cases").replaceChildren();
+      el("count").textContent =
+        rows.length +
+        " matching images / " +
+        data.metrics[el("domain").value].count +
+        " in this condition; cards use seed " +
+        seed;
+      el("page").textContent = page + 1 + " / " + total;
+      el("prev").disabled = page === 0;
+      el("next").disabled = page === total - 1;
+      for (const r of rows.slice(page * 9, page * 9 + 9)) {
+        const article = document.createElement("article");
+        article.className = "card";
+        const image = document.createElement("img");
+        image.loading = "lazy";
+        image.src = r.thumbnail;
+        image.alt = (r.label ? r.defect_type + " defect" : "normal blade") + "; " + r.id;
+        const body = document.createElement("div");
+        body.className = "card-body";
+        const truth = document.createElement("b");
+        truth.textContent = r.label ? r.defect_type + " defect" : "normal";
+        const id = document.createElement("p");
+        id.className = "muted";
+        id.textContent = r.id;
+        body.append(truth, id);
+        for (const arm of [control, "R0"]) {
+          const [score, q, flag] = r.outputs[arm][seed];
+          const line = document.createElement("div");
+          line.className = "score";
+          const left = document.createElement("span");
+          const name = document.createElement("b");
+          name.textContent = arm + " ";
+          const badge = document.createElement("span");
+          badge.className = "outcome " + (Boolean(flag) === Boolean(r.label) ? "correct" : "wrong");
+          badge.textContent = flag ? "flagged" : "not flagged";
+          left.append(name, badge);
+          const right = document.createElement("span");
+          right.textContent = score.toFixed(4) + " / " + q.toFixed(4);
+          right.title = "raw score / fixed threshold; flag when score is strictly greater";
+          line.append(left, right);
+          body.append(line);
+        }
+        const caption = document.createElement("p");
+        caption.className = "muted";
+        caption.textContent = "raw score / fixed threshold";
+        body.append(caption);
+        article.append(image, body);
+        el("cases").append(article);
+      }
+      if (!rows.length) {
+        const p = document.createElement("p");
+        p.className = "empty";
+        p.textContent = "no cases match these filters.";
+        el("cases").append(p);
+      }
+    }
+    function renderDomain() {
+      const domain = el("domain").value,
+        m = data.metrics[domain],
+        base = m.means.B0,
+        ours = m.means.R0;
+      el("population").textContent =
+        m.normals +
+        " normal + " +
+        m.defects +
+        " defective images. all 12 methods and all three seeds are included.";
+      el("stats").replaceChildren();
+      for (const [name, old, now] of [
+        ["b0 false alarms", base.fpr, null],
+        ["r0 false alarms", ours.fpr, ours.fpr - base.fpr],
+        ["b0 defect recall", base.recall, null],
+        ["r0 defect recall", ours.recall, ours.recall - base.recall],
+      ]) {
+        const box = document.createElement("div");
+        box.className = "stat";
+        const small = document.createElement("small");
+        small.textContent = name;
+        const strong = document.createElement("strong");
+        strong.textContent = percent(old) + "%";
+        box.append(small, strong);
+        if (now !== null) {
+          const delta = document.createElement("small");
+          delta.textContent = signed(now) + " percentage points vs b0";
+          box.append(delta);
+        }
+        el("stats").append(box);
+      }
+      const intervals = data.intervals[domain].B0;
+      el("intervals").textContent =
+        "r0 − b0, paired 95% interval: false alarms [" +
+        intervals.fpr.ci95.map(signed).join(", ") +
+        "] pp; recall [" +
+        intervals.recall.ci95.map(signed).join(", ") +
+        "] pp.";
+      el("table").replaceChildren();
+      for (const arm of data.arms) {
+        const row = document.createElement("tr");
+        if (arm === "R0") row.className = "primary";
+        for (const value of [
+          arm,
+          percent(m.means[arm].fpr),
+          percent(m.means[arm].recall),
+          percent(m.means[arm].image_auroc),
+        ]) {
+          const td = document.createElement("td");
+          td.textContent = value;
+          row.append(td);
+        }
+        el("table").append(row);
+      }
+      page = 0;
+      renderCases();
+    }
+    el("domain").addEventListener("change", renderDomain);
+    for (const id of ["seed", "control", "label", "change"])
+      el(id).addEventListener("change", () => {
+        page = 0;
+        renderCases();
+      });
+    el("prev").addEventListener("click", () => {
+      page--;
+      renderCases();
+    });
+    el("next").addEventListener("click", () => {
+      page++;
+      renderCases();
+    });
+    renderDomain();
+  </script>
+</html>

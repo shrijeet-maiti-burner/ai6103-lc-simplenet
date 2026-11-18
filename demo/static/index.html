@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LC-SimpleNet: lighting inspection</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="/">LC-SimpleNet</a>
+      <span id="runtime" class="runtime">connecting</span>
+    </header>
+    <main>
+      <section class="intro">
+        <h1>Lighting and anomaly detection</h1>
+        <p class="lede" id="image-scope">one normal image, three models and fixed thresholds.</p>
+      </section>
+      <section class="workspace" aria-label="model comparison">
+        <aside class="controls">
+          <div class="section-label">input</div>
+          <label for="category">category</label>
+          <select id="category"></select>
+          <div class="split">
+            <div>
+              <label for="seed">training seed</label>
+              <select id="seed"></select>
+            </div>
+            <div>
+              <label for="weight">b2 consistency weight</label>
+              <select id="weight"></select>
+            </div>
+          </div>
+          <label for="image">normal validation image</label>
+          <select id="image"></select>
+          <figure class="reference">
+            <img id="original" alt="reference image at model-input size" />
+            <figcaption>
+              reference
+              <span id="image-label">label: normal</span>
+            </figcaption>
+          </figure>
+          <div id="local-input" class="buttons" hidden>
+            <input id="local-image" type="file" accept="image/png,image/jpeg" hidden />
+            <button id="choose-upload" class="secondary">inspect a local image</button>
+            <button id="clear-upload" class="secondary" hidden>use dataset image</button>
+            <p class="micro" id="upload-note">png or jpeg, up to 16 mib; held in memory.</p>
+          </div>
+          <div class="slider-label">
+            <label for="brightness">brightness</label>
+            <output id="brightness-value">1.00</output>
+          </div>
+          <input
+            id="brightness"
+            type="range"
+            min="0.8"
+            max="1.2"
+            step="0.01"
+            value="1"
+            aria-describedby="transform-note"
+          />
+          <div class="slider-label">
+            <label for="gamma">gamma</label>
+            <output id="gamma-value">1.00</output>
+          </div>
+          <input
+            id="gamma"
+            type="range"
+            min="0.8"
+            max="1.2"
+            step="0.01"
+            value="1"
+            aria-describedby="transform-note"
+          />
+          <p id="transform-note" class="micro">
+            clip(brightness × pixels
+            <sup>gamma</sup>
+            , 0, 1), before normalization. gamma &gt; 1 darkens.
+          </p>
+          <div class="buttons">
+            <button id="reset" class="secondary">reset light</button>
+            <button id="sweep">run 9-point sweep</button>
+          </div>
+          <p id="clipping" class="micro">newly clipped pixels: waiting</p>
+        </aside>
+        <div class="comparison">
+          <div class="section-label">
+            <span>model outputs</span>
+            <span id="timing">waiting for models</span>
+          </div>
+          <div class="model-grid" id="models"></div>
+          <div class="map-controls">
+            <label for="opacity">
+              map overlay
+              <input id="opacity" type="range" min="0" max="1" step="0.05" value="0.65" />
+            </label>
+            <span>
+              <i class="gradient"></i>
+              low to high, fixed scale per model
+            </span>
+          </div>
+          <div class="unit-control">
+            <label for="score-units">
+              score units
+              <select id="score-units">
+                <option value="1">original</option>
+                <option value="0.0625">divided by 16</option>
+              </select>
+            </label>
+            <p id="units-note">changing score units changes mse, with the same decisions.</p>
+          </div>
+          <div class="interpretation"><p id="interpretation">loading trained heads…</p></div>
+          <div class="scope">
+            <span>image labels</span>
+            <p id="scope-note">
+              dataset images are known normal validation examples. a flag is a false alarm; this
+              view does not measure defect recall.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section class="sweep-section">
+        <div class="section-label">
+          <span>lighting sweep</span>
+          <span>brightness →, gamma ↓</span>
+        </div>
+        <div id="sweep-grid" class="sweep-grid">
+          <p class="empty">run the 3 × 3 sweep to compare decisions across lighting settings.</p>
+        </div>
+        <p class="micro">each tile uses the model's fixed threshold.</p>
+      </section>
+      <section class="evidence">
+        <div>
+          <h2>Prediction record</h2>
+          <p>save the image, transform, checkpoint and calibration details for this view.</p>
+          <button id="export" class="secondary">export record</button>
+        </div>
+        <details>
+          <summary>prediction details</summary>
+          <pre id="provenance">waiting for a prediction</pre>
+        </details>
+      </section>
+    </main>
+    <footer>
+      dataset:
+      <a href="https://www.mvtec.com/research-teaching/datasets/mvtec-ad-2">MVTec AD 2</a>
+    </footer>
+    <div id="error" role="alert" hidden></div>
+    <div id="busy" class="busy" role="status" hidden>
+      running the models
+      <span></span>
+    </div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>

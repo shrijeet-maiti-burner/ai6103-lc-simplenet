@@ -52,7 +52,7 @@ def handler_for(runtime):
             if route not in assets:
                 self.reply(404, {"error": "not found"})
                 return
-            path = ROOT / "demo/dist" / assets[route]
+            path = ROOT / "demo/static" / assets[route]
             self.reply(200, path.read_bytes(), mimetypes.guess_type(path)[0] or "text/plain")
 
         def do_POST(self):  # noqa: N802
@@ -112,7 +112,7 @@ def main():
         allow_reuse_address = False
 
     server = LocalServer(("127.0.0.1", args.port), handler_for(runtime))
-    print(f"illumination lab: http://127.0.0.1:{server.server_port}", flush=True)
+    print(f"lighting inspection: http://127.0.0.1:{server.server_port}", flush=True)
     print(runtime.describe()["scope"] + "; press ctrl+c to stop", flush=True)
     try:
         server.serve_forever()

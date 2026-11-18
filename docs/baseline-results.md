@@ -30,9 +30,7 @@ The [development artifact release](https://github.com/shrijeet-maiti-burner/ai61
 
 Archive: `ad-bottle-single-view-seeds-0-1-2.zip`; SHA-256: `c76bf420812c254bd76b55c51f6c1409b918d85cf64aafc830844bf9bec8eb6e`.
 
-## Evaluation handoff
-
-D handles evaluation at the evaluation stage. The fixed checkpoints and normal-validation outputs are ready for that work.
+## Checkpoint use
 
 Reconstruct the pinned upstream pretrained backbone and its original BatchNorm shape probe before loading the saved adapter/discriminator. Scores are raw anomaly scores. Maps observe the center crop, with `[20, 20, 308, 308]` coordinates in the resized canvas; ground-truth masks need matching geometry. Keep model, preprocessing, calibration and metric choices fixed before test scoring, with no test-based normalization or selection.
 

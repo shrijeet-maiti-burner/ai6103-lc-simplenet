@@ -3,6 +3,7 @@
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,7 +13,6 @@ def main() -> None:
     errors = []
     paths = [ROOT / "README.md", ROOT / "CONTRIBUTING.md", ROOT / "THIRD_PARTY.md"]
     paths += list((ROOT / "docs").rglob("*.md"))
-    paths += [ROOT / p / "README.md" for p in ("data", "results", "report", "manifests")]
     for path in paths:
         text = path.read_text(encoding="utf-8")
         if text.count("```") % 2:
@@ -28,6 +28,13 @@ def main() -> None:
         path = ROOT / item["repo_path"]
         if hashlib.sha256(path.read_bytes()).hexdigest() != item["sha256"]:
             errors.append(f"Changed preserved source: {item['repo_path']}")
+    sys.path.insert(0, str(ROOT / "src"))
+    from lc_simplenet.source_identity import BUNDLE_NAME, source_record
+
+    if (ROOT / BUNDLE_NAME).is_file():
+        identity = source_record(ROOT)
+        if identity["git_dirty"]:
+            errors.append("Changed bundle files: " + ", ".join(identity["source_files_changed"]))
     if errors:
         raise SystemExit("\n".join(errors))
     print(f"Checked {len(paths)} Markdown files and {len(manifest['preserved'])} source hashes.")

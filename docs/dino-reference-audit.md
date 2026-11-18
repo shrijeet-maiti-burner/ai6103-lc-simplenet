@@ -22,7 +22,7 @@ v2 was designed after v1's public outcomes were seen. its written protocol and c
 
 ## reproduce
 
-download the reference zip from the private team release using an authenticated account, then run:
+download the reference zip from the linked release, then run:
 
 ```powershell
 python scripts/audit_dino_reference_archive.py --archive <reference.zip> --out results/dino-audit-001.json
