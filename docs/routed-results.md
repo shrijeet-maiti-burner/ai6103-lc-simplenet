@@ -2,7 +2,7 @@
 
 checked 18 november 2026.
 
-**all 168 original AD 2 heads, target scoring and the independent audit are complete. the eight-category recall-preservation target does not pass.** the separate blade-lighting experiment meets its fixed point targets on three-seed averages against its reproduced B0; this is a limited result, not a general SimpleNet improvement.
+**all 168 original AD 2 heads, target scoring and a separate raw-score recount are complete. the eight-category recall-preservation target does not pass.** the separate blade-lighting experiment meets its fixed point targets on three-seed averages against its reproduced B0; this is a limited result, not a general SimpleNet improvement.
 
 the [aggregate evidence release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-results-2026-11-18) contains all category/domain and seed rows, comparisons, provenance hashes and a portable verifier. it excludes images, weights, per-image scores, personal notes and machine paths.
 
@@ -82,14 +82,16 @@ limits that belong beside that result:
 - individual seeds do not all pass: seed 1 loses **8.59 points** of illumination recall; seed 2 raises same-condition FPR **3.91 points**.
 - background-change recall falls **67.61% to 39.62%**. background and view rows remain available in full.
 - L0 retains higher illumination recall (**61.62%**). versus matched L1, routing changes illumination FPR **-1.33 points**, interval **[-4.00, +1.33]**; recall **+0.17 points**, interval **[-1.68, +2.19]**. the incremental routing gain is uncertain.
-- B0 ranks illumination images below chance (AUROC **42.15**), so the B0 targets compare against a weak baseline. threshold-free, R0 (**70.77**) is level with L0 (**71.27**) and L1 (**70.54**).
-- the original synthetic source screen and full source confirmation both failed. R0 was admitted as an explicitly unqualified exploratory candidate, fixed before real-defect feedback. those failures have not been reclassified as passes.
+- B0 ranks illumination images below chance (AUROC **42.15**), so the B0 targets compare against a weak baseline. threshold-free, R0 (**70.77**), L0 (**71.27**) and L1 (**70.54**) have similar point estimates.
+- the original synthetic source screen and full source confirmation both failed. local records describe R0 as fixed before real-defect feedback and admitted as an explicitly unqualified exploratory candidate. this timing is self-recorded, not independently timestamped pre-registration; those failures have not been reclassified as passes.
+
+the local exploratory amendment names R0, forbids fallback selection and is dated 16 november at 02:16 UTC. the retained scorer log starts with the protocol hash before its first domain output. these records are from the same experiment workflow. publishing the protocol hash in the 18 november handoff, after the 16 november result drafts, does not independently establish its pre-test timing. describe the study as exploratory with self-recorded pre-specification.
 
 ## interpretation and verification
 
 the supported claim is a blade-lighting benefit against our B0 on three-seed averages, with seed and background limitations. the original eight-category test shows lower lighting false alarms with an unacceptable recall loss. neither result establishes a general improvement over SimpleNet, a gain over every stronger control, private-server performance or SOTA.
 
-the local independent audits recounted all raw patch maxima and flags. exact-RGB source/test overlap, duplicate-target and conflicting-label checks passed; physical-specimen independence is not established. no target threshold was refitted. the AD 2 public labels had prior project exposure, so this is a frozen transfer comparison rather than an untouched independent target.
+separate audit scripts recounted all raw patch maxima and flags within the same assistant-led experiment workflow; this was not a second-person raw-data audit. [athul's review](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/40#pullrequestreview-5954465344) separately checked the published checksums, aggregate tables, deltas, seed failures and sensitivity results. that review did not rerun inference or recount the private raw patch scores. exact-RGB source/test overlap, duplicate-target and conflicting-label checks passed; physical-specimen independence is not established. no target threshold was refitted. the AD 2 public labels had prior project exposure, so this is a frozen transfer comparison rather than an untouched independent target.
 
 download and extract the release archive, then run:
 
@@ -97,9 +99,9 @@ download and extract the release archive, then run:
 python scripts/verify_routed_results.py routed-results-2026-11-18
 ```
 
-the archive also contains the same standalone verifier (`python verify_results.py .` from the extracted folder). it verifies the published file hashes, full aggregate matrices, count-derived rates, macro means and original fixed point gates. it does not rerun inference, replay raw patches or recompute bootstrap intervals; hashes of the independently audited original decisions are retained for provenance.
+the archive also contains the same standalone verifier (`python verify_results.py .` from the extracted folder). it verifies the published file hashes, full aggregate matrices, count-derived rates, macro means and original fixed point gates. it does not rerun inference, replay raw patches or recompute bootstrap intervals; hashes of the separately recounted original decisions are retained for provenance. the immutable release snapshot retains the earlier "independent audit" wording; the distinction above applies to those records too.
 
-the method code is in [PR #37](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/37). [PR #39](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/39) now provides both the [AD 2 source snapshot](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-reproduction-source-2026-11-16) and the separate [blade execution source](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-blade-source-2026-11-18). the blade export retains byte-identical recorded workers and matches all 512 source-image/texture and 64 replay members. both PRs still need teammate review. source/preparation and mechanics checks do not certify a fresh full-budget GPU run through either portable wrapper; final-package verification remains open.
+the method code is in [PR #37](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/37). [PR #39](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/39) now provides both the [AD 2 source snapshot](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-reproduction-source-2026-11-16) and the separate [blade execution source](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-blade-source-2026-11-18). the blade export retains byte-identical recorded workers and matches all 512 source-image/texture and 64 replay members. athul approved both PRs on 18 november; integration and packaging remain separate steps. source/preparation and mechanics checks do not certify a fresh full-budget GPU run through either portable wrapper; final-package verification remains open.
 
 the [report/video review drafts](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/review-drafts-2026-11-16) predate these completed results. the report and narration still need both outcomes, the stronger controls and the limits integrated before final review. this release is evidence, not a completed course submission.
 
@@ -112,6 +114,6 @@ for the final code zip, combine the reviewed changes and include both execution-
 | record | sha256 |
 |---|---|
 | AD 2 frozen protocol | `751098d10d402f10b10f61d6e5b39a768a74dad04e59af0c9df917063dd57c08` |
-| AD 2 independently audited decision | `39a9d5a932438f02d87657415f18bd0343aae34e85b60b3d46e78946cb9c7be6` |
-| blade frozen real-test protocol | `75c262274d9fa4295a7416ee306ef66106e83b18c2b689c0efd36c98bda45af6` |
-| blade independently audited decision | `29430423067cabc302e8d9690ba74ec05cc60ff7f90f5f48a94b20a920bc9a16` |
+| AD 2 separately recounted decision | `39a9d5a932438f02d87657415f18bd0343aae34e85b60b3d46e78946cb9c7be6` |
+| blade recorded real-test protocol (self-recorded timing) | `75c262274d9fa4295a7416ee306ef66106e83b18c2b689c0efd36c98bda45af6` |
+| blade separately recounted decision | `29430423067cabc302e8d9690ba74ec05cc60ff7f90f5f48a94b20a920bc9a16` |

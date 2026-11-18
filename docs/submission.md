@@ -6,7 +6,7 @@ the final-submission screenshot supplied on 16 november confirms the rules below
 
 ## report: 30 points
 
-- [x] original eight-category R0 training, scoring and independent audit complete; original target failure and the separate blade mean-level result retained in [the results handoff](routed-results.md).
+- [x] original eight-category R0 training, scoring and separate raw-score recount complete; original target failure and the separate blade mean-level result retained in [the results handoff](routed-results.md).
 - [ ] incorporate both completed outcomes, stronger controls, per-seed failures and test-exposure limits into the final report.
 - [ ] one designated member submits the report; the others do not submit duplicates.
 - [ ] first page contains all five official names, matriculation numbers and ntu email addresses.

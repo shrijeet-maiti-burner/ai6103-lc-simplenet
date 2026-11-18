@@ -2,7 +2,7 @@
 
 AI6103 group project: test whether paired relighting and patch-score consistency reduce lighting-induced false alarms without reducing defect recall.
 
-**status, 18 november: the routed follow-up is complete, including all 168 AD 2 heads, scoring and independent checks.** the [completed results](docs/routed-results.md) show a blade-lighting benefit against our B0 on three-seed averages, with seed and background limitations. the original eight-category AD 2 target does not pass: lighting false alarms fall, but defect recall falls too far. this is not an overall SimpleNet improvement.
+**status, 18 november: the routed follow-up is complete, including all 168 AD 2 heads, scoring and a separate raw-score recount.** the [completed results](docs/routed-results.md) show a blade-lighting benefit against our B0 on three-seed averages, with seed and background limitations. the original eight-category AD 2 target does not pass: lighting false alarms fall, but defect recall falls too far. this is not an overall SimpleNet improvement.
 
 the earlier [45-run AD reproduction](docs/ad-reproduction-results.md), [120-run paired AD 2 study](docs/ad2-study-results.md) and separate public image/native-localization results remain recorded. official private-server evaluation is unverified. the [shared report/video drafts](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/review-drafts-2026-11-16) predate the completed follow-ups and still need updating. datasets, weights and personal research are excluded from Git. the selected scope is [the revised proposal](references/proposal.pdf).
 
