@@ -6,7 +6,7 @@ this is a source handoff, not another trained result. it does not reverse the fa
 
 ## requirements
 
-- checkout this PR's source; the new launcher is not on `main` until reviewed and merged.
+- use the combined `main` source or [code delivery](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/code-submission-2026-11-18); the launcher was reviewed and merged on 18 november.
 - use the locked Python 3.12 / torch 2.6.0+cu124 / torchvision 0.21.0+cu124 / numpy 1.26.4 / Pillow 11.3.0 environment (`uv sync --frozen --extra cuda`).
 - training and scoring use the recorded workers' strict **NVIDIA L40S** guard and Linux `/dev/shm` workspace. their feature cache needs substantially more than a 6 GB laptop GPU. allocate one GPU and enough host/shared memory; the recorded training allocation used 30 GB host memory.
 - acquire AeBAD and DTD separately. the manifests identify the exact native PNGs and 256 texture files. `--textures-root` is the folder containing their manifest-relative `images/...` paths.
@@ -65,7 +65,7 @@ python scripts/reproduce_routed_blade.py --source-archive routed-blade-execution
 
 packing requires all nine full-budget cases and validates artifact hashes, encoder/feature identity and normal-only higher-q95 thresholds. it exports 36 heads and their procedural-development reference patches, without optimizers. no method or checkpoint is chosen from target performance; R0 stays fixed.
 
-scoring first replays all 36 development outputs bit for bit. a mismatch stops execution before the four target domains. it then scores every illumination/same/background/view image, exports raw patches/image scores and all 144 domain/method/seed rows, and independently recounts the fixed mean gates and paired exact-RGB-cluster intervals in `audit.json`. source overlap and conflicting labels are recorded without dropping examples. the three trained seeds do not establish new-seed or physical-specimen generalization.
+scoring first replays all 36 development outputs bit for bit. a mismatch stops execution before the four target domains. it then scores every illumination/same/background/view image, exports raw patches/image scores and all 144 domain/method/seed rows, and separately recounts the fixed mean gates and paired exact-RGB-cluster intervals in `audit.json`. source overlap and conflicting labels are recorded without dropping examples. the three trained seeds do not establish new-seed or physical-specimen generalization.
 
 each packet writes an immutable launch, event stream, checksummed artifacts and completion receipt. an interruption does not create a successful receipt. the wrapper currently requires a new scoring output directory for a retry; completed recorded experiments and their earlier transport receipts remain unchanged.
 
@@ -73,4 +73,4 @@ each packet writes an immutable launch, event stream, checksummed artifacts and 
 
 the release records source/worker identity, input-staging parity and subprocess/failure-guard checks. **a fresh nine-case full-budget training and real-image scoring run through this new local wrapper has not been completed.** the historical experiments ran through the original framed workers and private transport, whose results are reported separately. passing source/mechanics checks is not a new accuracy result or universal hardware certification.
 
-the [AD 2 launcher](routed-reproduction.md), this blade handoff and the feature-loss PR still need teammate review before selecting the final submission source. datasets and pretrained/trained weights remain external. the [results release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-results-2026-11-18) contains the completed original results and limits.
+the [AD 2 launcher](routed-reproduction.md), this blade handoff and the feature-loss PR were reviewed and merged on 18 november. the code delivery records the selected source and extraction checks separately from a full GPU reproduction. datasets and pretrained/trained weights remain external. the [results release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-results-2026-11-18) contains the completed original results and limits.

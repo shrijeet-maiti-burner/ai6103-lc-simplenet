@@ -14,7 +14,7 @@ the builder refuses an existing output, tracked changes or a different simplenet
 
 ## final routed handoff
 
-the three review branches are separate changes based on `main`; checking out the highest PR number does not combine them:
+the three changes below were reviewed and merged into `main` on 18 november. checking out one of their original branches does not combine them:
 
 | review | contents |
 |---|---|
@@ -22,7 +22,7 @@ the three review branches are separate changes based on `main`; checking out the
 | [#39](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/39) | AD 2 and blade input preparation, training/resume, scoring/audit launchers and source instructions |
 | [#40](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/pull/40) | completed results, aggregate verifier, recorded blade-gallery source and final handoff status |
 
-review the changes, resolve overlapping README/status edits, and build from one clean combined commit. retain the completed-results wording; a stale "still training" paragraph must not replace it. do not package one PR branch or today's `main` as though it already includes the other reviews.
+build from a clean combined commit containing all three changes. the overlapping README edits have been resolved and the completed-results wording retained. the [code delivery release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/code-submission-2026-11-18) identifies the packaged commit, both execution snapshots, checksums and extraction checks; a later `main` may contain different files.
 
 the generic builder includes committed Git objects, not release assets. the routed launchers also require these code-only execution snapshots:
 
