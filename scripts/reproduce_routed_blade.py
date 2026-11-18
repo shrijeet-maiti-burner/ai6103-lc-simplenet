@@ -334,6 +334,9 @@ def pack(args, root):
     if len(encoders) != 1 or len(features) != 1:
         raise ValueError("encoder or source feature populations differ")
     arms = ["B0", "B1", "B2", "L0", "L1", "L2", "L3", "R0", "R1", "R2", "P0", "P1"]
+    models = {str(s): {a: models[str(s)][a] for a in arms} for s in range(3)}
+    thresholds = {str(s): {a: thresholds[str(s)][a] for a in arms} for s in range(3)}
+    signatures = {str(s): {a: signatures[str(s)][a] for a in arms} for s in range(3)}
     args.out.mkdir(parents=True, exist_ok=False)
     value = {
         "protocol_sha256": config["study_protocol_sha256"],
