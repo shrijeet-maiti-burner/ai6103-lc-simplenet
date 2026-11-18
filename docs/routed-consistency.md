@@ -36,6 +36,13 @@ a training cli. existing training commands, defaults and inference are
 unchanged. shared adapter updates can still change later defect responses;
 gradient routing does not guarantee recall preservation.
 
+the reported AD 2 and blade results were produced by the archived trainers in
+the execution-source releases, such as the
+[AD 2 source](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-reproduction-source-2026-11-16),
+not by this module. this module is a checked copy of that objective: on cpu,
+its r0, l1 and l2 losses, gradients and batch-normalization updates match the
+archived AD 2 code bit for bit.
+
 the tests check forward-value and adapter-gradient equality, absent classifier
 consistency gradients, a classification-equivalent optimizer update, one live
 batch-normalization update, and state restoration after an exception. full-loss
