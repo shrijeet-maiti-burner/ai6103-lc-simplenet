@@ -98,6 +98,10 @@ the method code is in [PR #37](https://github.com/shrijeet-maiti-burner/ai6103-l
 
 the [report/video review drafts](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/review-drafts-2026-11-16) predate these completed results. the report and narration still need both outcomes, the stronger controls and the limits integrated before final review. this release is evidence, not a completed course submission.
 
+the recorded blade walkthrough's [renderer](../scripts/build_blade_gallery.py) and [HTML template](../demo/blade-gallery.html) are shared source. run `python scripts/build_blade_gallery.py --evidence-dir <recorded-evidence-directory> --out results/blade-gallery` against the original audited recording layout, native test packets and score files. aggregate CSVs alone do not supply image cards. the generated gallery contains dataset-derived thumbnails and stays local; the silent review clip is already available in the draft release. this renderer replays recorded evidence, not live inference, and does not accept arbitrary uploads.
+
+for the final code zip, combine the reviewed changes and include both execution-source archives as described in [the source-package handoff](source-package.md#final-routed-handoff).
+
 ## decision identities
 
 | record | sha256 |
