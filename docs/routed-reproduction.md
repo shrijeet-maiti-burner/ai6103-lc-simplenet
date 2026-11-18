@@ -117,8 +117,11 @@ frozen paired b0 anchors, and the prespecified recall/false-alarm limits.
 seven categories without sheet_metal are a sensitivity analysis, not a
 replacement primary scope. exposed public results are not private-server results.
 
-this launcher covers the ongoing original-ad2 transfer. it does not reproduce
-the different aebad fit-subset budget or the earlier robustad experiment. the
+this launcher covers the completed original-ad2 transfer. the different aebad
+fit-subset budget has a [separate blade handoff](routed-blade-reproduction.md);
+the earlier robustad experiment remains outside these launchers. the
 original source screen and full procedural confirmation did not qualify; the
 transfer remains explicitly exploratory. no new detection gain is claimed by
-this code handoff. full-matrix scoring is still pending.
+this code handoff. the experimental full-matrix scoring and audit have finished;
+the original recall-preservation target fails. see the
+[complete results](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-results-2026-11-18).
