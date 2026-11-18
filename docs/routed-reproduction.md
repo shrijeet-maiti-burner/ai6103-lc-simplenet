@@ -114,7 +114,7 @@ higher empirical q95 on regular normal validation, then strict `score > threshol
 no model, threshold, epoch, category or seed is selected using those results.
 
 this exports individual-case evidence. the original all8 claim still requires
-the complete independent matrix audit, both the newly matched and previous
+the complete separate matrix audit, both the newly matched and previous
 frozen paired b0 anchors, and the prespecified recall/false-alarm limits.
 seven categories without sheet_metal are a sensitivity analysis, not a
 replacement primary scope. exposed public results are not private-server results.
