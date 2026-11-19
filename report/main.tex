@@ -154,6 +154,10 @@ R0 trains with $L_{\rm cls}+0.1L_{\rm route}$; classification still updates both
 This prevents a direct discriminator consistency update without freezing the classifier
 during ordinary training (Figure~\ref{fig:route}).
 
+\paragraph{Single-image inference.}
+One preprocessed image passes through $E$, $A_\theta$ and $D_\phi$ in evaluation mode.
+Pairing and anomaly synthesis are used only during training.
+
 \begin{figure}[t]
 \centering
 \begin{tikzpicture}[box/.style={draw,align=center,font=\small,text width=29mm,minimum height=8mm},arr/.style={-{Latex[length=1.5mm]}}]
@@ -166,7 +170,7 @@ during ordinary training (Figure~\ref{fig:route}).
 \node[font=\small,align=center,below=3mm of disc] {updates $A_\theta,D_\phi$};
 \node[font=\small,align=center,below=3mm of aux] {updates $A_\theta$ only};
 \end{tikzpicture}
-\caption{Consistency holds the discriminator parameters fixed but retains its input derivative. Classification updates both trainable modules.}
+\caption{Only the normal-pair paths are shown. The detached discriminator retains its input derivative, so consistency updates the adapter while classification updates both modules.}
 \label{fig:route}
 \end{figure}
 
@@ -249,7 +253,8 @@ $256\times256$ full-frame resizing: 273 illumination, 689 same-condition, 305 ba
 established.
 
 \paragraph{Training.}
-Our reported runs use seeds 0, 1 and 2 and the fixed final checkpoint. AD 2 paired runs
+We fit separate heads per category, using seeds 0, 1 and 2 and the fixed final checkpoint.
+AD 2 paired runs
 use batch 8 and 80 source passes, giving 1,440--4,320 updates according to category size.
 Blade runs use batch 4, 160 passes and 5,120 updates. Paired/local-global adapters use AdamW
 at $10^{-4}$ with weight decay 0.01; discriminators use Adam at $2\times10^{-4}$ with weight
@@ -443,7 +448,7 @@ gates.\footnote{\url{https://github.com/shrijeet-maiti-burner/ai6103-lc-simplene
 We recounted raw patch maxima and flags; a teammate checked aggregate results. A fresh
 seven-method sheet-metal run reproduced the historical heads, thresholds and patch scores
 bit for bit after checkpoint resume and cold replay. This checks one category, not a fresh
-full-matrix rerun. The demo runs paired-head inference live; its blade gallery replays
+full-matrix rerun. The demo runs B0/B1/B2 inference live; its blade gallery replays
 recorded predictions.
 
 \section{Conclusion}
