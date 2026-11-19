@@ -393,6 +393,53 @@ which selects an epoch using test image AUROC. Test trajectories
 recorded by the reproduction scripts are diagnostics and are not
 used to select the reported fixed-final checkpoint.
 
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+box/.style={draw,align=center,font=\small,text width=27mm,minimum height=9mm},
+arr/.style={-{Latex[length=1.5mm]}},
+aux/.style={arr,dashed}]
+\node[anchor=west,font=\bfseries] at (-1.45,1.85) {Training: routed local/global model (R0)};
+\node[box] (normal) at (0,0.5) {normal image $x$\\and aligned $T(x)$};
+\node[box] (local) at (0,-1) {local texture edits\\and aligned relit edits};
+\node[box] (encoder) at (3.5,-0.25) {frozen WideResNet\\layers 2/3 + patches};
+\node[box] (adapter) at (7,-0.25) {trainable adapter\\$z=A_\theta(E(v))$};
+\node[box] (global) at (7,1.2) {Gaussian offsets\\+ projected ascent};
+\node[box] (disc) at (10.5,-0.25) {shared discriminator\\$D_\phi$: normality};
+\node[box] (classloss) at (14,-0.25) {global BCE\\+ local focal loss};
+\draw[arr] (normal.east)--(encoder.west);
+\draw[arr] (local.east)--(encoder.west);
+\draw[arr] (encoder)--(adapter);
+\draw[arr] (adapter)--(disc);
+\draw[arr] (adapter.north)--(global.south);
+\draw[arr] (global.east)-|(disc.north);
+\draw[arr] (disc)--(classloss);
+\node[font=\scriptsize,align=center] at (14,-1) {classification updates $A_\theta,D_\phi$};
+\node[box] (detached) at (10.5,-2.05) {$D_{\bar\phi}$: same weights\\detached parameters};
+\node[box] (pairloss) at (14,-2.05) {paired normal-score\\MSE, weight $0.1$};
+\draw[aux] (adapter.south)|-node[pos=0.7,above,font=\scriptsize] {normal pair only} (detached.west);
+\draw[aux] (detached)--(pairloss);
+\node[font=\scriptsize,align=center] at (14,-2.8) {consistency updates $A_\theta$ only};
+\node[anchor=west,font=\scriptsize,align=left] at (-1.45,-2.35) {Local edits: DTD texture + Perlin support.\\Global offsets are mined after adaptation.\\Backbone weights remain frozen.};
+\draw[black!40] (-1.45,-3.25)--(15.45,-3.25);
+\node[anchor=west,font=\bfseries] at (-1.45,-3.7) {Inference: one image; no synthetic or paired branch};
+\node[box,text width=20mm] (input) at (-0.3,-4.55) {one image};
+\node[box,text width=24mm] (evalfeatures) at (2.65,-4.55) {frozen features\\+ trained adapter};
+\node[box,text width=23mm] (evaldisc) at (5.9,-4.55) {trained $D_\phi$\\evaluation mode};
+\node[box,text width=23mm] (scores) at (9.15,-4.55) {patch anomaly scores\\$s_u=-D_\phi(z_u)$};
+\node[box] (decision) at (13.7,-4.55) {$S=\max_u s_u$\\flag if $S>\tau$};
+\node[box] (map) at (9.15,-6) {resize/smooth scores\\for heatmap display};
+\draw[arr] (input)--(evalfeatures);
+\draw[arr] (evalfeatures)--(evaldisc);
+\draw[arr] (evaldisc)--(scores);
+\draw[arr] (scores)--(decision);
+\draw[arr] (scores)--(map);
+\node[font=\scriptsize,align=center] at (13.7,-5.55) {$\tau$: fixed normal-validation threshold\\heatmap processing does not set $S$};
+\end{tikzpicture}
+\caption{Complete R0 training and scoring architecture. The frozen feature extractor, adapter and discriminator follow SimpleNet. Local/global synthesis adapts GLASS; aligned relighting and adapter-only consistency form the project extension. Solid arrows show data flow; dashed arrows identify the auxiliary consistency path, not backward passes. Classification trains both head modules; consistency differentiates through the detached discriminator input into the adapter only. The discriminator is shared, not a second learned network. Global mining changes offsets only. The inference row shows the scoring path and existing display processing, not evidence that R0 has been integrated into the live demo.}
+\label{fig:route}
+\end{figure*}
+
 \section{Experimental Protocol}
 
 \subsection{Datasets and preprocessing}
@@ -482,21 +529,7 @@ L1 adds relighting without consistency. L2 uses ordinary
 consistency gradients; R0 routes the consistency gradient
 through the adapter. R0 versus L2 isolates the gradient route under matched synthesis; R0 versus L1 tests adding routed consistency. A comparison with B0 changes synthesis and the discrimination loss as well as consistency.
 
-\begin{figure}[t]
-\centering
-\begin{tikzpicture}[box/.style={draw,align=center,font=\small,text width=29mm,minimum height=8mm},arr/.style={-{Latex[length=1.5mm]}}]
-\node[box] (data) {normal image and\\aligned relit image};
-\node[box,below=4mm of data] (feat) {frozen features $E$\\trainable adapter $A_\theta$};
-\node[box,below left=6mm and -12mm of feat] (disc) {live $D_\phi$\\classification losses};
-\node[box,below right=6mm and -12mm of feat] (aux) {detached $D_{\bar\phi}$\\consistency loss};
-\draw[arr] (data)--(feat);
-\draw[arr] (feat)--(disc);\draw[arr] (feat)--(aux);
-\node[font=\small,align=center,below=3mm of disc] {updates $A_\theta,D_\phi$};
-\node[font=\small,align=center,below=3mm of aux] {updates $A_\theta$ only};
-\end{tikzpicture}
-\caption{R0 changes the gradient route of the auxiliary consistency term. Both branches use the current discriminator values. Local and global synthetic inputs also feed the classification losses; they are omitted here to emphasize routing.}
-\label{fig:route}
-\end{figure}
+
 
 \subsection{Scoring and calibration}
 

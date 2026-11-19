@@ -13,3 +13,5 @@ Before submission:
 - Check final shared Overleaf build, code access, video duration and sole report submitter.
 
 This is a review draft, not a claim that all submission checks are complete. No training code, thresholds or result artifacts changed.
+
+Architecture update: replaces routing-only figure with full R0 training and inference diagram. Checked against local_global_losses.py, routed_consistency.py and demo.py in frozen execution source. Distinguishes shared discriminator values from detached auxiliary parameters; synthetic offsets are mined after adaptation; heatmap smoothing does not set the image score. Existing display path is not a claim of live R0 deployment. Compiled successfully with editor; five total pages including references; all five rendered pages inspected without clipping.
