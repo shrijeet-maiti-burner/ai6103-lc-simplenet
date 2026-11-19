@@ -94,6 +94,21 @@ bit exact. the strict scoring guard is retained. use the original runtime/gpu
 for its recorded calibration, or reproduce a separately calibrated training run
 on the new hardware. no genuine target was opened for these checks.
 
+on 19 november 2026, the 18 november code ZIP completed a full `sheet_metal`,
+seed-0 case on linux/l40s with the locked environment: all seven methods,
+137 fit normals, 19 calibration normals and 1,440 updates. training stopped at
+256, partial scoring was rejected, and a fresh process resumed after an exact
+next-input/feature check. cold scoring replayed every saved normal patch score
+bit for bit, then scored all 114 native public images (798 decisions) without
+refitting thresholds. a separate calculation checked thresholds, image maxima
+and condition counts from the saved patch arrays. all seven trained heads,
+thresholds and normal/test patch scores also matched the historical case bit
+for bit. sheet_metal was chosen for its shortest fixed budget, not its performance.
+this verifies one complete
+case, not the full AD 2 matrix or the blade launcher; it is not a new accuracy
+result. the [code release](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/code-final-2026-11-19)
+records the checks and hashes. training code and settings were unchanged.
+
 ## fixed-threshold public scoring
 
 ```powershell
