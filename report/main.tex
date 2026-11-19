@@ -34,41 +34,38 @@ updates the adapter and discriminator; the added consistency term updates only t
 Across three seeds on AeBAD-S, illumination false-positive rate falls from 55.56\% to
 22.67\%, while defect recall rises from 46.46\% to 52.36\%. Same-condition results improve
 as well. In the original MVTec AD 2 study, relighting alone raises native localisation
-AU-PRO from 11.94\% to 13.02\%. These gains have different causes and scope. Synthesis
-controls explain most
-of the blade improvement, the incremental routing effect is uncertain, and MVTec AD 2 still
-fails the original recall-preservation target. The comparisons separate useful detection
-gains from score stability alone.
+AU-PRO from 11.94\% to 13.02\%. Most of the blade gain also appears in the local/global
+controls; the added routing effect on blade illumination is small relative to its uncertainty. In the later
+AD 2 comparison, changed-light recall falls by 27.30 points against a five-point allowance.
+The comparisons separate detection gains from score stability.
 \end{abstract}
 
 \section{Introduction}
 
-A good part should not be classified as defective just because a lamp changes. An inspection
-model can nevertheless flag an undamaged surface after its brightness, reflection or shadow
-changes. We extend the released code of SimpleNet (CVPR 2023) \citep{liu2023simplenet}
-with paired relighting and a consistency loss on corresponding normal-patch scores.
-The goal is fewer lighting false alarms while keeping defects detectable.
+An inspection model should recognise a good part under changing light. Changes in
+brightness, reflections or shadows can instead raise its anomaly score. We extend the
+released code of SimpleNet (CVPR 2023) \citep{liu2023simplenet} with paired relighting and a
+consistency loss on corresponding normal-patch scores. The goal is fewer lighting false
+alarms while keeping defects detectable.
 
 On one aero-engine blade family, our combined recipe reduces mean illumination false alarms
 by 32.89 percentage points and raises recall by 5.89 points against its matched
 Gaussian-feature control. In the same-condition domain, false alarms fall by 4.35 points and
-recall rises by 8.64 points. These three-seed means satisfy the study's operating
-constraints on those two domains. They do not mean every seed or every domain improves.
+recall rises by 8.64 points. These results meet the stated operating constraints on
+three-seed means for the illumination and same-condition domains.
 
 The route to this result involved two changes. We first added paired brightness--gamma
-training. Relighting alone improved native
-localisation, but image-level recall under changed light fell. We then combined paired
-training with local/global anomaly synthesis adapted from GLASS \citep{chen2024glass} and
-restricted the consistency gradient to the feature adapter. The reason for routing is
-specific: the discriminator should still learn to separate synthetic anomalies, without
-being directly pushed to equalise normal scores. The shared adapter remains free to change,
-so routing is a hypothesis to test, not a recall guarantee.
+training. Relighting alone improved native localisation, while image-level recall under
+changed light fell. We then combined paired training with local/global anomaly synthesis
+adapted from GLASS \citep{chen2024glass} and restricted the consistency gradient to the
+feature adapter. Routing assigns normal-score agreement to the adapter while the
+discriminator learns synthetic anomaly separation. The shared adapter connects both
+objectives, so we test their interaction through matched controls.
 
 Our contribution is this paired implementation, its adapter-only objective, and a comparison
 that separates relighting, synthesis and gradient routing. Consistency learning and anomaly
-synthesis are established techniques. We test their integration into SimpleNet on real
-lighting changes, including eight-category MVTec AD 2, where the same recipe loses too much
-recall.
+synthesis are established techniques. We evaluate their integration on real lighting changes
+in AeBAD-S and eight-category MVTec AD 2.
 
 \section{Method}
 
@@ -77,9 +74,9 @@ recall.
 SimpleNet extracts local image features with a pretrained backbone, adapts them to the
 target data and trains a discriminator against synthetic feature anomalies
 \citep{liu2023simplenet}. We use a frozen ImageNet WideResNet-50-2, features from layers 2
-and 3, and 1536-dimensional aggregated patch features. The adapter is a trainable linear map
-without BatchNorm. The discriminator has one width-1024 Linear--BatchNorm--LeakyReLU block
-and a bias-free scalar output.
+and 3, and 1536-dimensional aggregated patch features. The adapter is a single trainable
+linear map. The discriminator has one width-1024 Linear--BatchNorm--LeakyReLU block and a
+bias-free scalar output.
 
 Let $E$ be the frozen extractor, $A_\theta$ the adapter and $D_\phi$ the discriminator. Its
 output represents normality. After spatial preprocessing, we form
@@ -126,37 +123,30 @@ and clipped to $[0.2,0.8]$. Four deterministic variants per image cycle over sou
 Normal and edited images receive identical relighting. A pixel is marked changed when any
 channel differs by more than $1/255$ after relighting; an $8\times8$ block is labelled
 anomalous if it contains a changed pixel. These labels supervise the $32\times32$ feature
-grid and describe synthetic edits, not real defects.
+grid using the visible support of the procedural edits.
 
 For anomaly logit $a=-D_\phi(z)$, let $\ell(a,y)$ denote binary cross-entropy with logits.
 The global loss $L_{\rm global}$ sums the mean normal-target ($y=0$) and synthetic-target
 ($y=1$) losses. Local labels $y_i$ give $p_{t,i}=y_i\sigma(a_i)+(1-y_i)(1-\sigma(a_i))$, and
-\begin{equation}
- L_{\rm cls}=L_{\rm global}
- +\frac{1}{|H|}\sum_{i\in H}(1-p_{t,i})^2\ell(a_i,y_i).
-\end{equation}
-The hard set $H$ retains squared probability errors at or above their detached empirical
-median, including ties. Losses use patches from both views. The live global-classification
-forward updates discriminator BatchNorm once; mining and auxiliary forwards use running
-statistics.
+\begin{equation} L_{\rm cls}=L_{\rm global} +\frac{1}{|H|}\sum_{i\in
+H}(1-p_{t,i})^2\ell(a_i,y_i). \end{equation} The hard set $H$ retains squared probability
+errors at or above their detached empirical median, including ties. Losses use patches from
+both views. The live global-classification forward updates discriminator BatchNorm once;
+mining and auxiliary forwards use running statistics.
 
 \subsection{Routing consistency through the adapter}
 
 For R0, we evaluate consistency through the current discriminator with detached parameters
-and cloned buffers, denoted $D_{\bar\phi}$:
-\begin{equation}
- L_{\rm route}=\left\langle\big[D_{\bar\phi}(z_x)-D_{\bar\phi}(z_{T(x)})\big]^2\right\rangle.
- \label{eq:route}
-\end{equation}
-The derivative with respect to the discriminator input stays active. Consequently
-$\nabla_\theta L_{\rm route}$ can update the adapter, while $\nabla_\phi L_{\rm route}=0$.
-R0 trains with $L_{\rm cls}+0.1L_{\rm route}$; classification still updates both modules.
-This prevents a direct discriminator consistency update without freezing the classifier
-during ordinary training (Figure~\ref{fig:route}).
+and cloned buffers, denoted $D_{\bar\phi}$: \begin{equation} L_{\rm
+route}=\left\langle\big[D_{\bar\phi}(z_x)-D_{\bar\phi}(z_{T(x)})\big]^2\right\rangle.
+\label{eq:route} \end{equation} The derivative with respect to the discriminator input stays
+active. Consequently $\nabla_\theta L_{\rm route}$ can update the adapter, while
+$\nabla_\phi L_{\rm route}=0$. R0 trains with $L_{\rm cls}+0.1L_{\rm route}$; the
+classification term updates both modules (Figure~\ref{fig:route}).
 
 \paragraph{Single-image inference.}
 One preprocessed image passes through $E$, $A_\theta$ and $D_\phi$ in evaluation mode.
-Pairing and anomaly synthesis are used only during training.
+Pairing and anomaly synthesis are training operations.
 
 \begin{figure}[t]
 \centering
@@ -170,7 +160,7 @@ Pairing and anomaly synthesis are used only during training.
 \node[font=\small,align=center,below=3mm of disc] {updates $A_\theta,D_\phi$};
 \node[font=\small,align=center,below=3mm of aux] {updates $A_\theta$ only};
 \end{tikzpicture}
-\caption{Only the normal-pair paths are shown. The detached discriminator retains its input derivative, so consistency updates the adapter while classification updates both modules.}
+\caption{The normal-pair training paths are shown. The detached discriminator retains its input derivative, so consistency updates the adapter while classification updates both modules.}
 \label{fig:route}
 \end{figure}
 
@@ -225,7 +215,7 @@ L2 & $6.00\pm0.67$ & $25.28\pm1.27$ & $21.08\pm3.50$ & $38.86\pm3.21$ & $68.19\p
 \textbf{R0} & $6.69\pm1.87$ & $26.11\pm0.96$ & $21.43\pm2.87$ & $39.62\pm2.83$ & $68.33\pm0.81$\\
 \bottomrule
 \end{tabular}
-\caption{The later matched comparisons, in percent (mean $\pm$ sample SD across three seeds). FPR is the fraction of normal images flagged; recall is the fraction of defects detected. R0 is the fixed primary recipe, not the best arm in every column. AD 2 uses newly matched L40S B0/B1/B2 heads; the earlier A40 cohort is separate.}
+\caption{The later matched comparisons, in percent (mean $\pm$ sample SD across three seeds). FPR is the fraction of normal images flagged; recall is the fraction of defects detected. Bold identifies the fixed primary recipe R0. AD 2 uses newly matched L40S B0/B1/B2 heads; the earlier A40 cohort is separate.}
 \label{tab:transfer}
 \end{table*}
 
@@ -239,18 +229,17 @@ bottle/grid pilot uses this geometry.
 
 For MVTec AD 2 \citep{heckler2026ad2}, all eight categories remain in the primary
 comparison: 2,528 training normals, 302 validation normals and 1,084 annotated public-test
-images (379 normal, 705 defective). We use full-frame bilinear $256\times256$ resizing,
-without cropping. Sheet metal has only 19 validation normals; excluding it is a declared
-sensitivity analysis, not a replacement primary result. Non-regular light pools exposure
-changes and additional-light captures rather than one uniform unseen condition. No official
-private-server result is claimed.
+images (379 normal, 705 defective). We bilinearly resize the entire image to $256\times256$.
+Sheet metal's 19 validation normals motivate a declared sensitivity analysis alongside the
+primary eight-category comparison. Non-regular light pools exposure changes and
+additional-light captures.
 
 AeBAD-S \citep{zhang2023aebad} supplies one blade family with illumination, same-condition,
 background and view domains. We train on 128 normal images, calibrate on 64, and reserve
 another 64 for procedural-anomaly checks. All 1,639 native test images are scored after
 $256\times256$ full-frame resizing: 273 illumination, 689 same-condition, 305 background and
-372 view images. Exact-RGB overlap checks passed, but physical-specimen independence is not
-established.
+372 view images. Exact-RGB source/test separation passed the overlap check; specimen-level
+independence remains uncertain.
 
 \paragraph{Training.}
 We fit separate heads per category, using seeds 0, 1 and 2 and the fixed final checkpoint.
@@ -266,13 +255,13 @@ retains the upstream optimizers and its 40 meta-epochs of four discriminator pas
 \paragraph{Selection and scope.}
 The initial AD 2 search tested B2 weights 0.01, 0.1 and 1.0 on normal validation at seed 3
 for 256 updates. Eligibility required score spread at least 0.5 times B1 and synthetic hinge
-loss at most 1.25 times B1. No weight qualified. We continued the pilot's weight 1.0 as a
-recorded deviation and reported every weight; a later full-run rule was partly retrospective
-and also selected none. We developed routing after inspecting these public results. R0 also
-failed the subsequent procedural-anomaly development checks. Our own records place its fixed
-recipe before transfer testing, but are not independent preregistration. The later transfers
-remain exploratory; no replacement winner is selected from them, and all twelve blade arms
-are released.
+loss at most 1.25 times B1. Each tested weight breached at least one limit. We continued the
+pilot's weight 1.0 as a recorded deviation and reported all three weights. A later, partly
+retrospective full-run rule also returned zero eligible weights. We developed routing after
+inspecting these public results. R0's procedural-anomaly screen and confirmation both fell
+outside their acceptance criteria. Our own records place its fixed recipe before transfer
+testing. The later transfers are exploratory, with R0 retained as the primary recipe and
+all twelve blade arms released.
 
 \paragraph{Calibration and metrics.}
 For each model/category/seed, we set $\tau=Q_{0.95}^{\rm higher}(s_{\rm val})$ using
@@ -281,17 +270,17 @@ score $s$ is the maximum negative discriminator patch output. Thresholds are ret
 conditions. We measure false-positive rate (FPR), defect recall and image AUROC, which
 measures normal/defect ranking across thresholds. AD 2 values are category-macro means
 within seed, then means and sample standard deviations across seeds; blade means average the
-three seeds within each domain. They are not ensemble predictions.
+three seeds within each domain. Each trained head is scored separately before averaging.
 
 The operating constraints require a changed-light FPR drop of at least five percentage
 points, recall loss no greater than five points, regular-light FPR rise no greater than two
-points and regular recall loss no greater than five points. These are practical gates, not
-significance tests. Native localisation reports pixel AUROC and area under the mean
-per-region overlap curve (AU-PRO). Eight-connected defect regions receive equal weight; we
-integrate over pixel FPR $[0,0.05]$, normalise by 0.05 and use no target-fitted
-postprocessing. Paired 95\% intervals resample the recorded exact-RGB clusters conditional
-on the three trained seeds; they do not establish behaviour for new seeds or physical
-specimens.
+points and regular recall loss no greater than five points. These thresholds define
+practical operating constraints. Native localisation reports pixel AUROC and area under the
+mean per-region overlap curve (AU-PRO). Eight-connected defect regions receive equal weight;
+we integrate over pixel FPR $[0,0.05]$ and normalise by 0.05. Map processing remains fixed
+for target evaluation. Paired 95\% intervals resample the recorded exact-RGB image clusters
+while holding the three trained seeds fixed. Their uncertainty describes this cohort and
+seed set.
 
 The code, frozen execution sources and full category/seed results are available in our
 repository.\footnote{\url{https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet}}
@@ -326,39 +315,36 @@ Seed & B0 & R0 & B0 & R0\\
 2 & 30 & 14 & 54 & 94\\
 \bottomrule
 \end{tabular}
-\caption{Blade illumination counts. Each seed evaluates the same 75 normal and 198 defective images. Seed 1 loses 17 detections despite the higher three-seed mean; these are repeated model evaluations, not independent new images.}
+\caption{Blade illumination counts. The three seeds score the same 75 normal and 198 defective images with separately trained B0/R0 heads. R0 finds 17 fewer defects in seed 1.}
 \label{tab:counts}
 \end{table}
 
 The illumination recall difference is $+5.89$ points, with paired 95\% interval
-$[-2.69,+14.14]$. Its lower endpoint stays above the allowed five-point loss, supporting
-recall preservation under this resampling scheme; the interval does not establish a strictly
-positive recall gain. Seed 1 nevertheless loses 8.59 illumination-recall points, seed 2
-raises same-condition FPR by 3.91 points, and background recall drops from 67.61\% to
-39.62\%.
+$[-2.69,+14.14]$. The interval lies above the $-5$-point margin and spans zero, permitting
+both a recall loss and a gain. Seed 1 loses 8.59 illumination-recall points, seed 2 raises
+same-condition FPR by 3.91 points, and background recall drops from 67.61\% to 39.62\%.
 
-L0 already reaches 61.62\% illumination recall, higher than R0. Against L1, adding routed
+L0 reaches 61.62\% illumination recall, higher than R0. Against L1, adding routed
 consistency changes illumination FPR by $-1.33$ points (95\% interval $[-4.00,+1.33]$) and
-recall by $+0.17$ ($[-1.68,+2.19]$). Against ordinary consistency L2, R0 reduces false
-alarms but also loses recall. Most of the B0-to-R0 gain comes with the changed
-synthesis/classification recipe. B0's illumination AUROC is only 42.15\%, making stronger
-references essential: L0, L1 and R0 reach 71.27\%, 70.54\% and 70.77\%, respectively.
+recall by $+0.17$ ($[-1.68,+2.19]$). Against L2, R0's illumination FPR is 3.56 points lower
+and recall 2.53 points lower. Most of the B0-to-R0 gain comes with the changed
+synthesis/classification recipe. The illumination AUROC comparison places R0 (70.77\%)
+alongside L0 (71.27\%) and L1 (70.54\%); B0 scores 42.15\%.
 
 \subsection{Paired relighting improves localisation}
 
 In the original paired AD 2 study, B1 raises native AU-PRO from $11.94\pm0.68$ to
 $13.02\pm0.67$ percent (Table~\ref{tab:paired}). Its B1-minus-B0 changes are $+0.98$,
 $+1.21$ and $+1.04$ points in the three seeds. Pixel AUROC also rises from 78.70\% to
-79.80\%. These are measured localisation gains; the few seeds do not justify a broad
-significance claim.
+79.80\%.
 
 The image-level trade-off remains. B1 reduces non-regular FPR by 6.0 points but loses 7.5
-recall points using unrounded rates. No B2 weight repairs the deficit against B0. A
-region-overlap metric integrates coverage over pixel thresholds; image recall uses one
-validation-fixed image threshold. Better spatial coverage can therefore coexist with more
-missed defective images. Native maps were evaluated on the RTX 3060 contingency, while the
-original image evaluation used A40; image flags agreed in the separate cross-device audit.
-These are not native localisation results for R0.
+recall points using unrounded rates. B2 recall ranges from 57.4\% to 61.6\%, compared with
+B0's 68.2\%. A region-overlap metric integrates coverage over pixel thresholds; image recall
+uses one validation-fixed image threshold. Better spatial coverage can therefore coexist
+with more missed defective images. Native maps were evaluated on the RTX 3060 contingency,
+while the original image evaluation used A40; image flags agreed in the separate
+cross-device audit. The localisation findings apply to the original five-arm cohort.
 
 \begin{table}[t]
 \centering\small
@@ -377,35 +363,34 @@ B2, $\lambda=1$ & $38.3\pm5.5$ & $57.4\pm7.8$ & $13.47\pm0.52$\\
 \label{tab:paired}
 \end{table}
 
-\subsection{Where the recipe fails: eight-category AD 2}
+\subsection{AD 2: fewer false alarms, lower recall}
 
 The later AD 2 transfer reduces changed-light FPR from 46.66\% to 21.43\%, but recall falls
 from 66.92\% to 39.62\%. The $-27.30$-point recall difference has paired 95\% interval
 $[-31.14,-23.56]$, far outside the five-point allowance. Regular-light FPR also rises by
-2.66 points, exceeding its two-point limit. The original recall-preservation objective is
-not met, including when sheet metal is excluded.
+2.66 points, exceeding its two-point limit. The sensitivity analysis excluding sheet metal
+also exceeds the five-point recall allowance.
 
-L0 already loses most of this recall without consistency: 37.62\% versus B0's 66.92\%. R0 is
-close to L1, so these data do not identify consistency gradients as the cause. Meanwhile
-changed-light image AUROC rises from 63.21\% for B0 to 68.33\% for R0. The fixed operating
-point fails despite better category-macro ranking; a different test threshold would conceal
-that failure rather than satisfy the protocol.
+L0 uses identity pairs and reaches 37.62\% recall against B0's 66.92\%; L1 and R0 are close
+at 38.56\% and 39.62\%. The main recall change accompanies the switch to local/global
+supervision. Meanwhile changed-light image AUROC rises from 63.21\% for B0 to 68.33\% for
+R0. The category-macro ranking improves, while recall at the source-normal operating point
+falls. We retain the validation-fixed thresholds for this comparison.
 
 Both the original A40 B0 and the new matched L40S B0 are retained in the evidence. The
-original B1 FPR improvement is 6.0 points; the new matched rerun gives only 1.21 points,
-with a 5.24-point recall loss. The cause of the baseline gap was not isolated. We therefore
-keep the two cohorts separate and do not present the earlier false-alarm reduction as stable
-across reruns.
+original B1 FPR improvement is 6.0 points; the new matched rerun gives 1.21 points,
+with a 5.24-point recall loss. The observed rerun variation motivates separate reporting of
+the two cohorts. Its cause remains unresolved.
 
 \subsection{Baseline reproduction}
 
 The single-view reproduction covers all 15 MVTec AD categories
 (Table~\ref{tab:reproduction}). Our fixed-final image/pixel AUROCs are
-$97.14\pm1.65$/$95.83\pm1.85$ percent. Our protocol differs from the paper: a normal holdout
-removes 20\% of training images, and we retain the final checkpoint rather than selecting on
-test AUROC. Grid is unstable: its three final image AUROCs are 69.92, 48.12 and 98.16. The
-test-selection diagnostic largely recovers the reference average, but is not used to select
-our reported models. The primary mean retains every category and final run.
+$97.14\pm1.65$/$95.83\pm1.85$ percent. Our protocol uses an 80/20 normal train/validation
+split and retains the final checkpoint; the upstream implementation uses all normal training
+images and selects on test image AUROC. Grid's three final image AUROCs are 69.92, 48.12 and
+98.16. The test-selection diagnostic approaches the reference average; the primary mean
+retains every category's fixed-final checkpoint.
 
 \begin{table}[t]
 \centering\small
@@ -418,41 +403,40 @@ Ours, fixed final & $97.14\pm1.65$ & $95.83\pm1.85$\\
 Test-selection diagnostic & 99.39 & 97.65\\
 \bottomrule
 \end{tabular}
-\caption{MVTec AD reproduction, in percent. Fixed-final uncertainty is sample SD across three seed macros. The test-selected diagnostic is context, not the reported checkpoint rule; both reproduction rows use the normal holdout.}
+\caption{MVTec AD reproduction, in percent. Fixed-final uncertainty is sample SD across three seed macros. The diagnostic applies the upstream test-epoch selection rule; the primary result retains final checkpoints. Both reproduction rows use the normal holdout.}
 \label{tab:reproduction}
 \end{table}
 
 \section{Analysis}
 
-\paragraph{Stable scores are not sufficient.}
+\paragraph{Score units and operating-point decisions.}
 Relighting reduced normal-pair MSE in all eight original AD 2 categories by 5.7--133 times,
-yet its image recall fell. There is also a simple reason not to treat lower raw-score MSE as
-detection evidence. Under a common positive affine transformation $s'=as+b$, $a>0$,
+alongside lower changed-light image recall. Raw-score MSE also depends on the choice of
+score units. Under a common positive affine transformation $s'=as+b$, $a>0$,
 \begin{equation}
  Q_{0.95}^{\rm higher}(s'_{\rm val})=a\tau+b,
  \quad s'>a\tau+b\ \Longleftrightarrow\ s>\tau.
 \end{equation}
-Every flag stays unchanged, while pair MSE is multiplied by $a^2$. Pure score compression
-can improve the consistency metric without improving a single decision. It also cannot, by
-itself, explain the observed FPR/recall changes after normal-only recalibration. Those
-require changes in how validation and target score distributions relate. Our data show the
-trade-off, but do not isolate its cause.
+Flags are preserved, while pair MSE is multiplied by $a^2$. Score compression can therefore
+lower MSE while preserving every decision. The measured FPR/recall differences reflect
+changes in the relation between validation and target scores beyond a common change of
+units.
 
 \paragraph{Routing protects one gradient path.}
-Detaching the discriminator removes its direct consistency gradient. It does not prevent the
-adapter from moving features in a direction that harms classification. This is why the
-L1/L2/R0 comparisons matter more for attributing routing than the much larger B0/R0
-difference. The useful blade mean is a gain of the combined recipe; the evidence does not
-establish routing as a generally better objective.
+Detaching the discriminator sends consistency updates through the adapter. The adapter's
+classification and consistency updates can act in different directions. The L1/L2/R0 controls
+isolate the consistency term and its gradient route within the same synthesis recipe. For
+blade illumination, the R0-minus-L1 FPR and recall intervals span zero; the gain against B0
+includes the synthesis and classification changes.
 
 \section{Conclusion}
 
-On AeBAD-S, the combined recipe gives fewer illumination false alarms and higher mean defect
-recall, with both measures also improved in the same-condition domain. Relighting alone
-gives a small localisation gain in the original AD 2 study. The controls leave the
-additional benefit of adapter-only consistency unresolved, and the combined recipe still
-fails the eight-category recall target. Inspection must be assessed by false alarms and
-defects at the chosen threshold; smoother scores alone do not establish better detection.
+On AeBAD-S, the combined recipe lowers illumination false alarms and raises mean defect
+recall against B0, with gains on both measures in the same-condition domain. Relighting
+alone also improves native localisation in the original AD 2 study. The blade illumination
+comparisons with L1 leave the added routing effect uncertain. On eight-category AD 2, the
+recall loss exceeds the five-point allowance. Evaluating false alarms and defect recall
+together at the chosen threshold makes these trade-offs explicit.
 
 \bibliography{references}
 \end{document}
