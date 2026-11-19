@@ -1,0 +1,15 @@
+Combined report review, 19 November 2026
+
+Based on Umesh PR #45, commit 39916ea2a04b811f0a535c0ba8706746a41dd8ec.
+
+Changes: consolidate repeated method/discussion text; add gradient-routing diagram and colour FPR/recall comparison; retain all authors; add dataset citations; distinguish exploratory development from untouched confirmation; update seven-method sheet-metal launcher verification. The AAAI style and references are embedded for single-file compilation.
+
+Validation: source compiled successfully with the desktop editor compiler; local PDF has five total pages including references; all pages visually inspected. Published aggregate verifier passed (384 AD2 rows, 144 blade rows). This does not rerun model inference.
+
+Before submission:
+- Define blade R1/R2 configurations used in the table.
+- Confirm final result release and training settings with Shrijeet.
+- Make AD2 training budgets, optimizer settings and consistency weights explicit; link full category/seed evidence.
+- Check final shared Overleaf build, code access, video duration and sole report submitter.
+
+This is a review draft, not a claim that all submission checks are complete. No training code, thresholds or result artifacts changed.

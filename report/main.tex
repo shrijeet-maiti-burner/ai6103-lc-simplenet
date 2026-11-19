@@ -1,5 +1,311 @@
+\begin{filecontents*}{aaai24embedded.sty}
+\NeedsTeXFormat{LaTeX2e}%
+\ProvidesPackage{aaai24}[2023/06/26 AAAI 2024 Submission format]%
+\def\year{2024}%
+\typeout{Conference Style for AAAI for LaTeX 2e -- version for submission}%
+%
+\def\copyright@on{T}
+\def\showauthors@on{T}
+\def\nocopyright{\gdef\copyright@on{}} % Copyright notice is required for camera-ready only.
+\DeclareOption{submission}{%
+  \gdef\copyright@on{}%
+  \gdef\showauthors@on{}%
+  \long\gdef\pdfinfo #1{\relax}%
+}%
+\ProcessOptions\relax%
+% WARNING: IF YOU ARE USING THIS STYLE SHEET FOR AN AAAI PUBLICATION, YOU
+% MAY NOT MODIFY IT FOR ANY REASON. MODIFICATIONS (IN YOUR SOURCE
+% OR IN THIS STYLE SHEET WILL RESULT IN REJECTION OF YOUR PAPER).
+%
+% WARNING: This style is NOT guaranteed to work. It is provided in the
+% hope that it might make the preparation of papers easier, but this style
+% file is provided "as is" without warranty of any kind, either express or
+% implied, including but not limited to the implied warranties of
+% merchantability, fitness for a particular purpose, or noninfringement.
+% You use this style file at your own risk. Standard disclaimers apply.
+% There are undoubtably bugs in this style. If you would like to submit
+% bug fixes, improvements, etc. please let us know. Please use the contact form
+% at www.aaai.org.
+%
+% Do not use this file unless you are an experienced LaTeX user.
+%
+% PHYSICAL PAGE LAYOUT
+\setlength\topmargin{-0.25in} \setlength\oddsidemargin{-0.25in}
+\setlength\textheight{9.0in} \setlength\textwidth{7.0in}
+\setlength\columnsep{0.375in} \newlength\titlebox \setlength\titlebox{2.25in}
+\setlength\headheight{0pt}  \setlength\headsep{0pt}
+%\setlength\footheight{0pt}  \setlength\footskip{0pt}
+\thispagestyle{empty} \pagestyle{empty}
+\flushbottom \twocolumn \sloppy
+% We're never going to need a table of contents, so just flush it to
+% save space --- suggested by drstrip@sandia-2
+\def\addcontentsline#1#2#3{}
+% gf: PRINT COPYRIGHT NOTICE
+\def\copyright@year{\number\year}
+\def\copyright@text{Copyright \copyright\space \copyright@year,
+Association for the Advancement of Artificial Intelligence (www.aaai.org).
+All rights reserved.}
+\def\copyrighttext#1{\gdef\copyright@on{T}\gdef\copyright@text{#1}}
+\def\copyrightyear#1{\gdef\copyright@on{T}\gdef\copyright@year{#1}}
+% gf: End changes for copyright notice (used in \maketitle, below)
+% Title stuff, taken from deproc.
+%
+\def\maketitle{%
+  \par%
+  \begingroup % to make the footnote style local to the title
+    \def\thefootnote{\fnsymbol{footnote}}
+    \twocolumn[\@maketitle] \@thanks%
+  \endgroup%
+  % Insert copyright slug unless turned off
+  \if T\copyright@on\insert\footins{\noindent\footnotesize\copyright@text}\fi%
+  %
+  \setcounter{footnote}{0}%
+  \let\maketitle\relax%
+  \let\@maketitle\relax%
+  \gdef\@thanks{}%
+  \gdef\@author{}%
+  \gdef\@title{}%
+  \let\thanks\relax%
+}%
+\long\gdef\affiliations #1{ \def \affiliations_{\if T\showauthors@on#1\fi}}%
+%
+\def\@maketitle{%
+  \def\theauthors{\if T\showauthors@on\@author\else Anonymous submission\fi}
+  \newcounter{eqfn}\setcounter{eqfn}{0}%
+  \newsavebox{\titlearea}
+  \sbox{\titlearea}{
+    \let\footnote\relax\let\thanks\relax%
+    \setcounter{footnote}{0}%
+    \def\equalcontrib{%
+      \ifnum\value{eqfn}=0%
+        \footnote{These authors contributed equally.}%
+        \setcounter{eqfn}{\value{footnote}}%
+      \else%
+        \footnotemark[\value{eqfn}]%
+      \fi%
+    }%
+    \vbox{%
+      \hsize\textwidth%
+      \linewidth\hsize%
+      \vskip 0.625in minus 0.125in%
+      \centering%
+      {\LARGE\bf \@title \par}%
+      \vskip 0.1in plus 0.5fil minus 0.05in%
+      {\Large{\textbf{\theauthors\ifhmode\\\fi}}}%
+      \vskip .2em plus 0.25fil%
+      {\normalsize \affiliations_\ifhmode\\\fi}%
+      \vskip .5em plus 2fil%
+    }%
+  }%
+%
+  \newlength\actualheight%
+  \settoheight{\actualheight}{\usebox{\titlearea}}%
+  \ifdim\actualheight>\titlebox%
+    \setlength{\titlebox}{\actualheight}%
+  \fi%
+%
+  \vbox to \titlebox {%
+    \let\footnote\thanks\relax%
+    \setcounter{footnote}{0}%
+    \def\equalcontrib{%
+      \ifnum\value{eqfn}=0%
+        \footnote{These authors contributed equally.}%
+        \setcounter{eqfn}{\value{footnote}}%
+      \else%
+        \footnotemark[\value{eqfn}]%
+      \fi%
+    }%
+    \hsize\textwidth%
+    \linewidth\hsize%
+    \vskip 0.625in minus 0.125in%
+    \centering%
+    {\LARGE\bf \@title \par}%
+    \vskip 0.1in plus 0.5fil minus 0.05in%
+    {\Large{\textbf{\theauthors\ifhmode\\\fi}}}%
+    \vskip .2em plus 0.25fil%
+    {\normalsize \affiliations_\ifhmode\\\fi}%
+    \vskip .5em plus 2fil%
+  }%
+}%
+%
+\renewenvironment{abstract}{%
+  \centerline{\bf Abstract}%
+  \vspace{0.5ex}%
+  \setlength{\leftmargini}{10pt}%
+  \begin{quote}%
+    \small%
+}{%
+  \par%
+  \end{quote}%
+  \vskip 1ex%
+}%
+% jsp added:
+\def\pubnote#1{
+  \thispagestyle{myheadings}%
+  \pagestyle{myheadings}%
+  \markboth{#1}{#1}%
+  \setlength\headheight{10pt}%
+  \setlength\headsep{10pt}%
+}%
+%
+% SECTIONS with less space
+\def\section{\@startsection {section}{1}{\z@}{-2.0ex plus
+-0.5ex minus -.2ex}{3pt plus 2pt minus 1pt}{\Large\bf\centering}}
+\def\subsection{\@startsection{subsection}{2}{\z@}{-2.0ex plus
+-0.5ex minus -.2ex}{3pt plus 2pt minus 1pt}{\large\bf\raggedright}}
+\def\subsubsection{\@startsection{subparagraph}{3}{\z@}{-6pt plus
+%%% DIEGO changed: 29/11/2009
+%% 2pt minus 1pt}{-1em}{\normalsize\bf}}
+-2pt minus -1pt}{-1em}{\normalsize\bf}}
+%%% END changed
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}{-6pt plus -2pt minus -1pt}{-1em}{\normalsize\bf}}%
+\setcounter{secnumdepth}{0}
+% add period to section (but not subsection) numbers, reduce space after
+%\renewcommand{\thesection}
+%   {\arabic{section}.\hskip-0.6em}
+%\renewcommand{\thesubsection}
+%   {\arabic{section}.\arabic{subsection}\hskip-0.6em}
+% FOOTNOTES
+\footnotesep 6.65pt %
+\skip\footins 9pt plus 4pt minus 2pt
+\def\footnoterule{\kern-3pt \hrule width 5pc \kern 2.6pt }
+\setcounter{footnote}{0}
+% LISTS AND PARAGRAPHS
+\parindent 10pt
+\topsep 4pt plus 1pt minus 2pt
+\partopsep 1pt plus 0.5pt minus 0.5pt
+\itemsep 0.5pt plus 1pt minus 0.5pt
+\parsep 2pt plus 1pt minus 0.5pt
+\leftmargin 10pt \leftmargini 13pt \leftmarginii 10pt \leftmarginiii 5pt \leftmarginiv 5pt \leftmarginv 5pt \leftmarginvi 5pt
+\labelwidth\leftmargini\advance\labelwidth-\labelsep \labelsep 5pt
+\def\@listi{\leftmargin\leftmargini}
+\def\@listii{\leftmargin\leftmarginii
+\labelwidth\leftmarginii\advance\labelwidth-\labelsep
+\topsep 2pt plus 1pt minus 0.5pt
+\parsep 1pt plus 0.5pt minus 0.5pt
+\itemsep \parsep}
+\def\@listiii{\leftmargin\leftmarginiii
+\labelwidth\leftmarginiii\advance\labelwidth-\labelsep
+\topsep 1pt plus 0.5pt minus 0.5pt
+\parsep \z@
+\partopsep 0.5pt plus 0pt minus 0.5pt
+\itemsep \topsep}
+\def\@listiv{\leftmargin\leftmarginiv
+\labelwidth\leftmarginiv\advance\labelwidth-\labelsep}
+\def\@listv{\leftmargin\leftmarginv
+\labelwidth\leftmarginv\advance\labelwidth-\labelsep}
+\def\@listvi{\leftmargin\leftmarginvi
+\labelwidth\leftmarginvi\advance\labelwidth-\labelsep}
+\abovedisplayskip 7pt plus2pt minus5pt%
+\belowdisplayskip \abovedisplayskip
+\abovedisplayshortskip 0pt plus3pt%
+\belowdisplayshortskip 4pt plus3pt minus3pt%
+% Less leading in most fonts (due to the narrow columns)
+% The choices were between 1-pt and 1.5-pt leading
+\def\normalsize{\@setfontsize\normalsize\@xpt{11}}   % 10 point on 11
+\def\small{\@setfontsize\small\@ixpt{10}}    % 9 point on 10
+\def\footnotesize{\@setfontsize\footnotesize\@ixpt{10}}  % 9 point on 10
+\def\scriptsize{\@setfontsize\scriptsize\@viipt{10}}  % 7 point on 8
+\def\tiny{\@setfontsize\tiny\@vipt{7}}    % 6 point on 7
+\def\large{\@setfontsize\large\@xipt{12}}    % 11 point on 12
+\def\Large{\@setfontsize\Large\@xiipt{14}}    % 12 point on 14
+\def\LARGE{\@setfontsize\LARGE\@xivpt{16}}    % 14 point on 16
+\def\huge{\@setfontsize\huge\@xviipt{20}}    % 17 point on 20
+\def\Huge{\@setfontsize\Huge\@xxpt{23}}    % 20 point on 23
+
+\AtBeginDocument{%
+  \@ifpackageloaded{natbib}%
+    {%
+      % When natbib is in use, set the proper style and fix a few things
+      \let\cite\citep
+      \let\shortcite\citeyearpar
+      \setcitestyle{aysep={}}
+      \setlength\bibhang{0pt}
+      \bibliographystyle{aaai24}
+    }{}%
+  \@ifpackageloaded{hyperref}%
+    {%
+      \PackageError{aaai}{You must not use hyperref in AAAI papers.}{You (or one of the packages you imported) are importing the hyperref package, which is forbidden in AAAI papers. You must remove it from the paper to proceed.}
+    }{}%
+  \@ifpackageloaded{bbm}%
+    {%
+      \PackageError{aaai}{You must not use bbm package in AAAI papers because it introduces Type 3 fonts which are forbidden.}{See https://tex.stackexchange.com/questions/479160/a-replacement-to-mathbbm1-with-type-1-fonts for possible alternatives.}
+    }{}%
+    \@ifpackageloaded{authblk}%
+    {%
+      \PackageError{aaai}{Package authblk is forbbidden.}{Package authblk is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{balance}%
+    {%
+      \PackageError{aaai}{Package balance is forbbidden.}{Package balance is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{CJK}%
+    {%
+      \PackageError{aaai}{Package CJK is forbbidden.}{Package CJK is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{flushend}%
+    {%
+      \PackageError{aaai}{Package flushend is forbbidden.}{Package flushend is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{fontenc}%
+    {%
+      \PackageError{aaai}{Package fontenc is forbbidden.}{Package fontenc is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{fullpage}%
+    {%
+      \PackageError{aaai}{Package fullpage is forbbidden.}{Package fullpage is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{geometry}%
+    {%
+      \PackageError{aaai}{Package geometry is forbbidden.}{Package geometry is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{grffile}%
+    {%
+      \PackageError{aaai}{Package grffile is forbbidden.}{Package grffile is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{navigator}%
+    {%
+      \PackageError{aaai}{Package navigator is forbbidden.}{Package navigator is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{savetrees}%
+    {%
+      \PackageError{aaai}{Package savetrees is forbbidden.}{Package savetrees is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{setspace}%
+    {%
+      \PackageError{aaai}{Package setspace is forbbidden.}{Package setspace is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{stfloats}%
+    {%
+      \PackageError{aaai}{Package stfloats is forbbidden.}{Package stfloats is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{tabu}%
+    {%
+      \PackageError{aaai}{Package tabu is forbbidden.}{Package tabu is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{titlesec}%
+    {%
+      \PackageError{aaai}{Package titlesec is forbbidden.}{Package titlesec is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{tocbibind}%
+    {%
+      \PackageError{aaai}{Package tocbibind is forbbidden.}{Package tocbibind is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{ulem}%
+    {%
+      \PackageError{aaai}{Package ulem is forbbidden.}{Package ulem is forbbiden. You must find an alternative.}
+    }{}%
+  \@ifpackageloaded{wrapfig}%
+    {%
+      \PackageError{aaai}{Package wrapfig is forbbidden.}{Package wrapfig is forbbiden. You must find an alternative.}
+    }{}%
+}
+
+\let\endthebibliography=\endlist
+\end{filecontents*}
 \documentclass[letterpaper]{article}
-\usepackage{aaai24}
+\usepackage{aaai24embedded}
+\ifdefined\XeTeXversion\def\encodingdefault{OT1}\fi
 \usepackage{times}
 \usepackage{helvet}
 \usepackage{courier}
@@ -7,13 +313,15 @@
 \usepackage{graphicx}
 \usepackage{natbib}
 \usepackage{caption}
-\usepackage{amsmath,amssymb,booktabs}
+\usepackage{amsmath,amssymb,booktabs,tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\definecolor{falsealarm}{RGB}{0,114,178}
+\definecolor{defectrecall}{RGB}{213,94,0}
+\nocopyright
 \frenchspacing
 \urlstyle{rm}
 \def\UrlFont{\rm}
-\pdfinfo{
-/TemplateVersion (2024.1)
-}
+\ifdefined\pdfinfo\pdfinfo{/TemplateVersion (2024.1)}\fi
 \title{Evaluating Paired Relighting and Consistency for Industrial Anomaly Detection}
 \author{}
 \affiliations{
@@ -89,14 +397,14 @@ used to select the reported fixed-final checkpoint.
 
 \subsection{Datasets and preprocessing}
 
-MVTec AD is used for a 15-category fixed-final reproduction and
+MVTec AD \citep{bergmann2019mvtec} is used for a 15-category fixed-final reproduction and
 a provisional paired study on bottle and grid. Images are resized
 to 329 pixels and centre-cropped to 288 pixels. The baseline
 configuration uses batch size 8, 40 meta-epochs and four
 discriminator epochs per meta-epoch. The paired bottle/grid study
 uses 80 source passes.
 
-The principal public lighting evaluation uses eight MVTec AD 2
+The principal public lighting evaluation uses eight MVTec AD 2 \citep{heckler2025ad2}
 categories: can, fabric, fruit jelly, rice, sheet metal, vial,
 wallplugs and walnuts. The paired inputs are resized to
 $256\times256$ by full-frame bilinear interpolation without a
@@ -126,15 +434,14 @@ The two views retain the same spatial coordinates. B0 samples
 the transform but uses the original image for both views. B1
 uses the relit second view without a consistency term. B2 adds
 mean-squared consistency between corresponding normal-patch
-scores:
+scores. Here $z_v=A_\theta(E(v))$ is the adapted feature of view $v$ and $u$ indexes patches:
 \begin{equation}
 L_{\mathrm{pair}} =
 \operatorname{mean}_{u}
 \left(D_\phi(z_{x,u})-D_\phi(z_{T(x),u})\right)^2.
 \end{equation}
 The paired trainer differentiates this term through both views
-and through the discriminator. Its objective is the two hinge
-terms plus $\lambda_{\mathrm{score}}L_{\mathrm{pair}}$.
+and through the discriminator. Its discrimination loss averages the normal and synthetic hinge terms across the two views, then adds $\lambda_{\mathrm{score}}L_{\mathrm{pair}}$.
 
 For the original AD 2 study, B2 was evaluated at
 $\lambda\in\{0.01,0.1,1.0\}$. The normal-validation selection
@@ -144,7 +451,7 @@ deviation rather than a selected setting.
 
 \subsection{Local/global objectives and routed consistency}
 
-The later extension uses local texture-based image changes,
+The later extension adapts local and global synthesis from GLASS \citep{chen2024glass}. It uses local texture-based image changes,
 global feature perturbations and focal supervision on synthetic
 patch labels. The local/global loss functions are available in
 the repository, but the standard paired training command does
@@ -160,11 +467,9 @@ increases the discriminator's normality score; it should not
 be described as a verified defect-directed ascent.
 
 Local supervision uses anomaly logits $-D_\phi(z)$ and focal
-loss with $\gamma=2$, retaining the harder half of patches
+loss with $\gamma=2$, retaining patches at or above the median
 according to detached squared probability error, including
-ties at the median. The loss functions consume synthetic inputs
-and masks; they do not themselves create the local texture
-images or masks.
+ties at the median. The execution trainer creates the local images using DTD texture donors \citep{cimpoi2014dtd} and supplies visible-change masks to the loss functions. These masks label synthetic edits, not real defects.
 
 In R0, the normal-patch consistency term is evaluated through
 a discriminator with detached parameters and cloned buffers.
@@ -175,7 +480,23 @@ and discriminator. R0 uses no defect-lift term. L0 is the
 local/global synthesis condition without consistency, while
 L1 adds relighting without consistency. L2 uses ordinary
 consistency gradients; R0 routes the consistency gradient
-through the adapter.
+through the adapter. R0 versus L2 isolates the gradient route under matched synthesis; R0 versus L1 tests adding routed consistency. A comparison with B0 changes synthesis and the discrimination loss as well as consistency.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[box/.style={draw,align=center,font=\small,text width=29mm,minimum height=8mm},arr/.style={-{Latex[length=1.5mm]}}]
+\node[box] (data) {normal image and\\aligned relit image};
+\node[box,below=4mm of data] (feat) {frozen features $E$\\trainable adapter $A_\theta$};
+\node[box,below left=6mm and -12mm of feat] (disc) {live $D_\phi$\\classification losses};
+\node[box,below right=6mm and -12mm of feat] (aux) {detached $D_{\bar\phi}$\\consistency loss};
+\draw[arr] (data)--(feat);
+\draw[arr] (feat)--(disc);\draw[arr] (feat)--(aux);
+\node[font=\small,align=center,below=3mm of disc] {updates $A_\theta,D_\phi$};
+\node[font=\small,align=center,below=3mm of aux] {updates $A_\theta$ only};
+\end{tikzpicture}
+\caption{R0 changes the gradient route of the auxiliary consistency term. Both branches use the current discriminator values. Local and global synthetic inputs also feed the classification losses; they are omitted here to emphasize routing.}
+\label{fig:route}
+\end{figure}
 
 \subsection{Scoring and calibration}
 
@@ -186,7 +507,7 @@ normal validation scores. It is the higher empirical 95th
 percentile, and a test image is flagged only when its score is
 strictly greater than the threshold. The same threshold is
 kept across lighting conditions. Checkpoint selection and
-threshold calibration do not use test labels.
+threshold calibration do not use test labels. The routed extension was developed after earlier public outcomes had been inspected, so the later comparison is exploratory rather than an untouched confirmation test.
 
 
 \subsection{Evaluation measures and decision criteria}
@@ -219,41 +540,41 @@ limit for the relevant comparisons. These checks are reported as gates,
 not as statistical significance tests. Passing an aggregate mean does
 not guarantee that every category or seed passes.
 
-\subsection{Training and implementation considerations}
-
-The baseline separates feature extraction from the trainable anomaly
-head. The pretrained Wide-ResNet-50-2 feature extractor remains frozen,
-while the linear adapter maps concatenated layer-2 and layer-3 patch
-features into the representation used by the discriminator. This
-design limits the number of trainable parameters and makes the
-adapter a natural point at which to test restricted gradient routing.
-The discriminator is trained to distinguish normal adapted features
-from synthetic perturbed features. During inference, the negative
-discriminator response is interpreted as anomaly evidence.
-
-For paired training, the two images in a pair share spatial coordinates.
-The brightness--gamma operation changes pixel intensity but does not
-introduce geometric displacement. Consequently, corresponding patch
-indices can be compared directly. B0 is an identity-pair control, B1
-introduces the relit second view, and B2 additionally penalises
-differences between corresponding normal-patch scores. The distinction
-between B1 and B2 is important: a performance difference between B0
-and B2 cannot by itself be attributed to consistency, because the
-relighting exposure also changes. Comparisons against B1 are more
-direct evidence about the additional consistency term.
-
-The later local/global variants alter the synthetic training signal.
-Local texture synthesis is intended to create spatially local
-appearance changes, whereas global feature ascent perturbs the
-feature representation directly. These mechanisms are distinct from
-input-space brightness--gamma relighting. The repository contains
-implementations and tests for these objectives, but the audit found
-that the standard main training commands do not invoke all of them.
-The routed experimental results instead rely on copies contained in
-the committed execution-source archives. This provenance distinction
-is retained throughout the results discussion.
-
 \section{Experimental Results}
+
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[font=\small]
+\begin{scope}[x=0.073cm,y=0.8cm]
+\node[anchor=west,font=\bfseries] at (0,4.1) {AD 2: changed lighting};
+\foreach \x in {0,20,40,60,80}{
+\draw[black!15] (\x,-0.35)--(\x,3.45);
+\node[below] at (\x,-0.35) {\x};}
+\foreach \name/\y/\f/\r in {B0/3/46.66/66.92,L0/2/20.02/37.62,L1/1/21.53/38.56,R0/0/21.43/39.62}{
+\node[left] at (0,\y) {\name};
+\fill[falsealarm] (0,\y+0.04) rectangle (\f,\y+0.27);
+\draw[defectrecall,thick] (0,\y-0.27) rectangle (\r,\y-0.04);
+\node[right,font=\scriptsize] at (\f,\y+0.155) {\f};
+\node[right,font=\scriptsize] at (\r,\y-0.155) {\r};}
+\end{scope}
+\begin{scope}[xshift=8.4cm,x=0.073cm,y=0.8cm]
+\node[anchor=west,font=\bfseries] at (0,4.1) {Blade: illumination};
+\foreach \x in {0,20,40,60,80}{
+\draw[black!15] (\x,-0.35)--(\x,3.45);
+\node[below] at (\x,-0.35) {\x};}
+\foreach \name/\y/\f/\r in {B0/3/55.56/46.46,L0/2/28.89/61.62,L1/1/24.00/52.19,R0/0/22.67/52.36}{
+\node[left] at (0,\y) {\name};
+\fill[falsealarm] (0,\y+0.04) rectangle (\f,\y+0.27);
+\draw[defectrecall,thick] (0,\y-0.27) rectangle (\r,\y-0.04);
+\node[right,font=\scriptsize] at (\f,\y+0.155) {\f};
+\node[right,font=\scriptsize] at (\r,\y-0.155) {\r};}
+\end{scope}
+\node[anchor=west] at (0,-1.05) {\textcolor{falsealarm}{Filled: false alarms (lower is better)}\qquad
+\textcolor{defectrecall}{Outline: defect recall (higher is better)}};
+\end{tikzpicture}
+\caption{False alarms and defect recall must be read together. Both panels use a common percentage scale. AD 2 values average eight category rates and three seeds; blade values average three seeds within the illumination domain. Local/global synthesis already produces most of the AD 2 trade-off before routed consistency is added. Blade means are more favourable against B0, but L0 has higher recall than R0. These are descriptive means, not significance estimates; seed and domain failures are discussed in the text.}
+\label{fig:tradeoff}
+\end{figure*}
 
 \subsection{MVTec AD}
 
@@ -281,7 +602,7 @@ The original A40 evaluation covers 120 heads: B0, B1 and B2
 at three consistency weights, across eight categories and three
 seeds. Table~\ref{tab:a40} reports the documented eight-category
 means. B1 reduces non-regular FPR by 6.0 percentage points
-relative to B0, but non-regular recall also falls by 7.5 points,
+relative to B0, but non-regular recall also falls by more than seven points,
 exceeding the five-point recall-preservation rule. B2 at
 $\lambda=1.0$ lowers non-regular FPR further, but its recall
 is lower than B1 and it fails additional per-condition recall
@@ -302,7 +623,7 @@ B2, $\lambda=1.0$ & 38.3 & 57.4 & 63.6\\
 \bottomrule
 \end{tabular}
 \caption{Original A40 MVTec AD 2 public image evaluation.
-Values are percentages except AUROC, also shown as percent.}
+All values are percentages.}
 \label{tab:a40}
 \end{table}
 
@@ -375,8 +696,8 @@ However, L0 has higher illumination recall (61.62\%) than R0.
 The three-seed R0 mean also hides variation: seed 1 loses
 8.59 points of illumination recall, and seed 2 increases
 same-condition FPR by 3.91 points. Background recall falls
-from 67.61\% for B0 to 39.62\% for R0. The reported
-illumination-recall interval includes zero and was not
+from 67.61\% for B0 to 39.62\% for R0. The reported interval for the change in
+illumination recall includes zero and was not
 recomputed in this audit. B0 illumination AUROC is 42.15,
 indicating a weak reference baseline on that domain.
 
@@ -406,7 +727,12 @@ illumination baseline, seed-level regressions, lower background
 recall and interval uncertainty all limit the interpretation.
 Exact physical-specimen independence is also not established.
 
+
+
 \section{Analysis and Discussion}
+
+Figure~\ref{fig:tradeoff} compares the false-alarm and recall trade-offs without combining the two datasets.
+
 
 The experiments show why false-alarm reduction and defect
 detection must be considered together. In the original AD 2
@@ -427,61 +753,6 @@ domains, but the weak B0 illumination AUROC and seed-level
 variation make a broad claim premature.
 
 
-\subsection{Interpretation across experimental settings}
-
-The three evaluation settings answer related but non-identical
-questions. The MVTec AD fixed-final reproduction checks whether the
-baseline implementation produces broadly plausible results on the
-standard benchmark. The bottle/grid paired experiment is a limited
-pilot and does not provide a broad lighting-shift test. MVTec AD 2
-provides the main public lighting evaluation, while the blade setting
-tests transfer to a separate inspection domain. Their metrics should
-not be pooled because their image populations, domains, training
-recipes, and baselines differ.
-
-The MVTec AD results also illustrate why a single aggregate score can
-hide category instability. Grid's three fixed-final seed AUROCs vary
-substantially, from 48.12 to 98.16, even though the other reported
-reproduction results are described as broadly close to the reference.
-The available evidence does not identify the cause of this variation.
-The paired bottle/grid pilot does not resolve the issue: bottle AUROC
-is at ceiling for both single-view and paired methods, while the grid
-test set does not contain multiple lighting conditions. The pilot
-therefore supports implementation exploration, not a general
-robustness conclusion.
-
-For MVTec AD 2, the original A40 results show that B1 improves
-changed-light FPR relative to B0, but its recall loss exceeds the
-preservation rule. B2 reduces FPR further at some weights, yet the
-lowest FPR is accompanied by still lower recall. This pattern is
-consistent with a shift in the sensitivity-specificity trade-off.
-The available native pixel metrics show modest localisation-score
-improvements for some paired arms, but those metrics do not negate
-the image-level recall loss. In particular, the pixel AUROC and
-AU-PRO values belong to the original paired study and must not be
-attributed to the later routed R0 model.
-
-The later L40S transfer provides a more direct comparison of the
-routed method with its own baseline. R0's large changed-light FPR
-reduction appears promising if considered alone. However, the same
-comparison shows a similarly large recall reduction and a regular-light
-FPR increase beyond the stated limit. The L0 result is especially
-important for causal interpretation: its changed-light recall is
-already much lower than B0 before consistency routing is introduced.
-R0 is also close to L1 on changed-light FPR and recall. Therefore,
-the aggregate evidence does not isolate adapter-only consistency as
-the source of the large FPR change.
-
-The blade results should be read as a domain-specific signal rather
-than confirmation of the AD 2 finding. R0 improves the reported
-illumination means relative to B0, but L0 has higher illumination
-recall, and the background-domain recall reduction is substantial.
-The seed-level regressions further show that the mean does not
-describe every run. The reported illumination-recall interval
-includes zero, and the audit did not recompute it. These observations
-motivate reporting per-domain and per-seed outcomes alongside
-aggregate means in future evaluations.
-
 \subsection{Reproducibility and evidence status}
 
 The audit distinguishes implementation inspection, arithmetic
@@ -497,8 +768,7 @@ For the AD 2 and blade routed experiments, the raw per-image scores,
 model weights, and some pixel-level outputs are not present in the
 committed repository evidence inspected by the audit. The full
 168-head AD 2 matrix and complete blade workflow were not rerun
-through the portable launchers. Only one sheet-metal seed-0 case
-is documented as a portable-launcher rerun. Consequently, this report
+through the portable launchers. The released launcher was verified on sheet metal, seed 0, across all seven methods at 1,440 updates, including stop/resume and cold calibration replay. The reported check matched historical heads, thresholds and normal/test patch scores exactly for that case. Consequently, this report
 uses the verified aggregate values while explicitly preserving the
 provenance and reproduction limitations. The original A40 public
 tables and native localisation metrics have a different evidence
@@ -513,45 +783,12 @@ shadows or physical changes in illumination. Synthetic feature
 perturbations and texture-based local edits also cannot represent
 the full range of manufacturing defects.
 
-The routed AD 2 and blade results were produced by trainers
-inside committed execution-source archives. The audit inspected
-these archives and traced their implementation, but did not
-retrain the models or rerun inference. The committed routed
-evidence contains category/seed aggregates, not per-image
-scores or patch tensors. Its verifier checks hashes, row
-coverage, confusion-count arithmetic, means and gates; it does
-not reproduce inference or recompute bootstrap intervals.
-Pixel AUROC and AU-PRO are unavailable for the routed runs.
-Only one sheet-metal seed-0 case is documented as rerun
-through the portable launcher; the complete AD 2 and blade
-matrices were not rerun through those launchers.
-
 Other limitations include the 19-image normal calibration set
 for sheet metal, the absence of a verified physical-specimen
-independence check for the blade data, and unresolved
-provenance for the score-field selection files. These
+independence check for the blade data. These
 limitations should be considered when interpreting the
 reported results.
 
-
-\subsection{Threats to validity}
-
-Several factors limit the strength of the conclusions. First, the
-photometric transform samples a restricted brightness and gamma
-range and preserves spatial structure; it does not reproduce complex
-illumination effects such as specular reflections, cast shadows,
-spatially varying exposure, or changes in camera response. Second,
-the use of normal validation data for threshold calibration makes
-the operating point dependent on the size and composition of that
-validation set. The audit notes only 19 normal calibration images
-for sheet metal, making that category particularly sensitive to
-individual samples. Third, the blade audit establishes exact-RGB
-overlap checks but does not establish physical-specimen independence.
-Finally, the routed aggregate evidence does not expose all per-image
-predictions needed to independently recompute uncertainty intervals
-or localisation metrics. These constraints mean that the results
-should be interpreted as evidence about the evaluated configurations,
-not as a guarantee of performance under arbitrary industrial shifts.
 
 \section{Conclusion}
 
@@ -595,6 +832,16 @@ SimpleNet: A Simple Network for Image Anomaly Detection
 and Localization.
 In \textit{Proceedings of the IEEE/CVF Conference on
 Computer Vision and Pattern Recognition}, 20402--20411.
+
+\bibitem[Bergmann et~al.(2019)]{bergmann2019mvtec}
+Bergmann, P.; Fauser, M.; Sattlegger, D.; and Steger, C. 2019.
+MVTec AD: A Comprehensive Real-World Dataset for Unsupervised Anomaly Detection.
+In \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}.
+
+\bibitem[Heckler-Kram et~al.(2025)]{heckler2025ad2}
+Heckler-Kram, L.; Neudeck, J.-H.; Scheler, U.; K\"onig, R.; and Steger, C. 2025.
+The MVTec AD 2 Dataset: Advanced Scenarios for Unsupervised Anomaly Detection.
+\textit{arXiv:2503.21622v1}.
 
 \end{thebibliography}
 \end{document}
