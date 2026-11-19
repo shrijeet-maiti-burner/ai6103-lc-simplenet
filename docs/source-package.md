@@ -51,6 +51,6 @@ Running needs no Git repository. Bundle-construction tests use Git when availabl
 | `routed-ad2-execution-source-20261116.zip` | `74f2c9adb729e432237a6879ae82373a3dcee032e5517e7daabb515b5096cb8a` |
 | `routed-blade-execution-source-20261118.zip` | `023a644655348d1a0b610e2e7406cced3cae4fbe997ff0e5055573722a047436` |
 
-Their numerical workers and licences retain their original bytes. They are distinct from the newer portable launchers. Original GPU experiments completed; a fresh full-budget run through those launchers remains unverified. Source checks, input-staging parity and mechanics checks do not replace that run.
+Their numerical workers and licences retain their original bytes. They are distinct from the newer portable launchers. A full seven-method AD 2 category/seed now passed the portable launcher on L40S, including checkpoint resume, exact normal-calibration replay and native public scoring; see the [verification record](routed-reproduction.md). The complete AD 2 matrix and blade workflow have not been rerun through these launchers.
 
 The [results](routed-results.md) and included aggregate matrices are the evidence for report/demo authors. The aggregate verifier checks counts, means and fixed gates; it does not rerun inference or recompute bootstrap intervals.
