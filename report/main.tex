@@ -45,9 +45,9 @@ gains from score stability alone.
 
 A good part should not be classified as defective just because a lamp changes. An inspection
 model can nevertheless flag an undamaged surface after its brightness, reflection or shadow
-changes. Our proposal was to show SimpleNet two aligned appearances of each normal training
-image and make their patch scores agree. The practical question is whether this removes
-lighting false alarms while leaving defects detectable.
+changes. We extend the released code of SimpleNet (CVPR 2023) \citep{liu2023simplenet}
+with paired relighting and a consistency loss on corresponding normal-patch scores.
+The goal is fewer lighting false alarms while keeping defects detectable.
 
 On one aero-engine blade family, our combined recipe reduces mean illumination false alarms
 by 32.89 percentage points and raises recall by 5.89 points against its matched
@@ -56,7 +56,7 @@ recall rises by 8.64 points. These three-seed means satisfy the study's operatin
 constraints on those two domains. They do not mean every seed or every domain improves.
 
 The route to this result involved two changes. We first added paired brightness--gamma
-training to SimpleNet \citep{liu2023simplenet}. Relighting alone improved native
+training. Relighting alone improved native
 localisation, but image-level recall under changed light fell. We then combined paired
 training with local/global anomaly synthesis adapted from GLASS \citep{chen2024glass} and
 restricted the consistency gradient to the feature adapter. The reason for routing is
@@ -293,6 +293,9 @@ postprocessing. Paired 95\% intervals resample the recorded exact-RGB clusters c
 on the three trained seeds; they do not establish behaviour for new seeds or physical
 specimens.
 
+The code, frozen execution sources and full category/seed results are available in our
+repository.\footnote{\url{https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet}}
+
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/lighting-tradeoff.pdf}
@@ -441,15 +444,6 @@ adapter from moving features in a direction that harms classification. This is w
 L1/L2/R0 comparisons matter more for attributing routing than the much larger B0/R0
 difference. The useful blade mean is a gain of the combined recipe; the evidence does not
 establish routing as a generally better objective.
-
-\paragraph{Reproducibility.}
-The repository provides execution sources, category/seed counts and operating
-gates.\footnote{\url{https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/tag/routed-results-2026-11-18}}
-We recounted raw patch maxima and flags; a teammate checked aggregate results. A fresh
-seven-method sheet-metal run reproduced the historical heads, thresholds and patch scores
-bit for bit after checkpoint resume and cold replay. This checks one category, not a fresh
-full-matrix rerun. The demo runs B0/B1/B2 inference live; its blade gallery replays
-recorded predictions.
 
 \section{Conclusion}
 
