@@ -41,7 +41,7 @@ python scripts/verify_routed_results.py evidence
 | Results for the report | [evidence index](docs/report-evidence.md), [completed follow-up](docs/routed-results.md) |
 | Build the submission ZIP | [source package](docs/source-package.md) |
 
-Datasets and pretrained/trained weights are external. The two `execution-sources/` archives preserve the numerical workers used by the follow-up experiments. Full routed training requires the documented Linux/L40S environment. The original GPU experiments completed; a fresh full-budget run through the portable launchers has not been completed.
+Datasets and pretrained/trained weights are external. The two `execution-sources/` archives preserve the numerical workers used by the follow-up experiments. Full routed training requires the documented Linux/L40S environment. One complete AD 2 category/seed passed the portable launcher, including resume, exact calibration replay and public scoring; see the [verification record](docs/routed-reproduction.md). The full AD 2 matrix and blade workflow have not been rerun through these launchers.
 
 ## Source
 
