@@ -10,6 +10,8 @@ The [completed results](docs/routed-results.md) include all controls and seeds. 
 
 4:45 walkthrough of the method, results and recorded demo.
 
+https://github.com/user-attachments/assets/a106a13b-41eb-48f8-8b80-2c20683f0f77
+
 [1080p video](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/download/presentation-final-2026-11-20/AI6103_LC-SimpleNet_G2609039F_Presentation.mp4) · [Report](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/download/report-final-2026-11-19-r6/ai6103-report-final-20261119-r6.pdf) · [Code ZIP](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/download/code-final-2026-11-19/ai6103-code-final-20261119.zip)
 
 ## Run
