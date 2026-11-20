@@ -6,6 +6,14 @@ We compare the original Gaussian/hinge objective, lighting augmentation, score c
 
 The [completed results](docs/routed-results.md) include all controls and seeds. On the eight-category MVTec AD 2 public subset, R0 reduces lighting false alarms but loses too much defect recall. On the separate AeBAD blade experiment, the three-seed averages improve against our B0 under illumination and same conditions, with seed and background failures. The incremental gain over the stronger synthesis controls is uncertain.
 
+## Presentation
+
+4:45 walkthrough of the method, results and recorded demo.
+
+https://github.com/user-attachments/assets/a106a13b-41eb-48f8-8b80-2c20683f0f77
+
+[1080p video](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/download/presentation-final-2026-11-20/AI6103_LC-SimpleNet_G2609039F_Presentation.mp4) · [Report](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/download/report-final-2026-11-19-r6/ai6103-report-final-20261119-r6.pdf) · [Code ZIP](https://github.com/shrijeet-maiti-burner/ai6103-lc-simplenet/releases/download/code-final-2026-11-19/ai6103-code-final-20261119.zip)
+
 ## Run
 
 Install Python 3.12.15 and [uv 0.13.0](https://github.com/astral-sh/uv/releases/tag/0.13.0). From a clone:
